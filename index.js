@@ -52,6 +52,11 @@ function ResponseHandler(req, res){
         fs.createReadStream(filePath).pipe(res);
     }
 }
+function HandlePost(req, res){
+    let Message = req.body;
+    console.log(Message.field1);
+}
+
 
 const hostname = '192.168.1.123';
 const port = 8000;
@@ -60,11 +65,10 @@ const FrontPage = "index.html"
 
 
 app.get('/', (req, res) => {
-    console.log("DUD");
     ResponseHandler(req, res);
 });
 app.post('/', (req, res) => {
-    console.log("Hello World");
+    HandlePost(req, res);
 });
 
 
