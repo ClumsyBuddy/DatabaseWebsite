@@ -1,0 +1,16 @@
+{
+  "name": "databasewebsite",
+  "version": "1.0.0",
+  "description": "Database Website for RDI",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Trevor Winn",
+  "license": "ISC",
+  "dependencies": {
+    "connect": "^3.7.0",
+    "express": "^4.18.1",
+    "sqlite3": "^5.0.8"
+  }
+}
