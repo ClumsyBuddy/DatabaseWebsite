@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
+
 class  ResponseHandler{
     constructor(MainIndex, PControl){
         this.FrontPage = MainIndex;
@@ -62,6 +63,7 @@ class  ResponseHandler{
                 break;
             case 'lol':
                 console.log("SCREEEE");
+                res.send("<p> Some Html </p>");
                 break;
         }
     }
