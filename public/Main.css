@@ -8,9 +8,14 @@
     text-align: center;
 }
 
-
+.SableOrangeBackground{
+    background-color: #F65E00;
+}
+.SableBlueBackground{
+    color: #1E2E54;
+}
 .SableOrange{
-    color: #F65E00;
+    color: #F65E00
 }
 .SableBlue{
     color: #1E2E54;
@@ -31,34 +36,63 @@
     margin-bottom: 4%;
     background-color: #04AA6D;
 }
-.block {
+.block{
     display: flex;
     width: 100%;
     border: none;
-    background-color: #F65E00;
+    /*background-color: #F65E00; */
     font-size: 16px;
     cursor: pointer;
     text-align: center;
-    border-radius: 1em;
   }
 
 .NavBar{
     background-color: #1E2E54;
-    width: 100%;
-    height: auto;
-    margin: auto;
+    width: 5%;
+    height: 2.2em;
+    text-align: center;
+    border-radius: 5px;
 }
 
 .NavBarElements{
-    display:inline-flexbox;
-    flex-wrap: nowrap;
-    flex-flow: row;
     font-size: 1.5em;
     color: white;
     text-decoration: none;
     text-align: center;
+    vertical-align: middle;
     width: 100%;
+    border-radius: 0px;
+    flex-direction: column;
 }
 .NavBarElements:hover{
     background-color: grey;
+}
+
+.CenteredMenu{
+    width: 100%;
+    margin: auto;
+    height: auto;
+    text-align: center;
+}
+
+#menu ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    width:100%
+}
+
+
+
+.Items{
+    padding-inline: 2.5px;
+}
+.ListItem{
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 70%;
+    background-color: #04AA6D;
+    margin-bottom: 5px;
 }

@@ -54,7 +54,9 @@ function ResponseHandler(req, res){
 }
 function HandlePost(req, res){
     let Message = req.body;
-    console.log(Message.field1);
+    if(Message._Search != undefined){
+        console.log(Message._Search);
+    }
 }
 
 
