@@ -71,6 +71,21 @@ class  ResponseHandler{
                 res.send("<p> Some Html </p>");
                 break;
         }
+        if(postMessage._ID != undefined){
+            console.log("Adding: " + postMessage._ID);
+            this.PControl.create(postMessage._ID, "Polo");
+            res.redirect(req.get("referer"));
+            postMessage._ID = undefined;
+        }
+
+        if(postMessage._Delete != undefined){
+            console.log("Deleting: " + postMessage._Delete);
+            this.PControl.delete(postMessage._Delete);
+            res.redirect(req.get("referer"));
+            postMessage._Delete = undefined;
+        }
+
+
     }
 
 }

@@ -27,14 +27,10 @@ app.use(express.urlencoded({ //Parse POST
     extended:true
 }));
 app.use(express.static(__dirname + '/public')); //Shows where static files are
-
+app.use('/uploads', express.static(__dirname + '/public'));
 
 const hostname = '192.168.1.123';
 const port = 8000;
-
-const _products = {
-    All: _Products.getAll()
-}
 
 app.get('/', (req, res) => {
     //HR.Start(req, res);
@@ -42,11 +38,23 @@ app.get('/', (req, res) => {
 });
 app.get('/Sable', (req, res) => {
     //HR.Start(req, res);
-    res.render('pages/Sable', {
-        _products
-    });
+    _Products.getAll().then((result) => {
+        res.render('pages/Sable', {
+            DisplayTitle: "Welcome To Sable",
+            displayProducts: result,
+            _Action: '/Sable'
+        });
+    })
+    
 });
-
+app.get('/Diplo', (req, res) =>{
+    displayProducts = [];
+    res.render('pages/Diplomat', {
+        DisplayTitle: "Welcome To Diplomat",
+        displayProducts,
+        _Action: '/diplo'
+    })
+});
 
 app.post('/Sable', (req, res) => {
     HR.HandleSablePost(req, res);

@@ -46,12 +46,25 @@
     text-align: center;
   }
 
+.ExitButton{
+display: flex;
+border: none;
+/*background-color: #F65E00; */
+font-size: 16px;
+cursor: pointer;
+text-align: center;
+background-color: transparent;
+float: right;
+}
+
+
 .NavBar{
     background-color: #1E2E54;
     width: 5%;
     height: 2.2em;
     text-align: center;
     border-radius: 5px;
+    margin-left: 35%;
 }
 
 .NavBarElements{
@@ -95,4 +108,13 @@
     width: 70%;
     background-color: #04AA6D;
     margin-bottom: 5px;
+}
+
+.InnerPopUp{
+    position:fixed; 
+    width:50vw; 
+    height: 50vh; 
+    background-color: lightgrey; 
+    top: 25%; 
+    left: 25%;
 }
