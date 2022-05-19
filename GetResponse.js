@@ -22,29 +22,34 @@ class  ResponseHandler{
                     filePath = path.resolve('./public/404.html');
                     res.statusCode = 404;
                     res.setHeader('Content-Type', 'text/html');
-                    fs.createReadStream(filePath).pipe(res);
+                    res.render(filePath);
+                    //fs.createReadStream(filePath).pipe(res);
                     return;
                 }
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'text/html');
-                fs.createReadStream(filePath).pipe(res);
+                res.render(filePath);
+                //fs.createReadStream(filePath).pipe(res);
             });
         }
         else if (fileExt == '.css') {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'text/css');
-            fs.createReadStream(filePath).pipe(res);
+            res.render(filePath);
+            //fs.createReadStream(filePath).pipe(res);
         }
         else if (fileExt == '.js'){
             res.statusCode = 200;
             res.setHeader('Content-Type', "javascript")
-            fs.createReadStream(filePath).pipe(res);
+            res.render(filePath);
+            //fs.createReadStream(filePath).pipe(res);
         }
         else {
             filePath = path.resolve('./public/404.html');
             res.statusCode = 404;
             res.setHeader('Content-Type', 'text/html');
-            fs.createReadStream(filePath).pipe(res);
+            res.render(filePath);
+            //fs.createReadStream(filePath).pipe(res);
         }
     }
 
@@ -54,7 +59,7 @@ class  ResponseHandler{
     }
 
 
-    HandlePost(req, res){
+    HandleSablePost(req, res){
         var postMessage = req.body;
         switch(postMessage._Search){
             case 'duh':
