@@ -71,9 +71,9 @@ class  ResponseHandler{
                 res.send("<p> Some Html </p>");
                 break;
         }
-        if(postMessage._ID != undefined){
-            console.log("Adding: " + postMessage._ID);
-            this.PControl.create(postMessage._ID, "Polo");
+        if(postMessage._ID != undefined & postMessage._NAME != undefined){
+            console.log("Adding: " + postMessage._ID + " " + postMessage._NAME);
+            this.PControl.create(postMessage._ID, postMessage._NAME);
             res.redirect(req.get("referer"));
             postMessage._ID = undefined;
         }

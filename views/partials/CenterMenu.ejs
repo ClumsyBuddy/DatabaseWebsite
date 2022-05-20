@@ -12,6 +12,7 @@
         <button type="menu" style="margin-left: 10px;">Filter</button>
         <form action=<%= _Action %> method="post" style="margin-left: 10px;">
             <input type="text" name="_ID"></input>
+            <input type="text" name="_NAME">
             <button type="submit">Add</button>
         </form>
         <form action=<%= _Action %> method="post" style="margin-left: 10px;">
@@ -21,43 +22,13 @@
     <div>
         <% displayProducts.forEach((_product) => { %> 
         <div class="ListItem">
-                <p class="Items"><%= _product.id %>
+            <button class="BarButtonMenu" onclick="OpenPopUp()">
+                <p class="Items" style="border-left: 4px double black;"><%= _product.id %></p> <p class="Items"><%= _product.name %></p>
+            </button>
                 <form action=<%= _Action %>  method="post" style="margin-left: 1%; margin-right: 10px; margin-top: 1%;">
                     <button type="submit" name="_Delete" value='<%= _product.id %>' >Delete</button>
                 </form>
-                </p>
         </div>
         <% }) %> 
     </div>
-    <script>
-        var _styles = {
-            "PopContainer": {Open:"position:fixed; z-index: 10; width: 100%; height: 100%; background-color: rgba(0, 0, 0, .7); top: 0; left: 0;'", Close:"'display:none;"},
-            "InnerPopUp": {Open: "", Close:"display:none;"}
-        }
-        document.getElementById("CancelButton").onclick = function(e){
-            var Target = e.target.parentNode.parentNode;
-            if(Target.id == "InnerPopUp"){
-                Target.parentNode.setAttribute("style", _styles.PopContainer.Close);
-                Target.setAttribute("style", _styles.InnerPopUp.Close);
-                console.log(Target)
-            }
-        }
-
-        
-        
-        document.getElementById("LoginButton").onclick = function(e){
-            var Target = e.target.parentNode;
-            console.log("Login");
-            console.log(Target);
-
-        }
-
-        function OpenPopUp(){
-            var GetElement = document.getElementById("InnerPopUp")
-            GetElement.setAttribute("style", _styles.InnerPopUp.Open);
-            GetElement.parentNode.setAttribute("style", _styles.PopContainer.Open);
-        }
-        
-    </script>
-
 </div>
