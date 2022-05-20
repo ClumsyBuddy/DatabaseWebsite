@@ -47,10 +47,17 @@ app.get('/', (req, res) => {
 });
 
 app.get('/Sable', (req, res) => {
+
     if(req.query._Search != '' && req.query._Search != undefined && req.query != {}){
-       HR.FindById(req, res);
+       HR.FindById(req, res, req.query._Search);
     } else if(req.query.I_Product != '' && req.query.I_Product != undefined && req.query != {}){
         HR.RenderById(req, res, req.query.I_Product);
+    }else if(req.query._CancelButton != undefined){
+        if(req.query._CancelButton == "All"){
+            HR.RenderAll(req, res);
+        }else{
+            HR.FindById(req, res, req.query._CancelButton);
+        }
     }else{
         HR.RenderAll(req, res);
     }

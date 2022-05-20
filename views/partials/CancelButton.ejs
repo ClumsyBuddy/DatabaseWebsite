@@ -1,2 +1,9 @@
-
-<button   name="_CancelButton" value="Close" id="CancelButton" onclick="ClosePopUp(this)" type="button" class="ExitButton"><img src="uploads/cancel-48x.png" alt="" width="28px" height="28px"></button>
+<form action="/Sable" method="get">
+    <% if (displayProducts.length > 1) { %>
+        <button   name="_CancelButton" value="All" type="menu" class="ExitButton">
+    <% } else { %>
+        <button   name="_CancelButton" value=<%= displayProducts[0].id %>  type="menu" class="ExitButton">
+    <% } %> 
+    
+        <img src="uploads/cancel-48x.png" alt="" width="28px" height="28px"></button>
+</form>

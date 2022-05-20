@@ -65,11 +65,11 @@ class  ResponseHandler{
         })
     }
     
-    FindById(req, res){
+    FindById(req, res, query){
         this.PControl.getAll().then((result) =>{
             var ItemArray = [];
             for(var _node in result){
-                if(result[_node].id.includes(req.query._Search)){
+                if(result[_node].id.includes(query)){
                     ItemArray.push(result[_node]);
                 }
             }
@@ -119,10 +119,6 @@ class  ResponseHandler{
             res.redirect(req.get("referer"));
             postMessage._Delete = undefined;
         }
-        if(postMessage._CancelButton != undefined){
-            console.log("Cancel: " + postMessage._CancelButton);
-        }
-
     }
 
 }
