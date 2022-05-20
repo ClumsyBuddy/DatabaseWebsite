@@ -55,7 +55,7 @@ class  ResponseHandler{
     RenderAll(req, res){
         this.PControl.getAll().then((result) => {
             var ItemArray = [];
-            ItemArray = result;            
+            ItemArray = result;
             res.render('pages/Sable', {
                 DisplayTitle: "Welcome To Sable",
                 displayProducts: ItemArray,
@@ -73,7 +73,6 @@ class  ResponseHandler{
                     ItemArray.push(result[_node]);
                 }
             }
-
             res.render('pages/Sable', {
                 DisplayTitle: "Welcome To Sable",
                 displayProducts: ItemArray,
@@ -83,7 +82,7 @@ class  ResponseHandler{
         })  
     }
 
-    RenderById(req, res, query){
+    RenderById(req, res, query, DisplayPopUp = false){
         this.PControl.getById(query).then((result) =>{
             if(result == undefined){
                 this.RenderAll(req, res);
@@ -99,7 +98,7 @@ class  ResponseHandler{
                 DisplayTitle: "Welcome To Sable",
                 displayProducts: ItemArray,
                 _Action: '/Sable',
-                DisplayPopUp: true
+                DisplayPopUp: DisplayPopUp
             });
         })
     }

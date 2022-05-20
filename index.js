@@ -1,16 +1,11 @@
 const http = require('http');
-const fs = require('fs');
 const path = require('path');
-const RHandler = require("./GetResponse")
 const express = require('express');
-const { response } = require('express');
 
 const Promise = require("bluebird");
 const Database = require('./Database');
 const Products = require("./Products");
 const ResponseHandler = require('./GetResponse');
-const { render } = require('express/lib/response');
-const { NONAME } = require('dns');
 
 const db = new Database('./Main.db');
 const _Products = new Products(db);
@@ -32,12 +27,6 @@ app.use('/uploads', express.static(__dirname + '/public'));
 app.use('/javascript', express.static(__dirname + '/public'));
 app.use('/CSS', express.static(__dirname + '/public'));
 
-
-function Print(Message){
-    console.log(Message);
-}
-
-
 const hostname = '192.168.1.123';
 const port = 8000;
 
@@ -47,17 +36,12 @@ app.get('/', (req, res) => {
 });
 
 app.get('/Sable', (req, res) => {
-
     if(req.query._Search != '' && req.query._Search != undefined && req.query != {}){
        HR.FindById(req, res, req.query._Search);
     } else if(req.query.I_Product != '' && req.query.I_Product != undefined && req.query != {}){
-        HR.RenderById(req, res, req.query.I_Product);
+        HR.RenderById(req, res, req.query.I_Product, true);
     }else if(req.query._CancelButton != undefined){
-        if(req.query._CancelButton == "All"){
-            HR.RenderAll(req, res);
-        }else{
-            HR.FindById(req, res, req.query._CancelButton);
-        }
+        HR.RenderAll(req, res);
     }else{
         HR.RenderAll(req, res);
     }

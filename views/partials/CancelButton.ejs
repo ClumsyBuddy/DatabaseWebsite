@@ -1,8 +1,8 @@
 <form action="/Sable" method="get">
-    <% if (displayProducts.length > 1) { %>
+    <% if (displayProducts.length ==  0) { %>
         <button   name="_CancelButton" value="All" type="menu" class="ExitButton">
     <% } else { %>
-        <button   name="_CancelButton" value=<%= displayProducts[0].id %>  type="menu" class="ExitButton">
+        <button   name="_CancelButton" value=<%= displayProducts[0].id %>    type="menu" class="ExitButton">
     <% } %> 
     
         <img src="uploads/cancel-48x.png" alt="" width="28px" height="28px"></button>
