@@ -10,6 +10,7 @@ const Database = require('./Database');
 const Products = require("./Products");
 const ResponseHandler = require('./GetResponse');
 const { render } = require('express/lib/response');
+const { NONAME } = require('dns');
 
 const db = new Database('./Main.db');
 const _Products = new Products(db);
@@ -32,6 +33,10 @@ app.use('/javascript', express.static(__dirname + '/public'));
 app.use('/CSS', express.static(__dirname + '/public'));
 
 
+function Print(Message){
+    console.log(Message);
+}
+
 
 const hostname = '192.168.1.123';
 const port = 8000;
@@ -40,16 +45,15 @@ app.get('/', (req, res) => {
     //HR.Start(req, res);
     res.render('pages/index');
 });
+
 app.get('/Sable', (req, res) => {
-    //HR.Start(req, res);
-    _Products.getAll().then((result) => {
-        res.render('pages/Sable', {
-            DisplayTitle: "Welcome To Sable",
-            displayProducts: result,
-            _Action: '/Sable'
-        });
-    })
-    
+    if(req.query._Search != '' && req.query._Search != undefined && req.query != {}){
+       HR.FindById(req, res);
+    } else if(req.query.I_Product != '' && req.query.I_Product != undefined && req.query != {}){
+        HR.RenderById(req, res, req.query.I_Product);
+    }else{
+        HR.RenderAll(req, res);
+    }
 });
 app.get('/Diplo', (req, res) =>{
     displayProducts = [];

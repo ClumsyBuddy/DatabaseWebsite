@@ -7,22 +7,22 @@ function ClosePopUp(e){
     if(Target.id == "InnerPopUp"){
         Target.parentNode.setAttribute("style", _styles.PopContainer.Close);
         Target.setAttribute("style", _styles.InnerPopUp.Close);
-        console.log(Target)
     }
     if(Target.id == "Login"){
         Target.setAttribute("style", "display:none;")
     }
 }
 
-
-
-document.getElementById("LoginButton").onclick = function(e){
-    var GetElement = document.getElementById("Login");
-   GetElement.setAttribute("style", "");
+if(document.getElementById("LoginButton") != undefined){
+    document.getElementById("LoginButton").onclick = function(e){
+        var GetElement = document.getElementById("Login");
+    GetElement.setAttribute("style", "");
+    }
 }
-
-function OpenPopUp(){
+function OpenPopUp(Product){    
     var GetElement = document.getElementById("InnerPopUp")
     GetElement.setAttribute("style", _styles.InnerPopUp.Open);
     GetElement.parentNode.setAttribute("style", _styles.PopContainer.Open);
+    GetElement.setAttribute("data-product", Product);
+    GetElement.parentNode.setAttribute("style", Product);
 }

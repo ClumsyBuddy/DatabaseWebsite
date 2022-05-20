@@ -1,5 +1,11 @@
-<div id="PopContainer" style="display: none;">
+
+<% if(DisplayPopUp == true) { %> 
+    <div id="PopContainer">
+<% }else{ %>
+    <div id="PopContainer" style="display: none;">
+<% } %> 
     <div id="InnerPopUp" class="InnerPopUp">
-        <%- include('./CancelButton') %> 
+        <%- include('./CancelButton') %>
+        <%- include('../partials/SimpleForm') %>
     </div>
 </div>

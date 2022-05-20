@@ -1,0 +1,121 @@
+<form action="#">
+
+    <!--DropDownMenuWRAPPER-->
+    <div class="FlexCenterSections" style="flex-direction: row; margin-top: 20px;">
+
+        <% if (displayProducts.length == 0) { %>
+            <div class="TopBar">
+                <p>Placeholder</p>
+            </div>
+        <% } else{ %>
+        <!--SKU Text--> <!--SKU-->
+        <div class="TopBar">
+            <p><%= displayProducts[0].id %></p>
+        </div>
+        <% } %>
+         
+        <!--DropDownMenu--> <!--Brand-->
+        <div class="TopBar">
+            <label class="desc" id="title106" for="Field106">
+                Brand
+            </label>
+            <div>
+            <select id="Field106" name="Field106" class="field select medium" tabindex="11"> 
+            <option value="First Choice">Clarion</option>
+            <option value="Second Choice">Clarion Pointe</option>
+            <option value="Third Choice">Comfort</option>
+            <option value="Fourth Choice">WoodSprings</option>
+            <option value="Fith Choice">Ever Home Suites</option>
+            <option value="Sixth Choice">MainStay</option>
+            </select>
+            </div>
+        </div>
+
+        <!--DropDownMenu--> <!--Color-->
+        <div class="TopBar">
+            <label class="desc" id="title106" for="Field106">
+                Color
+            </label>
+            <div>
+            <select id="Field106" name="Field106" class="field select medium" tabindex="11"> 
+            <option value="First Choice">White</option>
+            <option value="Second Choice">Navy</option>
+            <option value="Third Choice">Gusty Grey</option>
+            <option value="Third Choice">Royal</option>
+            <option value="Third Choice">Should</option>
+            <option value="Third Choice">Prob</option>
+            <option value="Third Choice">Do this different</option>
+
+            </select>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!--Radial Buttons-->
+    <div class="FlexCenterSections">
+        <fieldset style="display:flex; flex-direction: column;">
+          <legend id="title6" class="desc">
+            Check All That Apply
+          </legend>
+          <div style="display: inline-flex;">
+              <div>
+                  <input id="Field6" name="Field6" type="checkbox" checked="true" value="First Choice" tabindex="8">
+                  <label class="choice" for="Field6">XS</label>
+              </div>
+              <div>
+                  <input id="Field7" name="Field7" type="checkbox" checked="true" checked="true" value="Second Choice" tabindex="9">
+                  <label class="choice" for="Field7">SM</label>
+              </div>
+              <div>
+                  <input id="Field8" name="Field8" type="checkbox" checked="true" value="Third Choice" tabindex="10">
+                  <label class="choice" for="Field8">MD</label>
+              </div>
+          </div>
+          <div style="display: inline-flex;">
+              <div>
+                  <input id="Field8" name="Field8" type="checkbox" checked="true" value="Third Choice" tabindex="10">
+                  <label class="choice" for="Field8">LG</label>
+              </div>
+              <div>
+                  <input id="Field8" name="Field8" type="checkbox" checked="true"  value="Third Choice" tabindex="10">
+                  <label class="choice" for="Field8">XL</label>
+              </div>
+              <div>
+                  <input id="Field8" name="Field8" type="checkbox" checked="true" value="Third Choice" tabindex="10">
+                  <label class="choice" for="Field8">2XL</label>
+              </div>
+          </div>
+          <div>
+              <input id="Field8" name="Field8" type="checkbox" checked="true" value="Third Choice" tabindex="10">
+              <label class="choice"  for="Field8">3XL</label>
+          </div>
+        </fieldset>
+      </div>
+
+
+
+
+
+      <!--MessageBox-->
+    <div class="FlexCenterSections">
+      <label class="desc" id="title4" for="Field4">
+        Description
+      </label>
+      <div>
+        <textarea id="Field4" name="Field4" spellcheck="true" rows="10" cols="75" tabindex="4" style="resize: none;"></textarea>
+      </div>
+    </div>
+
+    
+    
+    
+    
+    <div class="FlexCenterSections">
+          <div>
+            <input id="saveForm" name="saveForm" type="submit" value="Submit">
+      </div>
+      </div>
+    
+  </form>

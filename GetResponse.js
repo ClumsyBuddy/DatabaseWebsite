@@ -1,13 +1,12 @@
 const fs = require('fs');
 const path = require('path');
-
+const { off } = require('process');
 
 class  ResponseHandler{
     constructor(MainIndex, PControl){
         this.FrontPage = MainIndex;
         this.PControl = PControl;
-        this.Test = "Hey Arnold";
-    }
+        }
 
     Start(req, res){
         console.log('Request for ' + req.url + ' by method ' + req.method);
@@ -53,24 +52,60 @@ class  ResponseHandler{
         }
     }
 
-    SillyCallbackFunction(result){
-        console.log(result);
-        console.log(this.Test);
+    RenderAll(req, res){
+        this.PControl.getAll().then((result) => {
+            var ItemArray = [];
+            ItemArray = result;            
+            res.render('pages/Sable', {
+                DisplayTitle: "Welcome To Sable",
+                displayProducts: ItemArray,
+                _Action: '/Sable',
+                DisplayPopUp: false
+            });
+        })
+    }
+    
+    FindById(req, res){
+        this.PControl.getAll().then((result) =>{
+            var ItemArray = [];
+            for(var _node in result){
+                if(result[_node].id.includes(req.query._Search)){
+                    ItemArray.push(result[_node]);
+                }
+            }
+
+            res.render('pages/Sable', {
+                DisplayTitle: "Welcome To Sable",
+                displayProducts: ItemArray,
+                _Action: '/Sable',
+                DisplayPopUp: false
+            });
+        })  
     }
 
+    RenderById(req, res, query){
+        this.PControl.getById(query).then((result) =>{
+            if(result == undefined){
+                this.RenderAll(req, res);
+                return;
+            }
+            var ItemArray = [];
+            if(Array.isArray(result) == false){
+                ItemArray.push(result);
+            }else{
+                ItemArray = result;
+            }
+            res.render('pages/Sable', {
+                DisplayTitle: "Welcome To Sable",
+                displayProducts: ItemArray,
+                _Action: '/Sable',
+                DisplayPopUp: true
+            });
+        })
+    }
 
     HandleSablePost(req, res){
         var postMessage = req.body;
-        switch(postMessage._Search){
-            case 'duh':
-                console.log("Le meme");
-                this.PControl.getById("SMK110").then(this.SillyCallbackFunction.bind(this));
-                break;
-            case 'lol':
-                console.log("SCREEEE");
-                res.send("<p> Some Html </p>");
-                break;
-        }
         if(postMessage._ID != undefined & postMessage._NAME != undefined){
             console.log("Adding: " + postMessage._ID + " " + postMessage._NAME);
             this.PControl.create(postMessage._ID, postMessage._NAME);
@@ -84,7 +119,9 @@ class  ResponseHandler{
             res.redirect(req.get("referer"));
             postMessage._Delete = undefined;
         }
-
+        if(postMessage._CancelButton != undefined){
+            console.log("Cancel: " + postMessage._CancelButton);
+        }
 
     }
 

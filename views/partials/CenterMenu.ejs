@@ -1,32 +1,34 @@
-<%- include('./PopUp') %> 
+<%- include('./PopUp') %>
 <%- include('./LoginForm') %>
-
 
 <div class="CenteredMenu" style="height: 100%">
     <h1 class="center" style="color:orangered">Items</h1>
     <div style="display:inline-flex; margin-bottom: 10px;">
-        <form action=<%= _Action %> method="post">
+        <form action=<%= _Action %> method="get">
             <input type="text" name="_Search">
             <button type="submit">Search</button>
         </form>
-        <button type="menu" style="margin-left: 10px;">Filter</button>
+        <form action=<%= _Action %> method="get">
+            <button name="Test" value="SMK110" type="menu" style="margin-left: 10px;">Filter</button>
+        </form>
         <form action=<%= _Action %> method="post" style="margin-left: 10px;">
             <input type="text" name="_ID"></input>
             <input type="text" name="_NAME">
             <button type="submit">Add</button>
         </form>
         <form action=<%= _Action %> method="post" style="margin-left: 10px;">
-            <button type="button" onclick="OpenPopUp('PopContainer')">Proper Add</button>
+            <button type="button" onclick="OpenPopUp('Add')">Proper Add</button>
         </form>
     </div>
     <div>
         <% displayProducts.forEach((_product) => { %> 
         <div class="ListItem">
-            <button class="BarButtonMenu" onclick="OpenPopUp()">
+
+            <form action=<%= _Action %> method="get"><button class="BarButtonMenu" name="I_Product" value=<%= _product.id %>  onclick="OpenPopUp('<%-_product.id %>')"></form>
                 <p class="Items" style="border-left: 4px double black;"><%= _product.id %></p> <p class="Items"><%= _product.name %></p>
             </button>
                 <form action=<%= _Action %>  method="post" style="margin-left: 1%; margin-right: 10px; margin-top: 1%;">
-                    <button type="submit" name="_Delete" value='<%= _product.id %>' >Delete</button>
+                    <button id="open_product:<%= _product.id %>" type="submit" name="_Delete" value='<%= _product.id %>' >Delete</button>
                 </form>
         </div>
         <% }) %> 
