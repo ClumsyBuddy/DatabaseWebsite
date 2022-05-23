@@ -1,50 +1,43 @@
 class Products {
-    constructor(db) {
+    constructor(db, _table) {
       this.dao = db
+      this.Table = _table;
     }
   
     createTable() {
       const sql = `
-      CREATE TABLE IF NOT EXISTS products (
-        id TEXT PRIMARY KEY,
-        name TEXT)`
+      CREATE TABLE IF NOT EXISTS ${this.Table} ( id TEXT PRIMARY KEY, name TEXT)`
       return this.dao.run(sql)
     }
 
     create(id, name) {
         return this.dao.run(
-          'INSERT INTO products (id, name) VALUES(?, ?)',
+          `INSERT INTO ${this.Table} (id, name) VALUES(?, ?)`,
           [id, name])
       }
 
 
       update(name, id) {
         return this.dao.run(
-          `UPDATE products SET name = ? WHERE id = ?`,
+          `UPDATE ${this.Table} SET name = ? WHERE id = ?`,
           [name, id]
         )
       }
 
       delete(id) {
         return this.dao.run(
-          `DELETE FROM products WHERE id = ?`,
+          `DELETE FROM ${this.Table} WHERE id = ?`,
           [id]
         )
       }
 
       getById(id, callback) {
-            return this.dao.get(`SELECT * FROM products WHERE id = ?`,
+            return this.dao.get(`SELECT * FROM ${this.Table} WHERE id = ?`,
                 [id], callback);
       }
 
       getAll() {
-        return this.dao.all(`SELECT * FROM products`)
-      }
-
-      getTasks(projectId) {
-        return this.dao.all(
-          `SELECT * FROM tasks WHERE projectId = ?`,
-          [projectId])
+        return this.dao.all(`SELECT * FROM ${this.Table}`)
       }
 
       customQuery(query){

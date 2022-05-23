@@ -1,4 +1,4 @@
-<form action="#">
+<form action="/Sable" method="post">
 
     <!--DropDownMenuWRAPPER-->
     <div class="FlexCenterSections" style="flex-direction: row; margin-top: 20px;">
@@ -20,13 +20,13 @@
                 Brand
             </label>
             <div>
-            <select id="Field106" name="Field106" class="field select medium" tabindex="11"> 
-            <option value="First Choice">Clarion</option>
-            <option value="Second Choice">Clarion Pointe</option>
-            <option value="Third Choice">Comfort</option>
-            <option value="Fourth Choice">WoodSprings</option>
-            <option value="Fith Choice">Ever Home Suites</option>
-            <option value="Sixth Choice">MainStay</option>
+            <select id="Brand" name="Brand" class="field select medium" tabindex="11"> 
+            <option value="CLA">Clarion</option>
+            <option value="CLAP ">Clarion Pointe</option>
+            <option value="COMCO">Comfort</option>
+            <option value="WDS">WoodSprings</option>
+            <option value="EVH">Ever Home Suites</option>
+            <option value="MST">MainStay</option>
             </select>
             </div>
         </div>
@@ -37,15 +37,11 @@
                 Color
             </label>
             <div>
-            <select id="Field106" name="Field106" class="field select medium" tabindex="11"> 
-            <option value="First Choice">White</option>
-            <option value="Second Choice">Navy</option>
-            <option value="Third Choice">Gusty Grey</option>
-            <option value="Third Choice">Royal</option>
-            <option value="Third Choice">Should</option>
-            <option value="Third Choice">Prob</option>
-            <option value="Third Choice">Do this different</option>
-
+            <select id="Color" name="Color" class="field select medium" tabindex="11"> 
+            <option value="WH">White</option>
+            <option value="NV">Navy</option>
+            <option value="GGY">Gusty Grey</option>
+            <option value="ROY">Royal</option>
             </select>
             </div>
         </div>
@@ -59,38 +55,72 @@
           <legend id="title6" class="desc">
             Check All That Apply
           </legend>
-          <div style="display: inline-flex;">
-              <div>
-                  <input id="Field6" name="Field6" type="checkbox" checked="true" value="First Choice" tabindex="8">
-                  <label class="choice" for="Field6">XS</label>
-              </div>
-              <div>
-                  <input id="Field7" name="Field7" type="checkbox" checked="true" checked="true" value="Second Choice" tabindex="9">
-                  <label class="choice" for="Field7">SM</label>
-              </div>
-              <div>
-                  <input id="Field8" name="Field8" type="checkbox" checked="true" value="Third Choice" tabindex="10">
-                  <label class="choice" for="Field8">MD</label>
-              </div>
-          </div>
-          <div style="display: inline-flex;">
-              <div>
-                  <input id="Field8" name="Field8" type="checkbox" checked="true" value="Third Choice" tabindex="10">
-                  <label class="choice" for="Field8">LG</label>
-              </div>
-              <div>
-                  <input id="Field8" name="Field8" type="checkbox" checked="true"  value="Third Choice" tabindex="10">
-                  <label class="choice" for="Field8">XL</label>
-              </div>
-              <div>
-                  <input id="Field8" name="Field8" type="checkbox" checked="true" value="Third Choice" tabindex="10">
-                  <label class="choice" for="Field8">2XL</label>
-              </div>
-          </div>
-          <div>
-              <input id="Field8" name="Field8" type="checkbox" checked="true" value="Third Choice" tabindex="10">
-              <label class="choice"  for="Field8">3XL</label>
-          </div>
+            
+          <!-- Top Line -->
+            <div style="display: inline-flex;">
+                <div>
+                    <input id="XXS" name="XXS" type="checkbox" checked="true" value="XXS" tabindex="8">
+                    <label class="choice" for="XXS">XXS</label>
+                </div>
+                <div>
+                    <input id="XS" name="XS" type="checkbox" checked="true" checked="true" value="XS" tabindex="9">
+                    <label class="choice" for="XS">XS</label>
+                </div>
+                <div>
+                    <input id="SM" name="SM" type="checkbox" checked="true" value="SM" tabindex="10">
+                    <label class="choice" for="SM">SM</label>
+                </div>
+            </div>
+
+            <!-- Middle Line -->
+            <div style="display: inline-flex;">
+                <div>
+                    <input id="MD" name="MD" type="checkbox" checked="true" value="MD" tabindex="11">
+                    <label class="choice" for="MD">MD</label>
+                </div>
+                <div>
+                    <input id="LG" name="LG" type="checkbox" checked="true" checked="true" value="LG" tabindex="12">
+                    <label class="choice" for="LG">LG</label>
+                </div>
+                <div>
+                    <input id="XL" name="XL" type="checkbox" checked="true" value="XL" tabindex="13">
+                    <label class="choice" for="XL">XL</label>
+                </div>
+            </div>
+
+
+            <!-- Middle Two Line -->
+            <div style="display: inline-flex;">
+                <div>
+                    <input id="2XL" name="2XL" type="checkbox" checked="true" value="2XL" tabindex="14">
+                    <label class="choice" for="2XL">2XL</label>
+                </div>
+                <div>
+                    <input id="3XL" name="3XL" type="checkbox" checked="true" checked="true" value="3XL" tabindex="14">
+                    <label class="choice" for="3XL">3XL</label>
+                </div>
+                <div>
+                    <input id="4XL" name="4XL" type="checkbox" checked="true" value="4XL" tabindex="15">
+                    <label class="choice" for="4XL">4XL</label>
+                </div>
+            </div>
+
+
+
+            <!-- Bottom Line -->
+            <div style="display: inline-flex;">
+                <div>
+                    <input id="5XL" name="5XL" type="checkbox" checked="true" value="5XL" tabindex="16">
+                    <label class="choice" for="5XL">5XL</label>
+                </div>
+                <div>
+                    <input id="6XL" name="6XL" type="checkbox" checked="true" checked="true" value="6XL" tabindex="17">
+                    <label class="choice" for="6XL">6XL</label>
+                </div>
+            </div>
+
+
+
         </fieldset>
       </div>
 
@@ -104,7 +134,7 @@
         Description
       </label>
       <div>
-        <textarea id="Field4" name="Field4" spellcheck="true" rows="10" cols="75" tabindex="4" style="resize: none;"></textarea>
+        <textarea id="Description" name="Description" spellcheck="true" rows="10" cols="75" tabindex="4" style="resize: none;"></textarea>
       </div>
     </div>
 

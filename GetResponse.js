@@ -1,56 +1,17 @@
 const fs = require('fs');
 const path = require('path');
-const { off } = require('process');
 
 class  ResponseHandler{
     constructor(MainIndex, PControl){
         this.FrontPage = MainIndex;
         this.PControl = PControl;
+        this.Arguements = {
+            DisplayTitle: "",
+            displayProducts: undefined,
+            _Action: "",
+            DisplayPopUp: false
         }
-
-    Start(req, res){
-        console.log('Request for ' + req.url + ' by method ' + req.method);
-        var fileUrl;
-        if (req.url == '/') fileUrl = '/' +  this.FrontPage;
-        else fileUrl = req.url;
-        var filePath = path.resolve('./public' + fileUrl);
-        const fileExt = path.extname(filePath);
-        if (fileExt == '.html') {
-            fs.exists(filePath, (exists) => {
-                if (!exists) {
-                    filePath = path.resolve('./public/404.html');
-                    res.statusCode = 404;
-                    res.setHeader('Content-Type', 'text/html');
-                    res.render(filePath);
-                    //fs.createReadStream(filePath).pipe(res);
-                    return;
-                }
-                res.statusCode = 200;
-                res.setHeader('Content-Type', 'text/html');
-                res.render(filePath);
-                //fs.createReadStream(filePath).pipe(res);
-            });
         }
-        else if (fileExt == '.css') {
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'text/css');
-            res.render(filePath);
-            //fs.createReadStream(filePath).pipe(res);
-        }
-        else if (fileExt == '.js'){
-            res.statusCode = 200;
-            res.setHeader('Content-Type', "javascript")
-            res.render(filePath);
-            //fs.createReadStream(filePath).pipe(res);
-        }
-        else {
-            filePath = path.resolve('./public/404.html');
-            res.statusCode = 404;
-            res.setHeader('Content-Type', 'text/html');
-            res.render(filePath);
-            //fs.createReadStream(filePath).pipe(res);
-        }
-    }
 
     RenderAll(req, res){
         this.PControl.getAll().then((result) => {
@@ -106,14 +67,16 @@ class  ResponseHandler{
     HandleSablePost(req, res){
         var postMessage = req.body;
         if(postMessage._ID != undefined & postMessage._NAME != undefined){
-            console.log("Adding: " + postMessage._ID + " " + postMessage._NAME);
+            var Message = `Adding: [${postMessage._ID}]`
+            console.log(Message);
             this.PControl.create(postMessage._ID, postMessage._NAME);
             res.redirect(req.get("referer"));
             postMessage._ID = undefined;
         }
 
         if(postMessage._Delete != undefined){
-            console.log("Deleting: " + postMessage._Delete);
+            var Message = `Deleting: [${postMessage._Delete}]`
+            console.log(Message);
             this.PControl.delete(postMessage._Delete);
             res.redirect(req.get("referer"));
             postMessage._Delete = undefined;
