@@ -4,15 +4,15 @@
 <% }else{ %>
     <div id="PopContainer" style="display: none;">
 <% } %>
-<% if (Data.DisplayProducts) { %>
+<% if (Data._DisplayProducts) { %>
     
     <% if (Data.DisplayProductEdit) { %>
     <div id="InnerPopUp" class="InnerPopUp">
         <%- include('./CancelButton', {Data:'PopUp'}) %>
-        <%- include('../partials/SimpleDisplayForm') %>
+        <%- include('../partials/SimpleEditForm') %>
     </div>
     <% } else{ %>
-    <div id="InnerPopUp" class="InnerPopUp">
+    <div id="InnerPopUp" class="InnerPopUp" style="height: 100%;">
         <%- include('./CancelButton', {Data:'PopUp'}) %>
         <%- include('../partials/SimpleDisplayForm') %>
     </div>

@@ -21,7 +21,7 @@ class  ResponseHandler{
                         }
                     }
                 }else{
-                    ItemArray = result; // <-- Display all items
+                    ItemArray = result; // <-- Display all
                 }
 
                 //If We are finding by id then add only the results that match to itemarray
@@ -51,7 +51,6 @@ class  ResponseHandler{
         }
         this.PControl.getAll().then((result) => {
             var _id = postMessage.id;
-            console.log(_id);
             console.log("ID: " + _id)
             if(result.length == 0){
                 this.PControl.create(_id, "Base", "Base", "Base");
@@ -67,13 +66,14 @@ class  ResponseHandler{
             for(var key in result){
                 if(result[key].id == _id){
                     Data.Base = true;
-                    if(result[key].id == Data.Brand_Id){
-                        Data.Duplicate_Id = true;
-                        if(result[key].Color == postMessage.Color){
-                            Data.Duplicate_Color = true;
-                        }
-                    }  
                 }
+                if(result[key].id == Data.Brand_Id){
+                    Data.Duplicate_Id = true;
+                    if(result[key].color == postMessage.Color){
+                        Data.Duplicate_Color = true;
+                        console.log("Duplicate Result");
+                    }
+                }  
             }
             if(Data.Base == false){
                 this.PControl.create(_id, "Base", "Base", "Base");
@@ -95,9 +95,11 @@ class  ResponseHandler{
             this.AddProduct(req, res, postMessage);
         }
         if(postMessage._Delete != undefined){
+            let Formatted = postMessage._Delete.split(" ");
+            console.log(Formatted);
             var Message = `Deleting: [${postMessage._Delete}]`
             console.log(Message);
-            this.PControl.delete(postMessage._Delete);
+            this.PControl.delete(Formatted[0], Formatted[1], Formatted[2]);
             res.redirect(req.get("referer"));
             postMessage._Delete = undefined;
         }

@@ -65,16 +65,17 @@ app.route('/Sable')
     .get(function(req, res){
 
         var PageData = { //Data bundle to send to render function
-            Title: "Welcome To Sable",
-            PageToRender: "pages/Sable",
-            _Action: "/Sable", 
-            DisplayPopUp: false, 
+            Title: "Welcome To Sable", //Title for header at top of page
+            PageToRender: "pages/Sable", //Location of the page
+            _Action: "/Sable",  //Tracked request 
+            DisplayPopUp: false,
             displayProducts: false,
             DisplayProductEdit: false,
             FindById: false,
-            Query: "undefined",
+            Query: "undefined",        /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
             ProductSection: undefined,
-            ProductDisplay: true
+            ProductDisplay: true,
+            _DisplayProducts: false
         }
         if(req.query._Search != undefined && req.query._Search != ''){ //If the query is a search query then add this data
 
@@ -86,8 +87,14 @@ app.route('/Sable')
             PageData.FindById = true;
             PageData.Query = req.query.I_Product;
             PageData.DisplayProductEdit = false;
+            PageData._DisplayProducts = true;
+         }else if(req.query.E_Product != undefined && req.query.E_Product != ''){ // If the query is a product query then add this data
+            PageData.DisplayPopUp = true;
+            PageData.Query = req.query.E_Product;
+            PageData.DisplayProductEdit = true;
+            PageData.FindById = true;
+            PageData._DisplayProducts = true;
          }
-
          HR.RenderAll(req, res, PageData); //Render the page
         })
     .post(function(req, res){
