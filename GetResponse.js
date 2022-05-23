@@ -1,16 +1,8 @@
-const fs = require('fs');
-const path = require('path');
 
 class  ResponseHandler{
     constructor(MainIndex, PControl){
         this.FrontPage = MainIndex;
         this.PControl = PControl;
-        this.Arguements = {
-            DisplayTitle: "",
-            displayProducts: undefined,
-            _Action: "",
-            DisplayPopUp: false
-        }
         }
 
     RenderAll(req, res){
@@ -23,7 +15,8 @@ class  ResponseHandler{
                 _Action: '/Sable',
                 DisplayPopUp: false,
                 DisplayOnly: false,
-                DisplayOnlyEdit: false
+                DisplayOnlyEdit: false,
+                DisplayProductSection: false
             });
         })
     }
@@ -42,12 +35,13 @@ class  ResponseHandler{
                 _Action: '/Sable',
                 DisplayPopUp: false,
                 DisplayOnly: false,
-                DisplayOnlyEdit: false
+                DisplayOnlyEdit: false,
+                DisplayProductSection: false
             });
         })  
     }
 
-    RenderById(req, res, query, DisplayPopUp = false, _DisplayOnly = false, _DisplayOnlyEdit = false){
+    RenderById(req, res, query, DisplayPopUp = false, _DisplayProductSection = false, _DisplayOnly = false, _DisplayOnlyEdit = false){
         this.PControl.getById(query).then((result) =>{
             if(result == undefined){
                 this.RenderAll(req, res);
@@ -59,10 +53,8 @@ class  ResponseHandler{
             }else{
                 ItemArray = result;
             }
-
-            if(_DisplayOnly || _DisplayOnlyEdit){
-                console.log(result);
-            }
+            
+            console.log(ItemArray);
 
             res.render('pages/Sable', {
                 DisplayTitle: "Welcome To Sable",
@@ -70,7 +62,8 @@ class  ResponseHandler{
                 _Action: '/Sable',
                 DisplayPopUp: DisplayPopUp,
                 DisplayOnly: _DisplayOnly,
-                DisplayOnlyEdit: _DisplayOnlyEdit
+                DisplayOnlyEdit: _DisplayOnlyEdit,
+                DisplayProductSection: _DisplayProductSection
             });
         })
     }
