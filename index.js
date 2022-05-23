@@ -63,23 +63,38 @@ app.route('/')
 //Router for getting all get and post request on '/Sable'
 app.route('/Sable')
     .get(function(req, res){
-        if(req.query._Search != '' && req.query._Search != undefined && req.query != {}){
-            //console.log(`Fining and Rendering By Id with query: ${req.query._Search}`);
-            HR.FindById(req, res, req.query._Search);
-         } else if(req.query.I_Product != '' && req.query.I_Product != undefined && req.query != {}){
-            //console.log(`Rendering By Id with query: ${req.query.I_Product}`);
-            HR.RenderById(req, res, req.query.I_Product, true, false, true, false);
-         }else if(req.query._CancelButton != undefined){
-            //console.log(`Render All after CancelButton`);
-             HR.RenderAll(req, res);
-         }else{
-            //console.log(`Render All`);
-             HR.RenderAll(req, res);
+
+        var PageData = { //Data bundle to send to render function
+            Title: "Welcome To Sable",
+            PageToRender: "pages/Sable",
+            _Action: "/Sable", 
+            DisplayPopUp: false, 
+            DisplayProducts: false,
+            DisplayProductEdit: false,
+            FindById: false,
+            Query: "undefined"
+        }
+        
+        if(req.query._Search != '' && req.query._Search != undefined && req.query != {}){ //If the query is a search query then add this data
+
+            PageData.FindById = true;
+            PageData.Query = req.query._Search;
+
+         } else if(req.query.I_Product != '' && req.query.I_Product != undefined && req.query != {}){ // If the query is a product query then add this data
+            PageData.DisplayPopUp = true;
+            PageData.FindById = true;
+            PageData.Query = req.query.I_Product;
+            PageData.DisplayProducts = true;
+            PageData.DisplayProductEdit = false;
          }
-    })
+
+         HR.RenderAll(req, res, PageData); //Render the page
+        })
     .post(function(req, res){
         HR.HandleSablePost(req, res);
     });
+
+
 
 app.route('/Diplo')
     .get(function(req, res){

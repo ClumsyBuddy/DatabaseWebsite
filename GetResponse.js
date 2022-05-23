@@ -5,73 +5,35 @@ class  ResponseHandler{
         this.PControl = PControl;
         }
 
-    RenderAll(req, res){
-        this.PControl.getAll().then((result) => {
-            var ItemArray = [];
-            ItemArray = result;
-            res.render('pages/Sable', {
-                DisplayTitle: "Welcome To Sable",
-                displayProducts: ItemArray,
-                _Action: '/Sable',
-                DisplayPopUp: false,
-                DisplayOnly: false,
-                DisplayOnlyEdit: false,
-                DisplayProductSection: false
-            });
-        })
-    }
-    
-    FindById(req, res, query){
-        this.PControl.getAll().then((result) =>{
-            var ItemArray = [];
-            for(var _node in result){
-                if(result[_node].id.includes(query)){
-                    ItemArray.push(result[_node]);
+    RenderAll(req, res, Data){
+            this.PControl.getAll().then((result) => {
+                var ItemArray = [];
+                //If the result array is empty push result into the array otherwise make itemarray equal to result
+                if(Array.isArray(result) == false){  
+                    ItemArray.push(result);
+                }else{
+                    ItemArray = result;
                 }
-            }
-            res.render('pages/Sable', {
-                DisplayTitle: "Welcome To Sable",
-                displayProducts: ItemArray,
-                _Action: '/Sable',
-                DisplayPopUp: false,
-                DisplayOnly: false,
-                DisplayOnlyEdit: false,
-                DisplayProductSection: false
-            });
-        })  
+                //If We are finding by id then add only the results that match to itemarray
+                if(Data.FindById){
+                    for(var _node in result){
+                        if(result[_node].id.includes(Data.Query)){
+                            ItemArray.push(result[_node]);
+                        }
+                    }
+                }
+                res.render(Data.PageToRender, {
+                    DisplayTitle: Data.Title,
+                    displayProducts: ItemArray,
+                    _Action: Data._Action,
+                    DisplayPopUp: Data.DisplayPopUp,
+                    DisplayProducts: Data.DisplayProducts,
+                    DisplayProductEdit: Data.DisplayProductEdit
+                });
+            })
     }
-
-    RenderById(req, res, query, DisplayPopUp = false, _DisplayProductSection = false, _DisplayOnly = false, _DisplayOnlyEdit = false){
-        this.PControl.getById(query).then((result) =>{
-            if(result == undefined){
-                this.RenderAll(req, res);
-                return;
-            }
-            var ItemArray = [];
-            if(Array.isArray(result) == false){
-                ItemArray.push(result);
-            }else{
-                ItemArray = result;
-            }
-            
-            console.log(ItemArray);
-
-            res.render('pages/Sable', {
-                DisplayTitle: "Welcome To Sable",
-                displayProducts: ItemArray,
-                _Action: '/Sable',
-                DisplayPopUp: DisplayPopUp,
-                DisplayOnly: _DisplayOnly,
-                DisplayOnlyEdit: _DisplayOnlyEdit,
-                DisplayProductSection: _DisplayProductSection
-            });
-        })
-    }
-
-
 
     AddProduct(req, res, postMessage){
-        
         var Message = `Adding: [${postMessage.id}]`
         console.log(Message);
         var CSizes = "";
@@ -91,7 +53,6 @@ class  ResponseHandler{
                 this.PControl.create(`${postMessage.Brand}-${_id}`, postMessage.Brand, postMessage.Color, CSizes);
                 return;
             }
-            
             var Data = {
                 Brand_Id: `${postMessage.Brand}-${_id}`,
                 Base: false,
@@ -109,32 +70,25 @@ class  ResponseHandler{
                     }  
                 }
             }
-
             if(Data.Base == false){
                 this.PControl.create(_id, "Base", "Base", "Base");
             }
-
             if(Data.Duplicate_Id == false){
                 this.PControl.create(Data.Brand_Id, postMessage.Brand, postMessage.Color, CSizes);
             }
-
             if(Data.Duplicate_Id == true && Data.Duplicate_Color == false){
                 this.PControl.create(Data.Brand_Id, postMessage.Brand, postMessage.Color, CSizes);
             }
-
         });
-        
     }
 
 
 
     HandleSablePost(req, res){
         let postMessage = req.body;
-
         if(postMessage.id != undefined & postMessage.Brand != undefined && postMessage.I_Product == undefined){
             this.AddProduct(req, res, postMessage);
         }
-       
         if(postMessage._Delete != undefined){
             var Message = `Deleting: [${postMessage._Delete}]`
             console.log(Message);
@@ -143,7 +97,6 @@ class  ResponseHandler{
             postMessage._Delete = undefined;
         }
     }
-
 }
 
 
