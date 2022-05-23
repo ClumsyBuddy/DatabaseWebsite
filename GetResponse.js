@@ -1,3 +1,4 @@
+const { param } = require("express/lib/request");
 
 class  ResponseHandler{
     constructor(MainIndex, PControl){
@@ -11,25 +12,29 @@ class  ResponseHandler{
                 //If the result array is empty push result into the array otherwise make itemarray equal to result
                 if(Array.isArray(result) == false){  
                     ItemArray.push(result);
-                }else{
-                    ItemArray = result;
                 }
+                // Find the Base Products to display
+                if(Data.ProductDisplay){
+                    for(var _node in result){
+                        if(!result[_node].id.includes("-")){
+                            ItemArray.push(result[_node]);
+                        }
+                    }
+                }else{
+                    ItemArray = result; // <-- Display all items
+                }
+
                 //If We are finding by id then add only the results that match to itemarray
                 if(Data.FindById){
+                    ItemArray = [];
                     for(var _node in result){
                         if(result[_node].id.includes(Data.Query)){
                             ItemArray.push(result[_node]);
                         }
                     }
                 }
-                res.render(Data.PageToRender, {
-                    DisplayTitle: Data.Title,
-                    displayProducts: ItemArray,
-                    _Action: Data._Action,
-                    DisplayPopUp: Data.DisplayPopUp,
-                    DisplayProducts: Data.DisplayProducts,
-                    DisplayProductEdit: Data.DisplayProductEdit
-                });
+                Data.displayProducts = ItemArray;
+                res.render(Data.PageToRender, {Data});
             })
     }
 
@@ -86,7 +91,7 @@ class  ResponseHandler{
 
     HandleSablePost(req, res){
         let postMessage = req.body;
-        if(postMessage.id != undefined & postMessage.Brand != undefined && postMessage.I_Product == undefined){
+        if(postMessage.id != undefined && postMessage.Brand != undefined && postMessage.I_Product == undefined){
             this.AddProduct(req, res, postMessage);
         }
         if(postMessage._Delete != undefined){

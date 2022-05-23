@@ -69,22 +69,22 @@ app.route('/Sable')
             PageToRender: "pages/Sable",
             _Action: "/Sable", 
             DisplayPopUp: false, 
-            DisplayProducts: false,
+            displayProducts: false,
             DisplayProductEdit: false,
             FindById: false,
-            Query: "undefined"
+            Query: "undefined",
+            ProductSection: undefined,
+            ProductDisplay: true
         }
-        
-        if(req.query._Search != '' && req.query._Search != undefined && req.query != {}){ //If the query is a search query then add this data
+        if(req.query._Search != undefined && req.query._Search != ''){ //If the query is a search query then add this data
 
             PageData.FindById = true;
             PageData.Query = req.query._Search;
 
-         } else if(req.query.I_Product != '' && req.query.I_Product != undefined && req.query != {}){ // If the query is a product query then add this data
+         } else if(req.query.I_Product != undefined && req.query.I_Product != ''){ // If the query is a product query then add this data
             PageData.DisplayPopUp = true;
             PageData.FindById = true;
             PageData.Query = req.query.I_Product;
-            PageData.DisplayProducts = true;
             PageData.DisplayProductEdit = false;
          }
 

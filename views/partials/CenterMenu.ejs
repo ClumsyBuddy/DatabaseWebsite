@@ -4,25 +4,25 @@
 <div class="CenteredMenu" style="height: 100%">
     <h1 class="center" style="color:orangered">Items</h1>
     <div style="display:inline-flex; margin-bottom: 10px;">
-        <form action=<%= _Action %> method="get">
+        <form action=<%= Data._Action %> method="get">
             <input type="text" name="_Search">
             <button type="submit">Search</button>
         </form>
-        <form action=<%= _Action %> method="get">
+        <form action=<%= Data._Action %> method="get">
             <button name="Test" value="SMK110" type="menu" style="margin-left: 10px;">Filter</button>
         </form>
-        <form action=<%= _Action %> method="post" style="margin-left: 10px;">
+        <form action=<%= Data._Action %> method="post" style="margin-left: 10px;">
             <button type="button" onclick="OpenPopUp('Add')">Add</button>
         </form>
     </div>
     <div>
-        <% displayProducts.forEach((_product) => { %> 
+        <% Data.displayProducts.forEach((_product) => { %> 
         <div class="ListItem">
 
-            <form action=<%= _Action %> method="get"><button class="BarButtonMenu" name="I_Product" value=<%= _product.id %>  onclick="OpenPopUp('<%-_product.id %>')"></form>
+            <form action=<%=Data. _Action %> method="get"><button class="BarButtonMenu" name="I_Product" value=<%= _product.id %>  onclick="OpenPopUp('<%-_product.id %>')"></form>
                 <p class="Items" style="border-left: 4px double black;"><%= _product.id %></p> <p class="Items"><%= _product.brand %></p><p class="Items"><%= _product.color %></p>
             </button>
-                <form action=<%= _Action %>  method="post" style="margin-left: 1%; margin-right: 10px; margin-top: 1%;">
+                <form action=<%= Data._Action %>  method="post" style="margin-left: 1%; margin-right: 10px; margin-top: 1%;">
                     <button id="open_product:<%= _product.id %>" type="submit" name="_Delete" value='<%= _product.id %>' >Delete</button>
                 </form>
         </div>
