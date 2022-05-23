@@ -10,7 +10,8 @@
               SKU
             </label>
             <div>
-              <textarea id="id" name="id" spellcheck="true" rows="1" cols="20" tabindex="4" style="resize: none;" required="true"><%= id %></textarea>
+                <% var Name = displayProducts[0].id.split("-").pop() %> 
+                <%= Name %>
             </div>
           </div>
 
@@ -20,13 +21,7 @@
                 Brand
             </label>
             <div>
-            <select id="Brand" name="Brand" class="field select medium" tabindex="11"> 
-            <option value="CLA">Clarion</option>
-            <option value="CLAP ">Clarion Pointe</option>
-            <option value="COMCO">Comfort</option>
-            <option value="WDS">WoodSprings</option>
-            <option value="EVH">Ever Home Suites</option>
-            <option value="MST">MainStay</option>
+                <%= displayProducts[0].brand %> 
             </select>
             </div>
         </div>

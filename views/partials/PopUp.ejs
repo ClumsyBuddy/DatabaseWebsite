@@ -3,9 +3,26 @@
     <div id="PopContainer">
 <% }else{ %>
     <div id="PopContainer" style="display: none;">
-<% } %> 
+<% } %>
+<% if (DisplayOnly) { %>
+    <% if (DisplayOnlyEdit) { %>
+        <div id="InnerPopUp" class="InnerPopUp">
+            <%- include('./CancelButton', {Data:'PopUp'}) %>
+            <%- include('../partials/SimpleEditForm') %>
+        </div>
+    <% } %>
     <div id="InnerPopUp" class="InnerPopUp">
         <%- include('./CancelButton', {Data:'PopUp'}) %>
-        <%- include('../partials/SimpleAddForm', {DisplayPopUp: true}) %>
+        <%- include('../partials/SimpleDisplayForm') %>
     </div>
+<% }else if (condition){ %>
+
+    
+
+    <% }else{ %>
+    <div id="InnerPopUp" class="InnerPopUp">
+        <%- include('./CancelButton', {Data:'PopUp'}) %>
+        <%- include('../partials/SimpleAddForm') %>
+    </div>
+    <% } %> 
 </div>

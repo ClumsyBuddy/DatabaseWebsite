@@ -68,7 +68,7 @@ app.route('/Sable')
             HR.FindById(req, res, req.query._Search);
          } else if(req.query.I_Product != '' && req.query.I_Product != undefined && req.query != {}){
             //console.log(`Rendering By Id with query: ${req.query.I_Product}`);
-            HR.RenderById(req, res, req.query.I_Product, true);
+            HR.RenderById(req, res, req.query.I_Product, true, true);
          }else if(req.query._CancelButton != undefined){
             //console.log(`Render All after CancelButton`);
              HR.RenderAll(req, res);

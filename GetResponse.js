@@ -21,7 +21,9 @@ class  ResponseHandler{
                 DisplayTitle: "Welcome To Sable",
                 displayProducts: ItemArray,
                 _Action: '/Sable',
-                DisplayPopUp: false
+                DisplayPopUp: false,
+                DisplayOnly: false,
+                DisplayOnlyEdit: false
             });
         })
     }
@@ -38,12 +40,14 @@ class  ResponseHandler{
                 DisplayTitle: "Welcome To Sable",
                 displayProducts: ItemArray,
                 _Action: '/Sable',
-                DisplayPopUp: false
+                DisplayPopUp: false,
+                DisplayOnly: false,
+                DisplayOnlyEdit: false
             });
         })  
     }
 
-    RenderById(req, res, query, DisplayPopUp = false){
+    RenderById(req, res, query, DisplayPopUp = false, _DisplayOnly = false, _DisplayOnlyEdit = false){
         this.PControl.getById(query).then((result) =>{
             if(result == undefined){
                 this.RenderAll(req, res);
@@ -55,11 +59,18 @@ class  ResponseHandler{
             }else{
                 ItemArray = result;
             }
+
+            if(_DisplayOnly || _DisplayOnlyEdit){
+                console.log(result);
+            }
+
             res.render('pages/Sable', {
                 DisplayTitle: "Welcome To Sable",
                 displayProducts: ItemArray,
                 _Action: '/Sable',
-                DisplayPopUp: DisplayPopUp
+                DisplayPopUp: DisplayPopUp,
+                DisplayOnly: _DisplayOnly,
+                DisplayOnlyEdit: _DisplayOnlyEdit
             });
         })
     }
@@ -126,11 +137,11 @@ class  ResponseHandler{
 
     HandleSablePost(req, res){
         let postMessage = req.body;
-        
-        if(postMessage.id != undefined & postMessage.Brand != undefined){
+
+        if(postMessage.id != undefined & postMessage.Brand != undefined && postMessage.I_Product == undefined){
             this.AddProduct(req, res, postMessage);
         }
-
+       
         if(postMessage._Delete != undefined){
             var Message = `Deleting: [${postMessage._Delete}]`
             console.log(Message);
