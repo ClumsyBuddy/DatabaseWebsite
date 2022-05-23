@@ -64,14 +64,71 @@ class  ResponseHandler{
         })
     }
 
+
+
+    AddProduct(req, res, postMessage){
+        
+        var Message = `Adding: [${postMessage.id}]`
+        console.log(Message);
+        var CSizes = "";
+        for(var Sizes in postMessage.CheckBox){
+            if(Sizes == postMessage.CheckBox.length - 1){
+                CSizes += postMessage.CheckBox[Sizes];
+            }else{
+                CSizes += postMessage.CheckBox[Sizes] + ",";
+            }
+        }
+        this.PControl.getAll().then((result) => {
+            var _id = postMessage.id;
+            console.log(_id);
+            console.log("ID: " + _id)
+            if(result.length == 0){
+                this.PControl.create(_id, "Base", "Base", "Base");
+                this.PControl.create(`${postMessage.Brand}-${_id}`, postMessage.Brand, postMessage.Color, CSizes);
+                return;
+            }
+            
+            var Data = {
+                Brand_Id: `${postMessage.Brand}-${_id}`,
+                Base: false,
+                Duplicate_Id: false,
+                Duplicate_Color: false
+            }
+            for(var key in result){
+                if(result[key].id == _id){
+                    Data.Base = true;
+                    if(result[key].id == Data.Brand_Id){
+                        Data.Duplicate_Id = true;
+                        if(result[key].Color == postMessage.Color){
+                            Data.Duplicate_Color = true;
+                        }
+                    }  
+                }
+            }
+
+            if(Data.Base == false){
+                this.PControl.create(_id, "Base", "Base", "Base");
+            }
+
+            if(Data.Duplicate_Id == false){
+                this.PControl.create(Data.Brand_Id, postMessage.Brand, postMessage.Color, CSizes);
+            }
+
+            if(Data.Duplicate_Id == true && Data.Duplicate_Color == false){
+                this.PControl.create(Data.Brand_Id, postMessage.Brand, postMessage.Color, CSizes);
+            }
+
+        });
+        
+    }
+
+
+
     HandleSablePost(req, res){
-        var postMessage = req.body;
-        if(postMessage._ID != undefined & postMessage._NAME != undefined){
-            var Message = `Adding: [${postMessage._ID}]`
-            console.log(Message);
-            this.PControl.create(postMessage._ID, postMessage._NAME);
-            res.redirect(req.get("referer"));
-            postMessage._ID = undefined;
+        let postMessage = req.body;
+        
+        if(postMessage.id != undefined & postMessage.Brand != undefined){
+            this.AddProduct(req, res, postMessage);
         }
 
         if(postMessage._Delete != undefined){

@@ -6,21 +6,21 @@ class Products {
   
     createTable() {
       const sql = `
-      CREATE TABLE IF NOT EXISTS ${this.Table} ( id TEXT PRIMARY KEY, name TEXT)`
+      CREATE TABLE IF NOT EXISTS ${this.Table} ( key INTEGER PRIMARY KEY AUTOINCREMENT , id TEXT, brand TEXT, color TEXT, sizes TEXT)`
       return this.dao.run(sql)
     }
 
-    create(id, name) {
+    create(id, brand, color, sizes) {
         return this.dao.run(
-          `INSERT INTO ${this.Table} (id, name) VALUES(?, ?)`,
-          [id, name])
+          `INSERT INTO ${this.Table} (key, id, brand, color, sizes) VALUES(null, ?, ?, ?, ?)`,
+          [id, brand, color, sizes])
       }
 
 
-      update(name, id) {
+      update(OldOption, newOption, id) {
         return this.dao.run(
-          `UPDATE ${this.Table} SET name = ? WHERE id = ?`,
-          [name, id]
+          `UPDATE ${this.Table} SET ${OldOption} = ? WHERE id = ?`,
+          [newOption, id]
         )
       }
 

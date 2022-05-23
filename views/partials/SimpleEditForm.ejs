@@ -1,0 +1,151 @@
+<form action="/Sable" method="post">
+
+    <!--DropDownMenuWRAPPER-->
+    <div class="FlexCenterSections" style="flex-direction: row; margin-top: 20px;">
+         
+
+
+        <div class="FlexCenterSections">
+            <label class="desc" id="id" for="id">
+              SKU
+            </label>
+            <div>
+              <textarea id="id" name="id" spellcheck="true" rows="1" cols="20" tabindex="4" style="resize: none;" required="true"></textarea>
+            </div>
+          </div>
+
+        <!--DropDownMenu--> <!--Brand-->
+        <div class="TopBar">
+            <label class="desc" id="title106" for="Field106">
+                Brand
+            </label>
+            <div>
+            <select id="Brand" name="Brand" class="field select medium" tabindex="11"> 
+            <option value="CLA">Clarion</option>
+            <option value="CLAP ">Clarion Pointe</option>
+            <option value="COMCO">Comfort</option>
+            <option value="WDS">WoodSprings</option>
+            <option value="EVH">Ever Home Suites</option>
+            <option value="MST">MainStay</option>
+            </select>
+            </div>
+        </div>
+
+        <!--DropDownMenu--> <!--Color-->
+        <div class="TopBar">
+            <label class="desc" id="title106" for="Field106">
+                Color
+            </label>
+            <div>
+            <select id="Color" name="Color" class="field select medium" tabindex="11"> 
+            <option value="WH">White</option>
+            <option value="NV">Navy</option>
+            <option value="GGY">Gusty Grey</option>
+            <option value="ROY">Royal</option>
+            </select>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!--Radial Buttons-->
+    <div class="FlexCenterSections">
+        <fieldset style="display:flex; flex-direction: column;">
+          <legend id="title6" class="desc">
+            Check All That Apply
+          </legend>
+            
+          <!-- Top Line -->
+            <div style="display: inline-flex;">
+                <div>
+                    <input id="XXS" name="CheckBox" type="checkbox" checked="true" value="XXS" tabindex="8">
+                    <label class="choice" for="XXS">XXS</label>
+                </div>
+                <div>
+                    <input id="XS" name="CheckBox" type="checkbox" checked="true" checked="true" value="XS" tabindex="9">
+                    <label class="choice" for="XS">XS</label>
+                </div>
+                <div>
+                    <input id="SM" name="CheckBox" type="checkbox" checked="true" value="SM" tabindex="10">
+                    <label class="choice" for="SM">SM</label>
+                </div>
+            </div>
+
+            <!-- Middle Line -->
+            <div style="display: inline-flex;">
+                <div>
+                    <input id="MD" name="CheckBox" type="checkbox" checked="true" value="MD" tabindex="11">
+                    <label class="choice" for="MD">MD</label>
+                </div>
+                <div>
+                    <input id="LG" name="CheckBox" type="checkbox" checked="true" checked="true" value="LG" tabindex="12">
+                    <label class="choice" for="LG">LG</label>
+                </div>
+                <div>
+                    <input id="XL" name="CheckBox" type="checkbox" checked="true" value="XL" tabindex="13">
+                    <label class="choice" for="XL">XL</label>
+                </div>
+            </div>
+
+
+            <!-- Middle Two Line -->
+            <div style="display: inline-flex;">
+                <div>
+                    <input id="2XL" name="CheckBox" type="checkbox" checked="true" value="2XL" tabindex="14">
+                    <label class="choice" for="2XL">2XL</label>
+                </div>
+                <div>
+                    <input id="3XL" name="CheckBox" type="checkbox" checked="true" checked="true" value="3XL" tabindex="14">
+                    <label class="choice" for="3XL">3XL</label>
+                </div>
+                <div>
+                    <input id="4XL" name="CheckBox" type="checkbox" checked="true" value="4XL" tabindex="15">
+                    <label class="choice" for="4XL">4XL</label>
+                </div>
+            </div>
+
+
+
+            <!-- Bottom Line -->
+            <div style="display: inline-flex;">
+                <div>
+                    <input id="5XL" name="CheckBox" type="checkbox" checked="true" value="5XL" tabindex="16">
+                    <label class="choice" for="5XL">5XL</label>
+                </div>
+                <div>
+                    <input id="6XL" name="CheckBox" type="checkbox" checked="true" checked="true" value="6XL" tabindex="17">
+                    <label class="choice" for="6XL">6XL</label>
+                </div>
+            </div>
+
+
+
+        </fieldset>
+      </div>
+
+
+
+
+
+      <!--MessageBox-->
+    <div class="FlexCenterSections">
+      <label class="desc" id="title4" for="Field4">
+        Description
+      </label>
+      <div>
+        <textarea id="Description" name="Description" spellcheck="true" rows="10" cols="75" tabindex="4" style="resize: none;"></textarea>
+      </div>
+    </div>
+
+    
+    
+    
+    
+    <div class="FlexCenterSections">
+          <div>
+            <input id="saveForm" name="saveForm" type="submit" value="Submit">
+      </div>
+      </div>
+    
+  </form>
