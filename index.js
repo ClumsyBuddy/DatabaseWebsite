@@ -68,14 +68,16 @@ app.route('/Sable')
             Title: "Welcome To Sable", //Title for header at top of page
             PageToRender: "pages/Sable", //Location of the page
             _Action: "/Sable",  //Tracked request 
-            DisplayPopUp: false,
-            displayProducts: false,
-            DisplayProductEdit: false,
-            FindById: false,
-            Query: "undefined",        /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
+            DisplayPopUp: false, //Display Popup menu
+            displayProducts: [], //Container for products to be displayed
+            DisplayProductEdit: false, //Displays menu to edit products attributes
+            FindById: false, //Determines whether to find by id or not
+            Query: "", // Data to hold query                                             /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
             ProductSection: undefined,
             ProductDisplay: true,
-            _DisplayProducts: false
+            _DisplayProducts: false,
+            _BackGroundDisplay: true, //Displays green product display
+            ProductMenuToEdit: false //Bad name for something that lets you click the base product then shows the corresponding products to the base that then lets you open its menu
         }
         if(req.query._Search != undefined && req.query._Search != ''){ //If the query is a search query then add this data
 
@@ -83,11 +85,13 @@ app.route('/Sable')
             PageData.Query = req.query._Search;
 
          } else if(req.query.I_Product != undefined && req.query.I_Product != ''){ // If the query is a product query then add this data
-            PageData.DisplayPopUp = true;
+            PageData.DisplayPopUp = false;
             PageData.FindById = true;
             PageData.Query = req.query.I_Product;
             PageData.DisplayProductEdit = false;
-            PageData._DisplayProducts = true;
+            PageData._DisplayProducts = false;
+            PageData._BackGroundDisplay = true;
+            PageData.ProductMenuToEdit = true;
          }else if(req.query.E_Product != undefined && req.query.E_Product != ''){ // If the query is a product query then add this data
             PageData.DisplayPopUp = true;
             PageData.Query = req.query.E_Product;
@@ -105,11 +109,23 @@ app.route('/Sable')
 
 app.route('/Diplo')
     .get(function(req, res){
+        var PageData = { //Data bundle to send to render function
+            Title: "Welcome To Diplomat", //Title for header at top of page
+            PageToRender: "pages/Diplomat", //Location of the page
+            _Action: "/Diplo",  //Tracked request 
+            DisplayPopUp: false, //Display Popup menu
+            displayProducts: [], //Container for products to be displayed
+            DisplayProductEdit: false, //Displays menu to edit products attributes
+            FindById: false, //Determines whether to find by id or not
+            Query: "", // Data to hold query                                             /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
+            ProductSection: undefined,
+            ProductDisplay: true,
+            _DisplayProducts: false,
+            _BackGroundDisplay: true //Displays green product display
+        }
         displayProducts = [];
         res.render('pages/Diplomat', {
-            DisplayTitle: "Welcome To Diplomat",
-            displayProducts,
-            _Action: '/diplo'
+            Data: PageData
         })
     }).post(function(req, res){
 

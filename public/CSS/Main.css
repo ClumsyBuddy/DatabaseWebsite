@@ -132,6 +132,16 @@ z-index: 10;
     left: 25%;
 }
 
+.InnerPopUpDisplay{
+    position:fixed; 
+    width:60vw; 
+    height: 75vh; 
+    background-color: lightgrey; 
+    top: 20%; 
+    left: 20%;
+    overflow: auto;
+}
+
 .BarButtonMenu{
     border:none; 
     background:none;

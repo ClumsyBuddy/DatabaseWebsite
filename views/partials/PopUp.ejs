@@ -1,5 +1,5 @@
 
-<% if(Data.DisplayPopUp == true) { %> 
+<% if(Data.DisplayPopUp) { %> 
     <div id="PopContainer">
 <% }else{ %>
     <div id="PopContainer" style="display: none;">
@@ -12,7 +12,7 @@
         <%- include('../partials/SimpleEditForm') %>
     </div>
     <% } else{ %>
-    <div id="InnerPopUp" class="InnerPopUp" style="height: 100%;">
+    <div id="InnerPopUp" class="InnerPopUpDisplay">
         <%- include('./CancelButton', {Data:'PopUp'}) %>
         <%- include('../partials/SimpleDisplayForm') %>
     </div>
