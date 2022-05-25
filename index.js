@@ -67,11 +67,9 @@ app.route('/')
             Query: "", // Data to hold query                                             /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
             MenuState:  {ListState:"BaseDisplay", PopUpState:"Start", LoginState:"None"},
         }
-        console.log(req.query);
         if(req.query.open_login == "PL"){
             PageData.MenuState.LoginState = "Show";
         }
-
         res.render(PageData.PageToRender, {Data:PageData});
     }).post(function(req, res){
         
