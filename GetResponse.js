@@ -1,4 +1,3 @@
-const { param } = require("express/lib/request");
 
 class  ResponseHandler{
     constructor(MainIndex, PControl){
@@ -87,8 +86,6 @@ class  ResponseHandler{
         });
     }
 
-
-
     HandleSablePost(req, res){
         let postMessage = req.body;
         if(postMessage.id != undefined && postMessage.Brand != undefined && postMessage.I_Product == undefined){
@@ -105,6 +102,5 @@ class  ResponseHandler{
         }
     }
 }
-
 
 module.exports = ResponseHandler

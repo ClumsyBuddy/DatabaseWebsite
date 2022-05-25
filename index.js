@@ -4,8 +4,6 @@ const path = require('path');
 const express = require('express');
 const Promise = require("bluebird");
 
-
-
 //Create a app and router variable
 const router = express.Router();
 const app = express();
@@ -15,12 +13,10 @@ const Database = require('./Database');
 const Products = require("./Products");
 const ResponseHandler = require('./GetResponse');
 
-
 //Create variables for exported Classes
 const db = new Database('./Main.db');
 const _Products = new Products(db, "products");
 const HR = new ResponseHandler("index.html", _Products);
-
 
 //Create the main table
 _Products.createTable();
@@ -74,7 +70,7 @@ app.route('/Sable')
             FindById: false, //Determines whether to find by id or not
             Query: "", // Data to hold query                                             /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
             ProductSection: undefined,
-            ProductDisplay: true,
+            ProductDisplay: true, //Display base product
             _DisplayProducts: false,
             _BackGroundDisplay: true, //Displays green product display
             ProductMenuToEdit: false //Bad name for something that lets you click the base product then shows the corresponding products to the base that then lets you open its menu
@@ -105,8 +101,6 @@ app.route('/Sable')
         HR.HandleSablePost(req, res);
     });
 
-
-
 app.route('/Diplo')
     .get(function(req, res){
         var PageData = { //Data bundle to send to render function
@@ -119,7 +113,7 @@ app.route('/Diplo')
             FindById: false, //Determines whether to find by id or not
             Query: "", // Data to hold query                                             /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
             ProductSection: undefined,
-            ProductDisplay: true,
+            ProductDisplay: true, //Display base product
             _DisplayProducts: false,
             _BackGroundDisplay: true //Displays green product display
         }
@@ -130,7 +124,6 @@ app.route('/Diplo')
     }).post(function(req, res){
 
     });
-
 
 app.use('/', router);
 app.use('/Sable', router);
