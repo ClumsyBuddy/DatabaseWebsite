@@ -1,15 +1,5 @@
-<% if (Data == "PopUp") { %>
-    <form action="/Sable" method="get">
-   
-        <% if (Data.displayProducts == undefined || Data.displayProducts.length ==  0) { %>
-            <button   name="_CancelButton" value="All" type="menu" class="ExitButton">
-        <% } else { %>
-            <button   name="_CancelButton" value=<%= Data.displayProducts[0].id %>    type="menu" class="ExitButton">
-        <% } %> 
-        
-            <img src="uploads/cancel-48x.png" alt="" width="28px" height="28px"></button>
-    </form>
-    <% } else { %>
-        <button onclick="ClosePopUp(this)" type="menu" id="CancelButton" class="ExitButton">
-                <img src="uploads/cancel-48x.png" alt="" width="28px" height="28px"></button>
-    <% } %> 
+<form action="<%= Data._Action %>" method="get">
+    <button type="menu" id="CancelButton" class="ExitButton">
+        <img src="uploads/cancel-48x.png" alt="" width="28px" height="28px">
+    </button>
+</form>

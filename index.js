@@ -42,8 +42,8 @@ const port = 8000;
 // Will be used to log activities
 app.use(function(req, res, next) {
     // log each request to the console
-    var Message = `Method: ${req.method} || At: ${req.url} || IP: ${req.ip.split("ffff:").pop()}`
-    console.log(Message);
+    //var Message = `Method: ${req.method} || At: ${req.url} || IP: ${req.ip.split("ffff:").pop()}`
+    //console.log(Message);
     // continue doing what we were doing and go to the route
     next();
 });
@@ -65,36 +65,26 @@ app.route('/Sable')
             PageToRender: "pages/Sable", //Location of the page
             _Action: "/Sable",  //Tracked request 
             DisplayPopUp: false, //Display Popup menu
-            displayProducts: [], //Container for products to be displayed
-            DisplayProductEdit: false, //Displays menu to edit products attributes
+            ProductList: [], //Container for products to be displayed
             FindById: false, //Determines whether to find by id or not
             Query: "", // Data to hold query                                             /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
-            ProductSection: undefined,
-            ProductDisplay: true, //Display base product
-            _DisplayProducts: false,
-            _BackGroundDisplay: true, //Displays green product display
-            ProductMenuToEdit: false //Bad name for something that lets you click the base product then shows the corresponding products to the base that then lets you open its menu
+            MenuState: "Start",
+            PopUpState: "Start"
         }
         if(req.query._Search != undefined && req.query._Search != ''){ //If the query is a search query then add this data
-
             PageData.FindById = true;
             PageData.Query = req.query._Search;
-
+            PageData.MenuState = "Search";
          } else if(req.query.I_Product != undefined && req.query.I_Product != ''){ // If the query is a product query then add this data
-            PageData.DisplayPopUp = false;
             PageData.FindById = true;
             PageData.Query = req.query.I_Product;
-            PageData.DisplayProductEdit = false;
-            PageData._DisplayProducts = false;
-            PageData._BackGroundDisplay = true;
-            PageData.ProductMenuToEdit = true;
-         }else if(req.query.E_Product != undefined && req.query.E_Product != ''){ // If the query is a product query then add this data
+            PageData.MenuState = "BrandDisplay";
+        }else if(req.query.E_Product != undefined && req.query.E_Product != ''){ // If the query is a product query then add this data
             PageData.DisplayPopUp = true;
             PageData.Query = req.query.E_Product;
-            PageData.DisplayProductEdit = true;
             PageData.FindById = true;
-            PageData._DisplayProducts = true;
-         }
+            PageData.MenuState = "PopUp";
+        }
          HR.RenderAll(req, res, PageData); //Render the page
         })
     .post(function(req, res){

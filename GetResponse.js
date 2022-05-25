@@ -11,16 +11,19 @@ class  ResponseHandler{
                 //If the result array is empty push result into the array otherwise make itemarray equal to result
                 if(Array.isArray(result) == false){  
                     ItemArray.push(result);
+                }else{
+                    ItemArray = result;
                 }
                 // Find the Base Products to display
-                if(Data.ProductDisplay){
+                
+                if(Data.MenuState == "Start"){
+                    ItemArray = [];
                     for(var _node in result){
                         if(!result[_node].id.includes("-")){
                             ItemArray.push(result[_node]);
                         }
                     }
-                }else{
-                    ItemArray = result; // <-- Display all
+                    console.log(Data.Query);
                 }
 
                 //If We are finding by id then add only the results that match to itemarray
@@ -32,7 +35,8 @@ class  ResponseHandler{
                         }
                     }
                 }
-                Data.displayProducts = ItemArray;
+
+                Data.ProductList = ItemArray;
                 res.render(Data.PageToRender, {Data});
             })
     }
