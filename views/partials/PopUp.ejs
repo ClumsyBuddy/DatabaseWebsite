@@ -1,9 +1,9 @@
 
 <% if(Data.DisplayPopUp) { %> 
     <div id="PopContainer">
-        <% if (Data.MenuState == "PopUp") { %>
+        <% if (Data.MenuState.ListState == "PopUp") { %>
         
-            <% if (Data.PopUpState == "Start") { %>
+            <% if (Data.MenuState.PopUpState == "Start") { %>
             
                 <div id="InnerPopUp" class="InnerPopUp">
                     <%- include('./CancelButton', {Data:'PopUp'}) %>
@@ -19,13 +19,13 @@
             
             <% }  %> 
         
-            <% }else{ %>
+        <% } %>
         
-                <div id="InnerPopUp" class="InnerPopUp">
-                    <%- include('./CancelButton', {Data:'PopUp'}) %>
-                    <%- include('../partials/SimpleAddForm') %>
-                </div>
-        
+        <% if(Data.MenuState.PopUpState == "Add"){ %> 
+            <div id="InnerPopUp" class="InnerPopUp">
+                <%- include('./CancelButton', {Data:'PopUp'}) %>
+                <%- include('../partials/SimpleAddForm') %>
+            </div>
         <% } %> 
     </div>
 <% } %>

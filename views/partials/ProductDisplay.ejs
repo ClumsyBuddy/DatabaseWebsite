@@ -1,23 +1,8 @@
 <div>
     <% Data.ProductList.forEach((_product) => { %> 
 
-
             <!-- Base Product Display -->
-            <% if (Data.MenuState == "Start") { %> 
-                <div class="ListItem">
-                    <form action=<%=Data._Action %> method="get">
-                        <button class="BarButtonMenu" name="I_Product" value=<%= _product.id %> >
-                            <p class="Items" style="border-left: 4px double black;"><%= _product.id %></p> <p class="Items"><%= _product.brand %></p><p class="Items"><%= _product.color %></p>
-                        </button>
-                    </form>
-                    <form action=<%= Data._Action %>  method="post" style="margin-left: 1%; margin-right: 10px; margin-top: 1%;">
-                        <button type="submit" name="_Delete" value='<%= _product.id %> <%= _product.brand %> <%= _product.color %>' >Delete</button>
-                    </form>
-                </div>
-            <% } %>
-
-            <!-- Base Product Display -->
-        <% if (Data.MenuState == "BaseDisplay") { %> 
+        <% if (Data.MenuState.ListState == "BaseDisplay") { %> 
             <div class="ListItem">
                 <form action=<%=Data._Action %> method="get">
                     <button class="BarButtonMenu" name="I_Product" value=<%= _product.id %> >
@@ -32,7 +17,7 @@
             
 
             <!-- Brand Product Display -->
-        <% if (Data.MenuState == "BrandDisplay") { %>        
+        <% if (Data.MenuState.ListState == "BrandDisplay") { %>        
             <div class="ListItem">
                 <form action=<%=Data._Action %> method="get">
                     <button class="BarButtonMenu" name="E_Product" value=<%= _product.id %> >
@@ -47,7 +32,7 @@
 
 
          <!-- Search Product Display -->
-         <% if (Data.MenuState == "Search") { %>        
+         <% if (Data.MenuState.ListState == "Search") { %>        
             <div class="ListItem">
                 <form action=<%=Data._Action %> method="get">
                     <button class="BarButtonMenu" name="I_Product" value=<%= _product.id %> >

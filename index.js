@@ -12,15 +12,20 @@ const app = express();
 const Database = require('./Database');
 const Products = require("./Products");
 const ResponseHandler = require('./GetResponse');
+const Account = require('./Accounts');
 
 //Create variables for exported Classes
 const db = new Database('./Main.db');
+const acc = new Database('./Account.db');
+
 const _Products = new Products(db, "products");
+const _accounts = new Account(acc, "accounts");
+
 const HR = new ResponseHandler("index.html", _Products);
 
 //Create the main table
 _Products.createTable();
-
+_accounts.createTable();
 //Use Ejs for the view engine, We want to use templates
 app.set("view engine", "ejs");
 
@@ -51,7 +56,23 @@ app.use(function(req, res, next) {
 //Router for getting all get and post request on '/' which is index
 app.route('/')
     .get(function(req, res){
-        res.render('pages/index');
+
+        var PageData = { //Data bundle to send to render function
+            Title: "Main Database", //Title for header at top of page
+            PageToRender: "pages/index", //Location of the page
+            _Action: "/",  //Tracked request 
+            DisplayPopUp: false, //Display Popup menu
+            ProductList: [], //Container for products to be displayed
+            FindById: false, //Determines whether to find by id or not
+            Query: "", // Data to hold query                                             /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
+            MenuState:  {ListState:"BaseDisplay", PopUpState:"Start", LoginState:"None"},
+        }
+        console.log(req.query);
+        if(req.query.open_login == "PL"){
+            PageData.MenuState.LoginState = "Show";
+        }
+
+        res.render(PageData.PageToRender, {Data:PageData});
     }).post(function(req, res){
         
     });
@@ -68,22 +89,24 @@ app.route('/Sable')
             ProductList: [], //Container for products to be displayed
             FindById: false, //Determines whether to find by id or not
             Query: "", // Data to hold query                                             /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
-            MenuState: "Start",
-            PopUpState: "Start"
+            MenuState:  {ListState:"BaseDisplay", PopUpState:"Start", LoginState:"None"},
         }
         if(req.query._Search != undefined && req.query._Search != ''){ //If the query is a search query then add this data
             PageData.FindById = true;
             PageData.Query = req.query._Search;
-            PageData.MenuState = "Search";
+            PageData.MenuState.ListState = "Search";
          } else if(req.query.I_Product != undefined && req.query.I_Product != ''){ // If the query is a product query then add this data
             PageData.FindById = true;
             PageData.Query = req.query.I_Product;
-            PageData.MenuState = "BrandDisplay";
+            PageData.MenuState.ListState = "BrandDisplay";
         }else if(req.query.E_Product != undefined && req.query.E_Product != ''){ // If the query is a product query then add this data
             PageData.DisplayPopUp = true;
             PageData.Query = req.query.E_Product;
             PageData.FindById = true;
-            PageData.MenuState = "PopUp";
+            PageData.MenuState.ListState = "PopUp";
+        }else if(req.query._Add != undefined && req.query._Add != ''){
+            PageData.DisplayPopUp = true;
+            PageData.MenuState.PopUpState = "Add";
         }
          HR.RenderAll(req, res, PageData); //Render the page
         })

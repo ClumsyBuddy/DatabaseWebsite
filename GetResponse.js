@@ -16,7 +16,7 @@ class  ResponseHandler{
                 }
                 // Find the Base Products to display
                 
-                if(Data.MenuState == "Start"){
+                if(Data.MenuState.ListState == "BaseDisplay"){
                     ItemArray = [];
                     for(var _node in result){
                         if(!result[_node].id.includes("-")){

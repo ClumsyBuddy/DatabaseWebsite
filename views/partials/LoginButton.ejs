@@ -1,3 +1,7 @@
-<button type="button" id="LoginButton" class="NavBar" style="margin-left:0;">
-    <a class="NavBarElements block">Login</a>
-</button>
+<% if (Data.MenuState.LoginState == "None") { %>
+    <form action="<% Data._Action %>" method="get" style="width:100%; display:flex; justify-content:center;">
+        <button type="menu" id="LoginButton" class="NavBar" style="margin-left:0;" name="open_login" value="PL">
+            <a class="NavBarElements block">Login</a>
+        </button>
+    </form>
+<% } %>
