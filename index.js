@@ -15,7 +15,9 @@ const ResponseHandler = require('./GetResponse');
 const Account = require('./Accounts');
 const Log = require('./Logger');
 const MasterLogger = require('./MasterLogger');
+const Sable_Menu = require('./Sable/SableMenuFunction');
 
+const SableMenu = new Sable_Menu();
 const BaseLog = new MasterLogger();
 
 //Create variables for exported Classes

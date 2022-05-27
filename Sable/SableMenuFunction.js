@@ -11,13 +11,17 @@ class SableMenu{
 
     }
     
+    ReturnItemList(LookUp, ItemList, Query){
+        return this.#ReturnBaseProduct(LookUp, ItemList, Query);
+    }
 
-    ReturnBaseProduct(LookUp, ItemList, Query){
+
+    #ReturnBaseProduct(LookUp, ItemList, Query){
         if(ItemList.length == 0 || Array.isArray(ItemList) == false){ // If there is nothing inside the array or its not a array return undefined
             return undefined;
         }
         if(LookUp != this.lookUpTable.Base){ //If We arent looking for the base SKU go to the next function
-            return this.ReturnAllProductsFromBase(LookUp, ItemListm, Query, callback);
+            return this.ReturnAllProductsFromBase(LookUp, ItemList, Query);
         }
         var CopyArray = [];
        
@@ -31,7 +35,7 @@ class SableMenu{
 
     }
 
-    ReturnAllProductsFromBase(LookUp, CopyArray, Query){
+    #ReturnAllProductsFromBase(LookUp, CopyArray, Query){
         
         //If We are finding by id then add only the results that match to itemarray
         for(var _node in result){
@@ -41,13 +45,13 @@ class SableMenu{
         }
 
         if(LookUp != this.lookUpTable.All){
-            CopyArray = this.ReturnColorProduct(LookUp, CopyArray, Query, callback);
+            CopyArray = this.ReturnColorProduct(LookUp, CopyArray, Query);
         }
 
         return CopyArray;
     }
 
-    ReturnBrandProduct(LookUp, CopyArray, Query){
+    #ReturnBrandProduct(LookUp, CopyArray, Query){
         
         for(var _node in result){
             if(result[_node].brand.includes(Query)){
@@ -56,12 +60,12 @@ class SableMenu{
         }
 
         if(LookUp != this.lookUpTable.Brand){
-            CopyArray = this.ReturnColorProduct(LookUp, CopyArray, Query, callback);
+            CopyArray = this.ReturnColorProduct(LookUp, CopyArray, Query);
         }
 
         return CopyArray;
     }
-    ReturnColorProduct(LookUp, CopyArray, Query, callback){
+    #ReturnColorProduct(LookUp, CopyArray, Query){
         if(LookUp != this.lookUpTable.Color){
             return undefined;
         }
