@@ -22,26 +22,11 @@ class  ResponseHandler{
                 }else{
                     ItemArray = result;
                 }
-                // Find the Base Products to display
                 
-                if(Data.MenuState.ListState == "BaseDisplay"){
-                    ItemArray = [];
-                    for(var _node in result){
-                        if(!result[_node].id.includes("-")){
-                            ItemArray.push(result[_node]);
-                        }
-                    }
-                }
+                
+                
 
-                //If We are finding by id then add only the results that match to itemarray
-                if(Data.FindById){
-                    ItemArray = [];
-                    for(var _node in result){
-                        if(result[_node].id.includes(Data.Query)){
-                            ItemArray.push(result[_node]);
-                        }
-                    }
-                }
+                
 
                 Data.ProductList = ItemArray;
                 res.render(Data.PageToRender, {Data});
