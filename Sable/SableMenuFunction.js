@@ -2,83 +2,87 @@
 class SableMenu{
     constructor(){
         const LookUp = {
-            Base:1,
-            All:2,
-            Brand:3,
-            Color:4
+            Base:0,
+            All:1,
+            Brand:2,
+            Color:3
         }
         this.lookUpTable = LookUp;
 
     }
     
-    ReturnItemList(LookUp, ItemList, Query){
-        return this.#ReturnBaseProduct(LookUp, ItemList, Query);
-    }
+   
 
 
     #ReturnBaseProduct(LookUp, ItemList, Query){
-        if(ItemList.length == 0 || Array.isArray(ItemList) == false){ // If there is nothing inside the array or its not a array return undefined
+        if(ItemList.length == 0){ // If there is nothing inside the array or its not a array return undefined
             return undefined;
         }
         if(LookUp != this.lookUpTable.Base){ //If We arent looking for the base SKU go to the next function
-            return this.ReturnAllProductsFromBase(LookUp, ItemList, Query);
+            return this.#ReturnAllProductsFromBase(LookUp, ItemList, Query);
         }
         var CopyArray = [];
        
-        for(var _node in result){ // Find the Base Products to display
-            if(!result[_node].id.includes("-")){
-                CopyArray.push(result[_node]);
+        for(var _node in ItemList){ // Find the Base Products to display
+            if(!ItemList[_node].id.includes("-")){
+                CopyArray.push(ItemList[_node]);
             }
         }
-
         return CopyArray;
-
     }
 
-    #ReturnAllProductsFromBase(LookUp, CopyArray, Query){
-        
+    #ReturnAllProductsFromBase(LookUp, ItemList, Query){
+        var CopyArray = [];
         //If We are finding by id then add only the results that match to itemarray
-        for(var _node in result){
-            if(result[_node].id.includes(Query)){
-                CopyArray.push(result[_node]);
+        for(var _node in ItemList){
+            if(ItemList[_node].id.includes(Query)){
+                if(ItemList[_node].brand != "Base"){
+                    CopyArray.push(ItemList[_node]);
+                }
             }
         }
 
         if(LookUp != this.lookUpTable.All){
-            CopyArray = this.ReturnColorProduct(LookUp, CopyArray, Query);
+            CopyArray = this.#ReturnBrandProduct(LookUp, CopyArray, Query);
         }
 
         return CopyArray;
     }
 
-    #ReturnBrandProduct(LookUp, CopyArray, Query){
-        
-        for(var _node in result){
-            if(result[_node].brand.includes(Query)){
-                CopyArray.push(result[_node]);
+    #ReturnBrandProduct(LookUp, ItemList, Query){
+        console.log(Query);
+        var CopyArray = [];
+        for(var _node in ItemList){
+            if(ItemList[_node].brand.includes(ItemList[_node].id.split("-")[0])){
+                CopyArray.push(ItemList[_node]);
             }
         }
 
         if(LookUp != this.lookUpTable.Brand){
-            CopyArray = this.ReturnColorProduct(LookUp, CopyArray, Query);
+            CopyArray = this.#ReturnColorProduct(LookUp, CopyArray, Query);
         }
 
         return CopyArray;
     }
-    #ReturnColorProduct(LookUp, CopyArray, Query){
+    #ReturnColorProduct(LookUp, ItemList, Query){
         if(LookUp != this.lookUpTable.Color){
             return undefined;
         }
-
-        for(var _node in result){
-            if(result[_node].color.includes(Query)){
-                CopyArray.push(result[_node]);
+        var CopyArray = [];
+        for(var _node in ItemList){
+            if(ItemList[_node].color.includes(Query)){
+                CopyArray.push(ItemList[_node]);
             }
         }
         return CopyArray;
     }
 
-
+    ReturnItemList(LookUp, ItemList, Query){
+        console.log("Before Return");
+        var List =  this.#ReturnBaseProduct(LookUp, ItemList, Query);
+        console.log("After Return");
+        return List;
+    }
 
 }
 

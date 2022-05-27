@@ -11,11 +11,10 @@ const app = express();
 //My exported packages
 const Database = require('./Database');
 const Products = require("./Products");
+const Sable_Menu = require('./Sable/SableMenuFunction');
 const ResponseHandler = require('./GetResponse');
 const Account = require('./Accounts');
-const Log = require('./Logger');
 const MasterLogger = require('./MasterLogger');
-const Sable_Menu = require('./Sable/SableMenuFunction');
 
 const SableMenu = new Sable_Menu();
 const BaseLog = new MasterLogger();
@@ -68,7 +67,7 @@ app.route('/')
             _Action: "/",  //Tracked request 
             DisplayPopUp: false, //Display Popup menu
             ProductList: [], //Container for products to be displayed
-            FindById: false, //Determines whether to find by id or not
+            FindProducts: 0, //Determines whether to find by id or not
             Query: "", // Data to hold query                                             /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
             MenuState:  {ListState:"BaseDisplay", PopUpState:"Start", LoginState:"None"},
         }
@@ -89,30 +88,28 @@ app.route('/Sable')
             _Action: "/Sable",  //Tracked request 
             DisplayPopUp: false, //Display Popup menu
             ProductList: [], //Container for products to be displayed
-            FindById: false, //Determines whether to find by id or not
+            FindProducts: 0, //Determines whether to find by id or not
             Query: "", // Data to hold query                                             /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
             MenuState:  {ListState:"BaseDisplay", PopUpState:"Start", LoginState:"None"},
         }
 
         if(req.query._Search != undefined && req.query._Search != ''){ //If the query is a search query then add this data
-            PageData.FindById = true;
+            PageData.FindProducts = SableMenu.lookUpTable.All;
             PageData.Query = req.query._Search;
             PageData.MenuState.ListState = "Search";
-            BaseLog.Print();
          } else if(req.query.I_Product != undefined && req.query.I_Product != ''){ // If the query is a product query then add this data
-            PageData.FindById = true;
+            PageData.FindProducts = SableMenu.lookUpTable.All;
             PageData.Query = req.query.I_Product;
             PageData.MenuState.ListState = "BrandDisplay";
         }else if(req.query.E_Product != undefined && req.query.E_Product != ''){ // If the query is a product query then add this data
-            PageData.DisplayPopUp = true;
+            PageData.FindProducts = SableMenu.lookUpTable.Brand;
             PageData.Query = req.query.E_Product;
-            PageData.FindById = true;
-            PageData.MenuState.ListState = "PopUp";
+            PageData.MenuState.ListState = "BrandDisplay";
         }else if(req.query._Add != undefined && req.query._Add != ''){
             PageData.DisplayPopUp = true;
             PageData.MenuState.PopUpState = "Add";
         }
-         HR.RenderAll(req, res, PageData); //Render the page
+        HR.RenderAll(req, res, PageData, SableMenu); //Render the page
         })
     .post(function(req, res){
         HR.HandleSablePost(req, res);

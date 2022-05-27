@@ -13,7 +13,7 @@ class  ResponseHandler{
         this.ProductLog = new Log(this.MLogger, "PHandle");
         }
 
-    RenderAll(req, res, Data){
+    RenderAll(req, res, Data, callback){
             this.PControl.getAll().then((result) => {
                 var ItemArray = [];
                 //If the result array is empty push result into the array otherwise make itemarray equal to result
@@ -23,11 +23,10 @@ class  ResponseHandler{
                     ItemArray = result;
                 }
                 
-                
-                
-
-                
-
+                if(callback != undefined){
+                    ItemArray = callback.ReturnItemList(Data.FindProducts, ItemArray, Data.Query);
+                }
+                console.log(ItemArray);
                 Data.ProductList = ItemArray;
                 res.render(Data.PageToRender, {Data});
             })
