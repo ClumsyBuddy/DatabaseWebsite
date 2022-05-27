@@ -13,6 +13,10 @@ const Database = require('./Database');
 const Products = require("./Products");
 const ResponseHandler = require('./GetResponse');
 const Account = require('./Accounts');
+const Log = require('./Logger');
+const MasterLogger = require('./MasterLogger');
+
+const BaseLog = new MasterLogger();
 
 //Create variables for exported Classes
 const db = new Database('./Main.db');
@@ -21,7 +25,7 @@ const acc = new Database('./Account.db');
 const _Products = new Products(db, "products");
 const _accounts = new Account(acc, "accounts");
 
-const HR = new ResponseHandler("index.html", _Products);
+const HR = new ResponseHandler("index.html", _Products, BaseLog);
 
 //Create the main table
 _Products.createTable();
@@ -56,7 +60,6 @@ app.use(function(req, res, next) {
 //Router for getting all get and post request on '/' which is index
 app.route('/')
     .get(function(req, res){
-
         var PageData = { //Data bundle to send to render function
             Title: "Main Database", //Title for header at top of page
             PageToRender: "pages/index", //Location of the page
@@ -78,7 +81,6 @@ app.route('/')
 //Router for getting all get and post request on '/Sable'
 app.route('/Sable')
     .get(function(req, res){
-
         var PageData = { //Data bundle to send to render function
             Title: "Welcome To Sable", //Title for header at top of page
             PageToRender: "pages/Sable", //Location of the page
@@ -89,10 +91,12 @@ app.route('/Sable')
             Query: "", // Data to hold query                                             /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
             MenuState:  {ListState:"BaseDisplay", PopUpState:"Start", LoginState:"None"},
         }
+
         if(req.query._Search != undefined && req.query._Search != ''){ //If the query is a search query then add this data
             PageData.FindById = true;
             PageData.Query = req.query._Search;
             PageData.MenuState.ListState = "Search";
+            BaseLog.Print();
          } else if(req.query.I_Product != undefined && req.query.I_Product != ''){ // If the query is a product query then add this data
             PageData.FindById = true;
             PageData.Query = req.query.I_Product;

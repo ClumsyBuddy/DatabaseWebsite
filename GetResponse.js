@@ -1,8 +1,16 @@
+const Log = require("./Logger");
+const MasterLogger = require("./MasterLogger");
+
 
 class  ResponseHandler{
-    constructor(MainIndex, PControl){
+    /**
+     * @param {MasterLogger} _Logger
+     */
+    constructor(MainIndex, PControl, _Logger){
         this.FrontPage = MainIndex;
         this.PControl = PControl;
+        this.MLogger = _Logger
+        this.ProductLog = new Log(this.MLogger, "PHandle");
         }
 
     RenderAll(req, res, Data){
@@ -23,7 +31,6 @@ class  ResponseHandler{
                             ItemArray.push(result[_node]);
                         }
                     }
-                    console.log(Data.Query);
                 }
 
                 //If We are finding by id then add only the results that match to itemarray
@@ -42,8 +49,7 @@ class  ResponseHandler{
     }
 
     AddProduct(req, res, postMessage){
-        var Message = `Adding: [${postMessage.id}]`
-        console.log(Message);
+        this.ProductLog.New(`Attempting to Add: [${postMessage.id} | ${postMessage.Brand} | ${postMessage.Color}]`);
         var CSizes = "";
         for(var Sizes in postMessage.CheckBox){
             if(Sizes == postMessage.CheckBox.length - 1){
@@ -54,7 +60,6 @@ class  ResponseHandler{
         }
         this.PControl.getAll().then((result) => {
             var _id = postMessage.id;
-            console.log("ID: " + _id)
             if(result.length == 0){
                 this.PControl.create(_id, "Base", "Base", "Base");
                 this.PControl.create(`${postMessage.Brand}-${_id}`, postMessage.Brand, postMessage.Color, CSizes);
@@ -74,18 +79,21 @@ class  ResponseHandler{
                     Data.Duplicate_Id = true;
                     if(result[key].color == postMessage.Color){
                         Data.Duplicate_Color = true;
-                        console.log("Duplicate Result");
+                        this.ProductLog.New(`Duplicate Result: [${Data.Brand_Id} | ${postMessage.Brand} | ${postMessage.Color}] was not added`);
                     }
                 }  
             }
             if(Data.Base == false){
                 this.PControl.create(_id, "Base", "Base", "Base");
+                this.ProductLog.New(`Successfully added base: [${postMessage.id}]`);
             }
             if(Data.Duplicate_Id == false){
                 this.PControl.create(Data.Brand_Id, postMessage.Brand, postMessage.Color, CSizes);
+                this.ProductLog.New(`Successfully added: [${Data.Brand_Id} | ${postMessage.Brand} | ${postMessage.Color}]`);
             }
             if(Data.Duplicate_Id == true && Data.Duplicate_Color == false){
                 this.PControl.create(Data.Brand_Id, postMessage.Brand, postMessage.Color, CSizes);
+                this.ProductLog.New(`Successfully added Color: [${Data.Brand_Id} | ${postMessage.Brand} | ${postMessage.Color}]`);
             }
         });
     }
@@ -97,10 +105,13 @@ class  ResponseHandler{
         }
         if(postMessage._Delete != undefined){
             let Formatted = postMessage._Delete.split(" ");
-            console.log(Formatted);
             var Message = `Deleting: [${postMessage._Delete}]`
-            console.log(Message);
-            this.PControl.delete(Formatted[0], Formatted[1], Formatted[2]);
+            this.ProductLog.New(Message);
+            this.PControl.delete(Formatted[0], Formatted[1], Formatted[2]).then((Resolve) => {
+                this.ProductLog.New("Deleted: " + JSON.stringify(Resolve));
+            }, (Reject) => {
+                this.ProductLog.New("Could not Delete: " + JSON.stringify(Reject));
+            }).bind(this);
             res.redirect(req.get("referer"));
             postMessage._Delete = undefined;
         }
