@@ -8,12 +8,8 @@ class SableMenu{
             Color:3
         }
         this.lookUpTable = LookUp;
-
+        this.currentlySearch = false;
     }
-    
-   
-
-
     #ReturnBaseProduct(LookUp, ItemList, Query){
         if(ItemList.length == 0){ // If there is nothing inside the array or its not a array return undefined
             return undefined;
@@ -30,40 +26,40 @@ class SableMenu{
         }
         return CopyArray;
     }
-
     #ReturnAllProductsFromBase(LookUp, ItemList, Query){
         var CopyArray = [];
         //If We are finding by id then add only the results that match to itemarray
         for(var _node in ItemList){
             if(ItemList[_node].id.includes(Query)){
-                if(ItemList[_node].brand != "Base"){
+                if(this.currentlySearch){
                     CopyArray.push(ItemList[_node]);
+                }else{
+                    if(ItemList[_node].brand != "Base"){
+                        CopyArray.push(ItemList[_node]);
+                    }
                 }
             }
         }
-
+        this.currentlySearch = false;
         if(LookUp != this.lookUpTable.All){
             CopyArray = this.#ReturnBrandProduct(LookUp, CopyArray, Query);
         }
 
         return CopyArray;
     }
-
     #ReturnBrandProduct(LookUp, ItemList, Query){
-        console.log(Query);
         var CopyArray = [];
         for(var _node in ItemList){
             if(ItemList[_node].brand.includes(ItemList[_node].id.split("-")[0])){
                 CopyArray.push(ItemList[_node]);
             }
         }
-
         if(LookUp != this.lookUpTable.Brand){
             CopyArray = this.#ReturnColorProduct(LookUp, CopyArray, Query);
         }
-
         return CopyArray;
     }
+
     #ReturnColorProduct(LookUp, ItemList, Query){
         if(LookUp != this.lookUpTable.Color){
             return undefined;
@@ -78,9 +74,7 @@ class SableMenu{
     }
 
     ReturnItemList(LookUp, ItemList, Query){
-        console.log("Before Return");
         var List =  this.#ReturnBaseProduct(LookUp, ItemList, Query);
-        console.log("After Return");
         return List;
     }
 

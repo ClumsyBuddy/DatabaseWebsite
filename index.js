@@ -91,10 +91,12 @@ app.route('/Sable')
             FindProducts: 0, //Determines whether to find by id or not
             Query: "", // Data to hold query                                             /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
             MenuState:  {ListState:"BaseDisplay", PopUpState:"Start", LoginState:"None"},
+            DisplayProductList: true
         }
 
         if(req.query._Search != undefined && req.query._Search != ''){ //If the query is a search query then add this data
             PageData.FindProducts = SableMenu.lookUpTable.All;
+            SableMenu.currentlySearch = true;
             PageData.Query = req.query._Search;
             PageData.MenuState.ListState = "Search";
          } else if(req.query.I_Product != undefined && req.query.I_Product != ''){ // If the query is a product query then add this data

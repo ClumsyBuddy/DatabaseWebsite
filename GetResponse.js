@@ -23,10 +23,9 @@ class  ResponseHandler{
                     ItemArray = result;
                 }
                 
-                if(callback != undefined){
+                if(callback != undefined && Data.DisplayProductList){
                     ItemArray = callback.ReturnItemList(Data.FindProducts, ItemArray, Data.Query);
                 }
-                console.log(ItemArray);
                 Data.ProductList = ItemArray;
                 res.render(Data.PageToRender, {Data});
             })
