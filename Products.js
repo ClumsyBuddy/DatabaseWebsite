@@ -6,7 +6,7 @@ class Products {
   
     createTable() {
       const sql = `
-      CREATE TABLE IF NOT EXISTS ${this.Table} ( key INTEGER PRIMARY KEY AUTOINCREMENT , id TEXT, brand TEXT, color TEXT, sizes TEXT, active INTEGER, description TEXT)`
+      CREATE TABLE IF NOT EXISTS ${this.Table} ( key INTEGER PRIMARY KEY AUTOINCREMENT , id TEXT NOT NULL, brand TEXT, color TEXT, sizes TEXT, active INTEGER, description TEXT)`
       return this.dao.run(sql)
     }
 
@@ -17,10 +17,10 @@ class Products {
       }
 
 
-      update(OldOption, newOption, id) {
+      update(OldOption, newOption, id, brand, color) {
         return this.dao.run(
-          `UPDATE ${this.Table} SET ${OldOption} = ? WHERE id = ?`,
-          [newOption, id]
+          `UPDATE ${this.Table} SET ${OldOption} = ? WHERE id = ? AND brand = ? AND color = ?`,
+          [newOption, id, brand, color]
         )
       }
 

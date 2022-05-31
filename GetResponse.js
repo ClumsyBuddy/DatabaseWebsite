@@ -33,8 +33,9 @@ class  ResponseHandler{
             })
     }
 
-    AddProduct(req, res, postMessage){
+    #AddProduct(req, res, postMessage){
         this.ProductLog.New(`Attempting to Add: [${postMessage.id} | ${postMessage.Brand} | ${postMessage.Color}]`);
+        console.log(postMessage.Description);
         var CSizes = "";
         for(var Sizes in postMessage.CheckBox){
             if(Sizes == postMessage.CheckBox.length - 1){
@@ -46,8 +47,8 @@ class  ResponseHandler{
         this.PControl.getAll().then((result) => {
             var _id = postMessage.id;
             if(result.length == 0){
-                this.PControl.create(_id, "Base", "Base", "Base");
-                this.PControl.create(`${postMessage.Brand}-${_id}`, postMessage.Brand, postMessage.Color, CSizes);
+                this.PControl.create(_id, "Base", "Base", "Base", "Base", "Base");
+                this.PControl.create(`${postMessage.Brand}-${_id}`, postMessage.Brand, postMessage.Color, CSizes, postMessage.Active_Product, postMessage.Description);
                 return;
             }
             var Data = {
@@ -69,35 +70,53 @@ class  ResponseHandler{
                 }  
             }
             if(Data.Base == false){
-                this.PControl.create(_id, "Base", "Base", "Base");
+                this.PControl.create(_id, "Base", "Base", "Base", "Base", "Base");
                 this.ProductLog.New(`Successfully added base: [${postMessage.id}]`);
             }
             if(Data.Duplicate_Id == false){
-                this.PControl.create(Data.Brand_Id, postMessage.Brand, postMessage.Color, CSizes);
+                this.PControl.create(Data.Brand_Id, postMessage.Brand, postMessage.Color, CSizes, postMessage.Active_Product, postMessage.Description);
                 this.ProductLog.New(`Successfully added: [${Data.Brand_Id} | ${postMessage.Brand} | ${postMessage.Color}]`);
             }
             if(Data.Duplicate_Id == true && Data.Duplicate_Color == false){
-                this.PControl.create(Data.Brand_Id, postMessage.Brand, postMessage.Color, CSizes);
+                this.PControl.create(Data.Brand_Id, postMessage.Brand, postMessage.Color, CSizes, postMessage.Active_Product, postMessage.Description);
                 this.ProductLog.New(`Successfully added Color: [${Data.Brand_Id} | ${postMessage.Brand} | ${postMessage.Color}]`);
             }
         });
     }
 
+    #DeleteProduct(FormattedKeys){
+        this.PControl.delete(FormattedKeys[0], FormattedKeys[1], FormattedKeys[2]).then((Resolve) => { //Delete specified product based on sku, brand and color
+            this.ProductLog.New("Deleted: " + JSON.stringify(Resolve));
+        }, (Reject) => {
+            this.ProductLog.New("Could not Delete: " + JSON.stringify(Reject));
+        }).bind(this);
+        this.PControl.getAll().then((result)=>{//Check if the only remaining product with specified SKU is the base and if so delete it
+            var Items = [];
+            for(var _node in result){
+                if(result[_node].id == FormattedKeys[0].split("-").pop()){
+                    Items.push(result[_node]);
+                }
+            }
+            if(Items.length == 1){
+                if(Items[0].brand == "Base"){
+                    this.ProductLog.New("No remaining Products with SKU, Deleting Base");
+                    this.PControl.delete(Items[0].id, "Base", "Base");
+                }
+            }
+        })
+    }
+
+
     HandleSablePost(req, res){
         let postMessage = req.body;
         if(postMessage.id != undefined && postMessage.Brand != undefined && postMessage.I_Product == undefined){
-            this.AddProduct(req, res, postMessage);
+            this.#AddProduct(req, res, postMessage);
         }
         if(postMessage._Delete != undefined){
-            let Formatted = postMessage._Delete.split(" ");
-            var Message = `Deleting: [${postMessage._Delete}]`
-            this.ProductLog.New(Message);
-            this.PControl.delete(Formatted[0], Formatted[1], Formatted[2]).then((Resolve) => {
-                this.ProductLog.New("Deleted: " + JSON.stringify(Resolve));
-            }, (Reject) => {
-                this.ProductLog.New("Could not Delete: " + JSON.stringify(Reject));
-            }).bind(this);
-            res.redirect(req.get("referer"));
+            let Formatted = postMessage._Delete.split(" "); //Split Query by the spaces
+            this.ProductLog.New(`Deleting: [${postMessage._Delete}]`);
+            this.#DeleteProduct(Formatted); //Go to Delete function
+            res.redirect(req.get("referer")); //Redirect page to remove results
             postMessage._Delete = undefined;
         }
     }
