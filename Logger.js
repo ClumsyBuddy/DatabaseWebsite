@@ -1,8 +1,14 @@
+const MasterLogger = require("./MasterLogger");
 
 
 
 
 class Log{
+    /**
+     * 
+     * @param {MasterLogger} MLogger 
+     * @param {string} Name 
+     */
     constructor(MLogger, Name){
         this.Control = MLogger;
         this.logger_name = Name;

@@ -17,15 +17,18 @@ class  ResponseHandler{
             this.PControl.getAll().then((result) => {
                 var ItemArray = [];
                 //If the result array is empty push result into the array otherwise make itemarray equal to result
-                if(Array.isArray(result) == false){  
+                if(Array.isArray(result) == false){ 
+                    this.ProductLog.New("Could not find array of items \n Creating new array"); 
                     ItemArray.push(result);
                 }else{
+                    this.ProductLog.New("Grabbing All Items");
                     ItemArray = result;
                 }
                 if(callback != undefined && Data.DisplayProductList){
                     ItemArray = callback.ReturnItemList(Data.FindProducts, ItemArray, Data.Query, Data.Color);
                 }
                 Data.ProductList = ItemArray;
+                this.ProductLog.New("Rendering Items");
                 res.render(Data.PageToRender, {Data});
             })
     }

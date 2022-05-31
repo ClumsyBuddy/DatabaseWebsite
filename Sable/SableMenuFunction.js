@@ -1,6 +1,13 @@
+const Log = require("../Logger");
+const MasterLogger = require("../MasterLogger");
+
 
 class SableMenu{
-    constructor(){
+    /**
+     * 
+     * @param {MasterLogger} MLogger 
+     */
+    constructor(MLogger){
         const LookUp = {
             Base:0,
             All:1,
@@ -9,6 +16,7 @@ class SableMenu{
         }
         this.lookUpTable = LookUp;
         this.currentlySearch = false;
+        this._Log = new Log(MLogger, "Filter");
     }
 
     /*
@@ -16,8 +24,7 @@ class SableMenu{
     * for deeper filtering. Filtering level is dependant on the lookUpTable.
     */
 
-
-
+/* ---------------------------------------------------------------------------------------------------------------------------------------------------- */
 
     /*
     * This function Checks for errors and then checks to see if we looking for base product items.
@@ -30,6 +37,7 @@ class SableMenu{
         if(LookUp != this.lookUpTable.Base){ //If We arent looking for the base SKU go to the next function
             return this.#ReturnAllProductsFromBase(LookUp, ItemList, Query, Color);
         }
+        this._Log.New("Filtering Base Items");
         var CopyArray = [];
        
         for(var _node in ItemList){ // Find the Base Products to display
@@ -37,6 +45,7 @@ class SableMenu{
                 CopyArray.push(ItemList[_node]);
             }
         }
+        this._Log.New(`Found: ${CopyArray.length} items`);
         return CopyArray;
     }
 
@@ -47,11 +56,13 @@ class SableMenu{
     *  else add everything we find to the list that isn't a base product item.
     */
     #ReturnAllProductsFromBase(LookUp, ItemList, Query, Color){
+        this._Log.New("Filtering All Products from base");
         var CopyArray = [];
         //If We are finding by id then add only the results that match to itemarray
         for(var _node in ItemList){
             var Duplicate = false;
             if(ItemList[_node].id.includes(Query)){//If we are looking for a specfic search change the behavior
+                this._Log.New("Filtering based on Search");
                 if(this.currentlySearch){
                     CopyArray.push(ItemList[_node]);
                 }else{
@@ -76,7 +87,7 @@ class SableMenu{
         if(LookUp != this.lookUpTable.All){
             CopyArray = this.#ReturnBrandProduct(LookUp, CopyArray, Query, Color);
         }
-
+        this._Log.New(`Found: ${CopyArray.length} Items`);
         return CopyArray;
     }
     /*
@@ -85,6 +96,7 @@ class SableMenu{
     *   Everything in itemlist is already filtered from the previous function so this just adds a layer on top of that
     */
     #ReturnBrandProduct(LookUp, ItemList, Query, Color){ //Return all filtered products that have "-" meaning they are brand products
+        this._Log.New("Filtering By Selected Brand");
         var CopyArray = [];
         for(var _node in ItemList){
             if(ItemList[_node].brand.includes(ItemList[_node].id.split("-")[0])){
@@ -94,13 +106,14 @@ class SableMenu{
         if(LookUp != this.lookUpTable.Brand){
             CopyArray = this.#ReturnColorProduct(LookUp, CopyArray, Query, Color);
         }
+        this._Log.New(`Found: ${CopyArray.length} Items`);
         return CopyArray;
     }
     /*
     *   Simply return the SKU with the request color
     */
     #ReturnColorProduct(LookUp, ItemList, Query, Color){ // Return all filtered products based on color
-        console.log(ItemList);
+        this._Log.New("Selecting Product by Color");
         if(LookUp != this.lookUpTable.Color){
             return undefined;
         }
@@ -110,6 +123,7 @@ class SableMenu{
                 CopyArray.push(ItemList[_node]);
             }
         }
+        this._Log.New(`Found Product: ${JSON.stringify(CopyArray)}`);
         return CopyArray;
     }
     /*
@@ -118,10 +132,12 @@ class SableMenu{
     *   Base filter, all filter, brand filter, color filter
     */
     ReturnItemList(LookUp, ItemList, Query, Color){
+        this._Log.New(`Starting Search for product in LookUp: ${LookUp} - Query: ${Query} - Color: ${Color}`);
         if(ItemList.length == 0){
             return [];
         }
         var List =  this.#ReturnBaseProduct(LookUp, ItemList, Query, Color);
+        this._Log.New(`Found: ${List.length} Items`);
         return List;
     }
 
