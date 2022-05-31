@@ -15,6 +15,7 @@ class  ResponseHandler{
 
     RenderAll(req, res, Data, callback){
             this.PControl.getAll().then((result) => {
+               
                 var ItemArray = [];
                 //If the result array is empty push result into the array otherwise make itemarray equal to result
                 if(Array.isArray(result) == false){ 

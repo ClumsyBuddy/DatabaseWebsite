@@ -93,7 +93,8 @@ app.route('/Sable')
             Query: "", // Data to hold query                                             /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
             MenuState:  {ListState:"BaseDisplay", PopUpState:"Start", LoginState:"None"},
             DisplayProductList: true,
-            Color: undefined
+            Color: undefined,
+            Re_Render: false
         }
 
         if(req.query._Search != undefined && req.query._Search != ''){ //If the query is a search query then add this data
