@@ -129,18 +129,16 @@ app.route('/Sable')
 app.route('/Diplo')
     .get(function(req, res){
         var PageData = { //Data bundle to send to render function
-            Title: "Welcome To Diplomat", //Title for header at top of page
-            PageToRender: "pages/Diplomat", //Location of the page
+            Title: "Welcome To Diplo", //Title for header at top of page
+            PageToRender: "pages/Diplo", //Location of the page
             _Action: "/Diplo",  //Tracked request 
             DisplayPopUp: false, //Display Popup menu
-            displayProducts: [], //Container for products to be displayed
-            DisplayProductEdit: false, //Displays menu to edit products attributes
-            FindById: false, //Determines whether to find by id or not
+            ProductList: [], //Container for products to be displayed
+            FindProducts: 0, //Determines whether to find by id or not
             Query: "", // Data to hold query                                             /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
-            ProductSection: undefined,
-            ProductDisplay: true, //Display base product
-            _DisplayProducts: false,
-            _BackGroundDisplay: true //Displays green product display
+            MenuState:  {ListState:"BaseDisplay", PopUpState:"Start", LoginState:"None"},
+            DisplayProductList: true,
+            Color: undefined
         }
         displayProducts = [];
         res.render('pages/Diplomat', {

@@ -32,22 +32,24 @@
     <!--Radial Buttons-->
     <div class="FlexCenterSections">
         <fieldset style="display:flex; flex-direction: column;">
-          <legend id="title6" class="desc">
+            <legend id="title6" class="desc">
             Check All That Apply
-          </legend>
-            
-          <!-- Top Line -->
-            <div style="display: inline-flex;">
+            </legend>
+
+            <% var SizeArray = Data.ProductList[0].sizes.split(","); %> 
+                
+              <!-- Top Line -->
+          <div style="display: inline-flex;">
                 <div>
-                    <input id="XXS" name="CheckBox" type="checkbox" checked="true" value="XXS" tabindex="8">
+                    <input id="XXS" name="CheckBox" type="checkbox" <% if (SizeArray.includes("XXS")) { %>checked="true"<% } %> value="XXS" tabindex="8">
                     <label class="choice" for="XXS">XXS</label>
                 </div>
                 <div>
-                    <input id="XS" name="CheckBox" type="checkbox" checked="true" checked="true" value="XS" tabindex="9">
+                    <input id="XS" name="CheckBox" type="checkbox" <% if (SizeArray.includes("XS")) { %>checked="true"<% } %> value="XS" tabindex="9">
                     <label class="choice" for="XS">XS</label>
                 </div>
                 <div>
-                    <input id="SM" name="CheckBox" type="checkbox" checked="true" value="SM" tabindex="10">
+                    <input id="SM" name="CheckBox" type="checkbox"  <% if (SizeArray.includes("SM")) { %>checked="true"<% } %> value="SM" tabindex="10">
                     <label class="choice" for="SM">SM</label>
                 </div>
             </div>
@@ -55,15 +57,15 @@
             <!-- Middle Line -->
             <div style="display: inline-flex;">
                 <div>
-                    <input id="MD" name="CheckBox" type="checkbox" checked="true" value="MD" tabindex="11">
+                    <input id="MD" name="CheckBox" type="checkbox" <% if (SizeArray.includes("MD")) { %>checked="true"<% } %> value="MD" tabindex="11">
                     <label class="choice" for="MD">MD</label>
                 </div>
                 <div>
-                    <input id="LG" name="CheckBox" type="checkbox" checked="true" checked="true" value="LG" tabindex="12">
+                    <input id="LG" name="CheckBox" type="checkbox" <% if (SizeArray.includes("LG")) { %>checked="true"<% } %> value="LG" tabindex="12">
                     <label class="choice" for="LG">LG</label>
                 </div>
                 <div>
-                    <input id="XL" name="CheckBox" type="checkbox" checked="true" value="XL" tabindex="13">
+                    <input id="XL" name="CheckBox" type="checkbox" <% if (SizeArray.includes("XL")) { %>checked="true"<% } %> value="XL" tabindex="13">
                     <label class="choice" for="XL">XL</label>
                 </div>
             </div>
@@ -72,15 +74,15 @@
             <!-- Middle Two Line -->
             <div style="display: inline-flex;">
                 <div>
-                    <input id="2XL" name="CheckBox" type="checkbox" checked="true" value="2XL" tabindex="14">
+                    <input id="2XL" name="CheckBox" type="checkbox" <% if (SizeArray.includes("2XL")) { %>checked="true"<% } %> value="2XL" tabindex="14">
                     <label class="choice" for="2XL">2XL</label>
                 </div>
                 <div>
-                    <input id="3XL" name="CheckBox" type="checkbox" checked="true" checked="true" value="3XL" tabindex="14">
+                    <input id="3XL" name="CheckBox" type="checkbox" <% if (SizeArray.includes("3XL")) { %>checked="true"<% } %> value="3XL" tabindex="14">
                     <label class="choice" for="3XL">3XL</label>
                 </div>
                 <div>
-                    <input id="4XL" name="CheckBox" type="checkbox" checked="true" value="4XL" tabindex="15">
+                    <input id="4XL" name="CheckBox" type="checkbox" <% if (SizeArray.includes("4XL")) { %>checked="true"<% } %> value="4XL" tabindex="15">
                     <label class="choice" for="4XL">4XL</label>
                 </div>
             </div>
@@ -90,16 +92,14 @@
             <!-- Bottom Line -->
             <div style="display: inline-flex;">
                 <div>
-                    <input id="5XL" name="CheckBox" type="checkbox" checked="true" value="5XL" tabindex="16">
+                    <input id="5XL" name="CheckBox" type="checkbox" <% if (SizeArray.includes("5XL")) { %>checked="true"<% } %> value="5XL" tabindex="16">
                     <label class="choice" for="5XL">5XL</label>
                 </div>
                 <div>
-                    <input id="6XL" name="CheckBox" type="checkbox" checked="true" checked="true" value="6XL" tabindex="17">
+                    <input id="6XL" name="CheckBox" type="checkbox" <% if (SizeArray.includes("6XL")) { %>checked="true"<% } %> value="6XL" tabindex="17">
                     <label class="choice" for="6XL">6XL</label>
                 </div>
             </div>
-
-
 
         </fieldset>
       </div>
@@ -115,7 +115,7 @@
           <!-- Top Line -->
             <div style="display: inline-flex; justify-content: center;">
                 <div>
-                    <input id="ActiveProduct" name="Active_Product" type="checkbox" checked="true" checked="true" value="Active_Product" tabindex="9">
+                    <input id="ActiveProduct" name="Active_Product" type="checkbox" <% if(Data.ProductList[0].active == true){ %>checked="true"<% } %>  value="Active_Product" tabindex="9">
                     <label class="choice" for="Active">Active</label>
                 </div>
             </div>
