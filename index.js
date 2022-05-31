@@ -91,7 +91,8 @@ app.route('/Sable')
             FindProducts: 0, //Determines whether to find by id or not
             Query: "", // Data to hold query                                             /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
             MenuState:  {ListState:"BaseDisplay", PopUpState:"Start", LoginState:"None"},
-            DisplayProductList: true
+            DisplayProductList: true,
+            Color: undefined
         }
 
         if(req.query._Search != undefined && req.query._Search != ''){ //If the query is a search query then add this data
@@ -106,10 +107,18 @@ app.route('/Sable')
         }else if(req.query.E_Product != undefined && req.query.E_Product != ''){ // If the query is a product query then add this data
             PageData.FindProducts = SableMenu.lookUpTable.Brand;
             PageData.Query = req.query.E_Product;
-            PageData.MenuState.ListState = "BrandDisplay";
+            PageData.MenuState.ListState = "ColorDisplay";
         }else if(req.query._Add != undefined && req.query._Add != ''){
             PageData.DisplayPopUp = true;
             PageData.MenuState.PopUpState = "Add";
+        }else if(req.query.C_Product != undefined && req.query.C_Product != ''){
+            PageData.DisplayPopUp = true;
+            PageData.FindProducts = SableMenu.lookUpTable.Color;
+            PageData.MenuState.ListState = "PopUp";
+            PageData.MenuState.PopUpState = "Edit";
+            var Variables = req.query.C_Product.split(",");
+            PageData.Query = Variables[0];
+            PageData.Color = Variables[1];
         }
         HR.RenderAll(req, res, PageData, SableMenu); //Render the page
         })

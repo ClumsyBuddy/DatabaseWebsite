@@ -15,33 +15,15 @@
         <!--DropDownMenu--> <!--Brand-->
         <div class="TopBar">
             <label class="desc" id="title106" for="Field106">
-                Brand
+                <%= Data.ProductList[0].brand %> 
             </label>
-            <div>
-            <select id="Brand" name="Brand" class="field select medium" tabindex="11">
-            <option value="CLA">Clarion</option>
-            <option value="CLAP ">Clarion Pointe</option>
-            <option value="COMCO">Comfort</option>
-            <option value="WDS">WoodSprings</option>
-            <option value="EVH">Ever Home Suites</option>
-            <option value="MST">MainStay</option>
-            </select>
-            </div>
         </div>
 
         <!--DropDownMenu--> <!--Color-->
         <div class="TopBar">
             <label class="desc" id="title106" for="Field106">
-                Color
+                <%= Data.ProductList[0].color %>
             </label>
-            <div>
-            <select id="Color" name="Color" class="field select medium" tabindex="11"> 
-            <option value="WH">White</option>
-            <option value="NV">Navy</option>
-            <option value="GGY">Gusty Grey</option>
-            <option value="ROY">Royal</option>
-            </select>
-            </div>
         </div>
 
     </div>
@@ -118,6 +100,25 @@
             </div>
 
 
+
+        </fieldset>
+      </div>
+
+
+
+
+
+
+      <!--Active or not Section-->
+      <div class="FlexCenterSections">
+        <fieldset style="display:flex; flex-direction: column;">
+          <!-- Top Line -->
+            <div style="display: inline-flex; justify-content: center;">
+                <div>
+                    <input id="ActiveProduct" name="Active_Product" type="checkbox" checked="true" checked="true" value="Active_Product" tabindex="9">
+                    <label class="choice" for="Active">Active</label>
+                </div>
+            </div>
 
         </fieldset>
       </div>

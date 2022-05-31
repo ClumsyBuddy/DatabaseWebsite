@@ -3,7 +3,7 @@
     <div id="PopContainer">
         <% if (Data.MenuState.ListState == "PopUp") { %>
         
-            <% if (Data.MenuState.PopUpState == "Start") { %>
+            <% if (Data.MenuState.PopUpState == "Edit") { %>
             
                 <div id="InnerPopUp" class="InnerPopUp">
                     <%- include('./CancelButton', {Data:'PopUp'}) %>
@@ -29,5 +29,5 @@
         <% } %> 
     </div>
 
-    
+
 <% } %>
