@@ -6,15 +6,15 @@
             <% if (Data.MenuState.PopUpState == "Edit") { %>
             
                 <div id="InnerPopUp" class="InnerPopUp">
-                    <%- include('./CancelButton', {Data:'PopUp'}) %>
-                    <%- include('../partials/SimpleEditForm') %>
+                    <%- include('../CancelButton', {Data:'PopUp'}) %>
+                    <%- include('./SimpleEditForm') %>
                 </div>
             
             <% } else{ %>
             
                 <div id="InnerPopUp" class="InnerPopUpDisplay">
                     <%- include('./CancelButton', {Data:'PopUp'}) %>
-                    <%- include('../partials/SimpleDisplayForm') %>
+                    <%- include('./SimpleDisplayForm') %>
                 </div>
             
             <% }  %> 
@@ -23,8 +23,8 @@
 
         <% if(Data.MenuState.PopUpState == "Add"){ %> 
             <div id="InnerPopUp" class="InnerPopUp">
-                <%- include('./CancelButton', {Data:'PopUp'}) %>
-                <%- include('../partials/SimpleAddForm') %>
+                <%- include('../CancelButton', {Data:'PopUp'}) %>
+                <%- include('./SimpleAddForm') %>
             </div>
         <% } %> 
     </div>

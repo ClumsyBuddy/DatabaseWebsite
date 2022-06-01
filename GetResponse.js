@@ -96,6 +96,7 @@ class  ResponseHandler{
 
     #DeleteProduct(req, res, postMessage){
         let Formatted = postMessage._Delete.split(" "); //Split Query by the spaces
+        console.log(Formatted);
         this.ProductLog.New(`Deleting: [${postMessage._Delete}]`);
         this.PControl.delete(Formatted[0], Formatted[1], Formatted[2]).then((Resolve) => { //Delete specified product based on sku, brand and color
             this.ProductLog.New("Deleted: " + JSON.stringify(Resolve));
@@ -149,13 +150,15 @@ class  ResponseHandler{
                     this.PControl.update("active", postMessage.active, result[key].key);
                     this.PControl.update("description", postMessage.Description, result[key].key);
                     if(MultipleSKU > 1){
-                        this.PControl.create(postMessage.id, "Base", "Base", "Base", "Base", "Base");
+                        this.PControl.create(postMessage.id.split("-").pop(), "Base", "Base", "Base", "Base", "Base");
+                        this.#DeleteProduct(req, res, {_Delete:`${_SableState.ProductId} ${postMessage.Brand} ${_SableState.ProductColor}`});
                     }else{
                         UpdateOldBase = true;
                     }
                     break;
                 }
             }
+            console.log(_SableState.ProductId.split("-").pop());
             if(UpdateOldBase){
                 for(var key in result){
                     if(_SableState.ProductId.split("-").pop() == result[key].id && result[key].brand == "Base"){
