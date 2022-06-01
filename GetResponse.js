@@ -1,15 +1,18 @@
 const Log = require("./Logger");
 const MasterLogger = require("./MasterLogger");
+const Products = require("./Products");
 const SableMenu = require("./Sable/SableMenuFunction");
 const SablePageState = require("./Sable/SableState");
 
 
 class  ResponseHandler{
     /**
+     * @param {Products} PControl
      * @param {MasterLogger} _Logger
      */
     constructor(MainIndex, PControl, _Logger){
         this.FrontPage = MainIndex;
+        
         this.PControl = PControl;
         this.MLogger = _Logger
         this.ProductLog = new Log(this.MLogger, "PHandle");
@@ -43,7 +46,6 @@ class  ResponseHandler{
 
     #AddProduct(req, res, postMessage){
         this.ProductLog.New(`Attempting to Add: [${postMessage.id} | ${postMessage.Brand} | ${postMessage.Color}]`);
-        console.log(postMessage.Description);
         var CSizes = "";
         for(var Sizes in postMessage.CheckBox){
             if(Sizes == postMessage.CheckBox.length - 1){
@@ -93,7 +95,6 @@ class  ResponseHandler{
     }
 
     #DeleteProduct(req, res, postMessage){
-        console.log(postMessage)
         let Formatted = postMessage._Delete.split(" "); //Split Query by the spaces
         this.ProductLog.New(`Deleting: [${postMessage._Delete}]`);
         this.PControl.delete(Formatted[0], Formatted[1], Formatted[2]).then((Resolve) => { //Delete specified product based on sku, brand and color
@@ -122,14 +123,69 @@ class  ResponseHandler{
      * @param {*} req 
      * @param {*} res 
      * @param {SablePageState} _SableState 
+     * @param {Object} NewData 
+     */
+    #UpdateProduct(req, res, _SableState, postMessage){
+        this.PControl.getAll().then((result) =>{
+            var CSizes = "";
+            for(var Sizes in postMessage.CheckBox){
+                if(Sizes == postMessage.CheckBox.length - 1){
+                    CSizes += postMessage.CheckBox[Sizes];
+                }else{
+                    CSizes += postMessage.CheckBox[Sizes] + ",";
+                }
+            }
+            var MultipleSKU = 0;
+            for(var _node in result){
+                if(result[_node].id.split("-").pop() == _SableState.ProductId.split("-").pop()){
+                    MultipleSKU += 1;
+                }
+            }
+            var UpdateOldBase = false;
+            for(var key in result){
+                if(result[key].id == _SableState.ProductId && result[key].color == _SableState.ProductColor){
+                    this.PControl.update("id", postMessage.id, result[key].key);
+                    this.PControl.update("sizes", CSizes, result[key].key);
+                    this.PControl.update("active", postMessage.active, result[key].key);
+                    this.PControl.update("description", postMessage.Description, result[key].key);
+                    if(MultipleSKU > 1){
+                        this.PControl.create(postMessage.id, "Base", "Base", "Base", "Base", "Base");
+                    }else{
+                        UpdateOldBase = true;
+                    }
+                    break;
+                }
+            }
+            if(UpdateOldBase){
+                for(var key in result){
+                    if(_SableState.ProductId.split("-").pop() == result[key].id && result[key].brand == "Base"){
+                        this.PControl.update("id", postMessage.id.split("-").pop(), result[key].key);
+                        break;
+                    }
+                }
+            }
+        })
+    }
+
+
+
+    /**
+     * 
+     * @param {*} req 
+     * @param {*} res 
+     * @param {SablePageState} _SableState 
      * @param {SableMenu} SableMenu 
      * @returns 
      */
     HandleSablePost(req, res, _SableState, SableMenu){
-
        _SableState.Reset();
-
         let postMessage = req.body;
+        
+        
+        if(postMessage.saveForm == "Update"){
+            this.#UpdateProduct(req, res, _SableState, postMessage);
+        }
+        
         if(postMessage.id != undefined && postMessage.Brand != undefined && postMessage.I_Product == undefined){
             this.#AddProduct(req, res, postMessage);
         }

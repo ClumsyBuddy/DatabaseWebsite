@@ -17,10 +17,10 @@ class Products {
       }
 
 
-      update(OldOption, newOption, id, brand, color) {
+      update(OldOption, newOption, key) {
         return this.dao.run(
-          `UPDATE ${this.Table} SET ${OldOption} = ? WHERE id = ? AND brand = ? AND color = ?`,
-          [newOption, id, brand, color]
+          `UPDATE ${this.Table} SET ${OldOption} = ? WHERE key = ?`,
+          [newOption, key]
         )
       }
 

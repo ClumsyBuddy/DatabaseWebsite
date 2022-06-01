@@ -23,6 +23,8 @@ class SablePageState extends PageStateManager{
         }
         this.SectionId = "Base SKU";
         this.StateIndex = this.IndexTable.BaseDisplay;
+        this.ProductId = '';
+        this.ProductColor = '';
     }
 
     HandleMenuPost(index, Query, SableMenu){ //Simple State machine. Depending on what state we want we can flip between them using the indexTable
@@ -56,6 +58,8 @@ class SablePageState extends PageStateManager{
                 var Variables = Query.split(",");
                 this.Query = Variables[0];
                 this.Color = Variables[1];
+                this.ProductId = Variables[0];
+                this.ProductColor = Variables[1];
                 break;
             case this.IndexTable.Cancel:    /*  CANCEL BUTTON  */
                 //this.MenuState.ListState = "BaseDisplay";
