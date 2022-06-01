@@ -26,11 +26,13 @@ class SablePageState extends PageStateManager{
         console.log(Query);
         switch(index){
             case this.IndexTable.BaseDisplay: /*  BASE DISPLAY  */
+                this.SavePreviousState();
                 break;
             case this.IndexTable.AllDispay: /*  ALL DISPLAY  */
                 this.FindProducts = SableMenu.lookUpTable.All;  
                 this.Query = Query
                 this.MenuState.ListState = "BrandDisplay";
+                this.SavePreviousState();
                 break;
             case this.IndexTable.BrandDisplay:  /*  BRAND DISPLAY  */
                 this.FindProducts = SableMenu.lookUpTable.Brand;

@@ -18,7 +18,6 @@ class  ResponseHandler{
 
     RenderAll(req, res, Data, callback){
             this.PControl.getAll().then((result) => {
-                console.log("RenderAll: " + JSON.stringify(Data));
                 var ItemArray = [];
                 //If the result array is empty push result into the array otherwise make itemarray equal to result
                 if(Array.isArray(result) == false){ 
@@ -33,7 +32,6 @@ class  ResponseHandler{
                 }
                 Data.ProductList = ItemArray;
                 this.ProductLog.New("Rendering Items");
-                console.log("ProductList: " + JSON.stringify(Data.ProductList));
                 res.render(Data.PageToRender, {Data});
             })
     }
@@ -140,6 +138,7 @@ class  ResponseHandler{
         }
         if(postMessage._Search != undefined){
             if(postMessage._Search == ''){
+                _SableState.Reset();
                 this.RenderAll(req, res, _SableState.ReturnClassObject(), SableMenu);
                 return;
             }            

@@ -32,7 +32,7 @@ class  PageStateManager{
         this.ProductList = this.#SaveBase.ProductList;
         this.FindProducts = this.#SaveBase.FindProducts;
         this.Query = this.#SaveBase.Query;
-        this.MenuState = this.#SaveBase.MenuState;
+        this.MenuState = {ListState:this.#SaveBase.MenuState.ListState, PopUpState:this.#SaveBase.MenuState.PopUpState, LoginState:this.MenuState.LoginState};
         this.DisplayProductList = this.#SaveBase.DisplayProductList;
         this.Optional = this.#SaveBase.Optional;
         this.Re_Render = this.#SaveBase.Re_Render;
