@@ -22,12 +22,14 @@ class SablePageState extends PageStateManager{
             _ReRender:8
         }
         this.SectionId = "Base SKU";
+        this.StateIndex = this.IndexTable.BaseDisplay;
     }
 
     HandleMenuPost(index, Query, SableMenu){ //Simple State machine. Depending on what state we want we can flip between them using the indexTable
         switch(index){
             case this.IndexTable.BaseDisplay: /*  BASE DISPLAY  */
                 this.SectionId = "Base SKU";
+                this.StateIndex = this.IndexTable.BaseDisplay;
                 this.SavePreviousState();
                 break;
             case this.IndexTable.AllDispay: /*  ALL DISPLAY  */
@@ -35,6 +37,7 @@ class SablePageState extends PageStateManager{
                 this.Query = Query
                 this.MenuState.ListState = "BrandDisplay";
                 this.SectionId = "Brands";
+                this.StateIndex = this.IndexTable.AllDispay;
                 this.SavePreviousState();
                 break;
             case this.IndexTable.BrandDisplay:  /*  BRAND DISPLAY  */
@@ -42,6 +45,7 @@ class SablePageState extends PageStateManager{
                 this.Query = Query;
                 this.MenuState.ListState = "ColorDisplay";
                 this.SectionId = "Brand Colors";
+                this.StateIndex = this.IndexTable.BrandDisplay;
                 this.SavePreviousState();
                 break;
             case this.IndexTable.ColorDisplay:  /*  COLOR DISPLAY  */
@@ -55,8 +59,7 @@ class SablePageState extends PageStateManager{
                 break;
             case this.IndexTable.Cancel:    /*  CANCEL BUTTON  */
                 //this.MenuState.ListState = "BaseDisplay";
-                this.Reset();
-                this.ResetToPreviousState();
+                this.HandleMenuPost(this.StateIndex, this.Query, SableMenu);
                 break;
             case this.IndexTable.Add:   /*  ADD BUTTON  */
                 this.DisplayPopUp = true;

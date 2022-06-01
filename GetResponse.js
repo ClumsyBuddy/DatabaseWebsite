@@ -32,6 +32,11 @@ class  ResponseHandler{
                 }
                 Data.ProductList = ItemArray;
                 this.ProductLog.New("Rendering Items");
+
+                if(Data.ProductList.length == 0){
+                    Data.SectionId = "Database is Empty";
+                }
+
                 res.render(Data.PageToRender, {Data});
             })
     }

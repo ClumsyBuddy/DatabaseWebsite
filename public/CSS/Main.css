@@ -153,3 +153,7 @@ z-index: 10;
 .BarButtonMenu:active{
     background-color: rgba(255, 255, 255, .5);
 }
+
+.SectionHeader{
+    color: #F65E00;
+}
