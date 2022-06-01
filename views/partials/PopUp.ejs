@@ -1,27 +1,33 @@
 
 <% if(Data.DisplayPopUp) { %> 
     <div id="PopContainer">
-<% }else{ %>
-    <div id="PopContainer" style="display: none;">
+        <% if (Data.MenuState.ListState == "PopUp") { %>
+        
+            <% if (Data.MenuState.PopUpState == "Edit") { %>
+            
+                <div id="InnerPopUp" class="InnerPopUp">
+                    <%- include('./CancelButton', {Data:'PopUp'}) %>
+                    <%- include('../partials/SimpleEditForm') %>
+                </div>
+            
+            <% } else{ %>
+            
+                <div id="InnerPopUp" class="InnerPopUpDisplay">
+                    <%- include('./CancelButton', {Data:'PopUp'}) %>
+                    <%- include('../partials/SimpleDisplayForm') %>
+                </div>
+            
+            <% }  %> 
+        
+        <% } %>
+
+        <% if(Data.MenuState.PopUpState == "Add"){ %> 
+            <div id="InnerPopUp" class="InnerPopUp">
+                <%- include('./CancelButton', {Data:'PopUp'}) %>
+                <%- include('../partials/SimpleAddForm') %>
+            </div>
+        <% } %> 
+    </div>
+
+
 <% } %>
-<% if (Data._DisplayProducts) { %>
-    
-    <% if (Data.DisplayProductEdit) { %>
-    <div id="InnerPopUp" class="InnerPopUp">
-        <%- include('./CancelButton', {Data:'PopUp'}) %>
-        <%- include('../partials/SimpleEditForm') %>
-    </div>
-    <% } else{ %>
-    <div id="InnerPopUp" class="InnerPopUpDisplay">
-        <%- include('./CancelButton', {Data:'PopUp'}) %>
-        <%- include('../partials/SimpleDisplayForm') %>
-    </div>
-    <% }  %> 
-    
-    <% }else{ %>
-    <div id="InnerPopUp" class="InnerPopUp">
-        <%- include('./CancelButton', {Data:'PopUp'}) %>
-        <%- include('../partials/SimpleAddForm') %>
-    </div>
-    <% } %> 
-</div>

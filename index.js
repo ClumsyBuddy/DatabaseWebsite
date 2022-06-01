@@ -4,8 +4,6 @@ const path = require('path');
 const express = require('express');
 const Promise = require("bluebird");
 
-
-
 //Create a app and router variable
 const router = express.Router();
 const app = express();
@@ -13,18 +11,27 @@ const app = express();
 //My exported packages
 const Database = require('./Database');
 const Products = require("./Products");
+const Sable_Menu = require('./Sable/SableMenuFunction');
 const ResponseHandler = require('./GetResponse');
+const Account = require('./Accounts');
+const MasterLogger = require('./MasterLogger');
+
+const BaseLog = new MasterLogger();
+const SableMenu = new Sable_Menu(BaseLog);
 
 
 //Create variables for exported Classes
 const db = new Database('./Main.db');
-const _Products = new Products(db, "products");
-const HR = new ResponseHandler("index.html", _Products);
+const acc = new Database('./Account.db');
 
+const _Products = new Products(db, "products");
+const _accounts = new Account(acc, "accounts");
+
+const HR = new ResponseHandler("index.html", _Products, BaseLog);
 
 //Create the main table
 _Products.createTable();
-
+_accounts.createTable();
 //Use Ejs for the view engine, We want to use templates
 app.set("view engine", "ejs");
 
@@ -46,8 +53,8 @@ const port = 8000;
 // Will be used to log activities
 app.use(function(req, res, next) {
     // log each request to the console
-    var Message = `Method: ${req.method} || At: ${req.url} || IP: ${req.ip.split("ffff:").pop()}`
-    console.log(Message);
+    //var Message = `Method: ${req.method} || At: ${req.url} || IP: ${req.ip.split("ffff:").pop()}`
+    //console.log(Message);
     // continue doing what we were doing and go to the route
     next();
 });
@@ -55,73 +62,49 @@ app.use(function(req, res, next) {
 //Router for getting all get and post request on '/' which is index
 app.route('/')
     .get(function(req, res){
-        res.render('pages/index');
+        var PageData = { //Data bundle to send to render function
+            Title: "Main Database", //Title for header at top of page
+            PageToRender: "pages/index", //Location of the page
+            _Action: "/",  //Tracked request 
+            DisplayPopUp: false, //Display Popup menu
+            ProductList: [], //Container for products to be displayed
+            FindProducts: 0, //Determines whether to find by id or not
+            Query: "", // Data to hold query                                             /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
+            MenuState:  {ListState:"BaseDisplay", PopUpState:"Start", LoginState:"None"},
+        }
+        if(req.query.open_login == "PL"){
+            PageData.MenuState.LoginState = "Show";
+        }
+        res.render(PageData.PageToRender, {Data:PageData});
     }).post(function(req, res){
         
     });
 
+const SablePageState = require('./Sable/SableState');
+const _SableState = new SablePageState('Welcome To Sable', 'pages/Sable', '/Sable');
 //Router for getting all get and post request on '/Sable'
 app.route('/Sable')
     .get(function(req, res){
-
-        var PageData = { //Data bundle to send to render function
-            Title: "Welcome To Sable", //Title for header at top of page
-            PageToRender: "pages/Sable", //Location of the page
-            _Action: "/Sable",  //Tracked request 
-            DisplayPopUp: false, //Display Popup menu
-            displayProducts: [], //Container for products to be displayed
-            DisplayProductEdit: false, //Displays menu to edit products attributes
-            FindById: false, //Determines whether to find by id or not
-            Query: "", // Data to hold query                                             /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
-            ProductSection: undefined,
-            ProductDisplay: true,
-            _DisplayProducts: false,
-            _BackGroundDisplay: true, //Displays green product display
-            ProductMenuToEdit: false //Bad name for something that lets you click the base product then shows the corresponding products to the base that then lets you open its menu
-        }
-        if(req.query._Search != undefined && req.query._Search != ''){ //If the query is a search query then add this data
-
-            PageData.FindById = true;
-            PageData.Query = req.query._Search;
-
-         } else if(req.query.I_Product != undefined && req.query.I_Product != ''){ // If the query is a product query then add this data
-            PageData.DisplayPopUp = false;
-            PageData.FindById = true;
-            PageData.Query = req.query.I_Product;
-            PageData.DisplayProductEdit = false;
-            PageData._DisplayProducts = false;
-            PageData._BackGroundDisplay = true;
-            PageData.ProductMenuToEdit = true;
-         }else if(req.query.E_Product != undefined && req.query.E_Product != ''){ // If the query is a product query then add this data
-            PageData.DisplayPopUp = true;
-            PageData.Query = req.query.E_Product;
-            PageData.DisplayProductEdit = true;
-            PageData.FindById = true;
-            PageData._DisplayProducts = true;
-         }
-         HR.RenderAll(req, res, PageData); //Render the page
+        
+        HR.RenderAll(req, res, _SableState.ReturnClassObject(), SableMenu); //Render the page
         })
     .post(function(req, res){
-        HR.HandleSablePost(req, res);
+        HR.HandleSablePost(req, res, _SableState, SableMenu);
     });
-
-
 
 app.route('/Diplo')
     .get(function(req, res){
         var PageData = { //Data bundle to send to render function
-            Title: "Welcome To Diplomat", //Title for header at top of page
-            PageToRender: "pages/Diplomat", //Location of the page
+            Title: "Welcome To Diplo", //Title for header at top of page
+            PageToRender: "pages/Diplo", //Location of the page
             _Action: "/Diplo",  //Tracked request 
             DisplayPopUp: false, //Display Popup menu
-            displayProducts: [], //Container for products to be displayed
-            DisplayProductEdit: false, //Displays menu to edit products attributes
-            FindById: false, //Determines whether to find by id or not
+            ProductList: [], //Container for products to be displayed
+            FindProducts: 0, //Determines whether to find by id or not
             Query: "", // Data to hold query                                             /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
-            ProductSection: undefined,
-            ProductDisplay: true,
-            _DisplayProducts: false,
-            _BackGroundDisplay: true //Displays green product display
+            MenuState:  {ListState:"BaseDisplay", PopUpState:"Start", LoginState:"None"},
+            DisplayProductList: true,
+            Color: undefined
         }
         displayProducts = [];
         res.render('pages/Diplomat', {
@@ -130,7 +113,6 @@ app.route('/Diplo')
     }).post(function(req, res){
 
     });
-
 
 app.use('/', router);
 app.use('/Sable', router);

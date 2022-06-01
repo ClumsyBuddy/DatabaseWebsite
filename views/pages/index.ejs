@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
 <head>
-    <title>My Website</title>
+    <title>Database</title>
     <link rel="stylesheet" href="CSS/Main.css">
 </head>
 <body class="FrontPage">
     <div>
-        <div><h1 class="center SableOrange">Welcome to Sable Database</h1></div>
+        <div><h1 class="center SableOrange"><%= Data.Title %> </h1></div>
         <div style="width: 100%; height: auto; display: flex; flex-direction: row; justify-content: center;">
         <%- include("../partials/LoginButton") %>
         </div>
@@ -27,7 +27,6 @@
             </button>
         </div>
     </div>
-    <script async defer src="javascript/Menu.js"></script>
 </body>
 
 </html>
