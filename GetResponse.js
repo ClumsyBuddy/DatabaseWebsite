@@ -88,9 +88,10 @@ class  ResponseHandler{
     }
 
     #DeleteProduct(req, res, postMessage){
+        console.log(postMessage)
         let Formatted = postMessage._Delete.split(" "); //Split Query by the spaces
         this.ProductLog.New(`Deleting: [${postMessage._Delete}]`);
-        this.PControl.delete(FormattedKeys[0], FormattedKeys[1], FormattedKeys[2]).then((Resolve) => { //Delete specified product based on sku, brand and color
+        this.PControl.delete(Formatted[0], Formatted[1], Formatted[2]).then((Resolve) => { //Delete specified product based on sku, brand and color
             this.ProductLog.New("Deleted: " + JSON.stringify(Resolve));
         }, (Reject) => {
             this.ProductLog.New("Could not Delete: " + JSON.stringify(Reject));
@@ -98,7 +99,7 @@ class  ResponseHandler{
         this.PControl.getAll().then((result)=>{//Check if the only remaining product with specified SKU is the base and if so delete it
             var Items = [];
             for(var _node in result){
-                if(result[_node].id == FormattedKeys[0].split("-").pop()){
+                if(result[_node].id.includes(Formatted[0].split("-").pop())){
                     Items.push(result[_node]);
                 }
             }
@@ -129,7 +130,8 @@ class  ResponseHandler{
         }
         if(postMessage._Delete != undefined){
             this.#DeleteProduct(req, res, postMessage); //Go to Delete function
-            res.redirect(req.get("referer")); //Redirect page to remove results
+            _SableState.HandleMenuPost(_SableState.IndexTable._ReRender, postMessage, SableMenu);
+            this.RenderAll(req, res, _SableState.ReturnClassObject(), SableMenu);
             postMessage._Delete = undefined;
         }
         if(postMessage.CancelButton != undefined && postMessage.CancelButton != ''){
@@ -139,6 +141,7 @@ class  ResponseHandler{
         if(postMessage._Search != undefined){
             if(postMessage._Search == ''){
                 _SableState.Reset();
+                _SableState.SectionId = "Base SKU";
                 this.RenderAll(req, res, _SableState.ReturnClassObject(), SableMenu);
                 return;
             }            

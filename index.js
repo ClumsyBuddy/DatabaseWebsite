@@ -85,22 +85,8 @@ const _SableState = new SablePageState('Welcome To Sable', 'pages/Sable', '/Sabl
 //Router for getting all get and post request on '/Sable'
 app.route('/Sable')
     .get(function(req, res){
-        var PageData = { //Data bundle to send to render function
-            Title: "Welcome To Sable", //Title for header at top of page
-            PageToRender: "pages/Sable", //Location of the page
-            _Action: "/Sable",  //Tracked request 
-            DisplayPopUp: false, //Display Popup menu
-            ProductList: [], //Container for products to be displayed
-            FindProducts: 0, //Determines whether to find by id or not
-            Query: "", // Data to hold query                                             /*  NEED TO RENAME THESE, THE NAMING IS TERRIBLE AND ITS HARD TO TELL WHAT IT DOES  */
-            MenuState:  {ListState:"BaseDisplay", PopUpState:"Start", LoginState:"None"},
-            DisplayProductList: true,
-            Color: undefined,
-            Re_Render: false
-        }
-
         
-        HR.RenderAll(req, res, PageData, SableMenu); //Render the page
+        HR.RenderAll(req, res, _SableState.ReturnClassObject(), SableMenu); //Render the page
         })
     .post(function(req, res){
         HR.HandleSablePost(req, res, _SableState, SableMenu);

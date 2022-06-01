@@ -18,26 +18,30 @@ class SablePageState extends PageStateManager{
             Cancel:4,
             Add:5,
             Edit:6,
-            Search:7
+            Search:7,
+            _ReRender:8
         }
+        this.SectionId = "Base SKU";
     }
 
     HandleMenuPost(index, Query, SableMenu){ //Simple State machine. Depending on what state we want we can flip between them using the indexTable
-        console.log(Query);
         switch(index){
             case this.IndexTable.BaseDisplay: /*  BASE DISPLAY  */
+                this.SectionId = "Base SKU";
                 this.SavePreviousState();
                 break;
             case this.IndexTable.AllDispay: /*  ALL DISPLAY  */
                 this.FindProducts = SableMenu.lookUpTable.All;  
                 this.Query = Query
                 this.MenuState.ListState = "BrandDisplay";
+                this.SectionId = "Brands";
                 this.SavePreviousState();
                 break;
             case this.IndexTable.BrandDisplay:  /*  BRAND DISPLAY  */
                 this.FindProducts = SableMenu.lookUpTable.Brand;
                 this.Query = Query;
                 this.MenuState.ListState = "ColorDisplay";
+                this.SectionId = "Brand Colors";
                 this.SavePreviousState();
                 break;
             case this.IndexTable.ColorDisplay:  /*  COLOR DISPLAY  */
@@ -65,6 +69,11 @@ class SablePageState extends PageStateManager{
                 this.currentlySearch = true;
                 this.Query = Query
                 this.MenuState.ListState = "Search";
+                this.SectionId = "Search Results";
+                break;
+            case this.IndexTable._ReRender:
+                this.Reset();
+                this.ResetToPreviousState();
                 break;
         }
     }

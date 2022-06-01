@@ -20,6 +20,7 @@ class  PageStateManager{
             this.DisplayProductList = true; //Controls whether we show the list of products or not
             this.Optional = ""; //Allows up to check for a optional Variable (Was originally Color)
             this.Re_Render = false; //Chooses whether we rerender the previous page
+            this.SectionId = "";
             this.#SaveBase = this.ReturnClassObject();
             this.#PreviousState = this.ReturnClassObject();
         }
@@ -34,6 +35,7 @@ class  PageStateManager{
         this.Query = this.#SaveBase.Query;
         this.MenuState = {ListState:this.#SaveBase.MenuState.ListState, PopUpState:this.#SaveBase.MenuState.PopUpState, LoginState:this.MenuState.LoginState};
         this.DisplayProductList = this.#SaveBase.DisplayProductList;
+        this.SectionId = this.#SaveBase.SectionId,
         this.Optional = this.#SaveBase.Optional;
         this.Re_Render = this.#SaveBase.Re_Render;
     }
@@ -48,6 +50,7 @@ class  PageStateManager{
             Query: this.Query,
             MenuState:  {ListState:this.MenuState.ListState, PopUpState:this.MenuState.PopUpState, LoginState:this.MenuState.LoginState},
             DisplayProductList: this.DisplayProductList,
+            SectionId: this.SectionId,
             Optional: this.Optional,
             Re_Render: this.Re_Render
             
@@ -66,6 +69,7 @@ class  PageStateManager{
         this.Query = this.#PreviousState.Query;
         this.MenuState = this.#PreviousState.MenuState;
         this.DisplayProductList = this.#PreviousState.DisplayProductList;
+        this.SectionId = this.#PreviousState.SectionId;
         this.Optional = this.#PreviousState.Optional;
         this.Re_Render = this.#PreviousState.Re_Render;
     }
