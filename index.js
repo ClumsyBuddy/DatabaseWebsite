@@ -80,6 +80,8 @@ app.route('/')
         
     });
 
+const SablePageState = require('./Sable/SableState');
+const _SableState = new SablePageState('Welcome To Sable', 'pages/Sable', '/Sable');
 //Router for getting all get and post request on '/Sable'
 app.route('/Sable')
     .get(function(req, res){
@@ -97,35 +99,11 @@ app.route('/Sable')
             Re_Render: false
         }
 
-        if(req.query._Search != undefined && req.query._Search != ''){ //If the query is a search query then add this data
-            PageData.FindProducts = SableMenu.lookUpTable.All;
-            SableMenu.currentlySearch = true;
-            PageData.Query = req.query._Search;
-            PageData.MenuState.ListState = "Search";
-         } else if(req.query.I_Product != undefined && req.query.I_Product != ''){ // If the query is a product query then add this data
-            PageData.FindProducts = SableMenu.lookUpTable.All;
-            PageData.Query = req.query.I_Product;
-            PageData.MenuState.ListState = "BrandDisplay";
-        }else if(req.query.E_Product != undefined && req.query.E_Product != ''){ // If the query is a product query then add this data
-            PageData.FindProducts = SableMenu.lookUpTable.Brand;
-            PageData.Query = req.query.E_Product;
-            PageData.MenuState.ListState = "ColorDisplay";
-        }else if(req.query._Add != undefined && req.query._Add != ''){
-            PageData.DisplayPopUp = true;
-            PageData.MenuState.PopUpState = "Add";
-        }else if(req.query.C_Product != undefined && req.query.C_Product != ''){
-            PageData.DisplayPopUp = true;
-            PageData.FindProducts = SableMenu.lookUpTable.Color;
-            PageData.MenuState.ListState = "PopUp";
-            PageData.MenuState.PopUpState = "Edit";
-            var Variables = req.query.C_Product.split(",");
-            PageData.Query = Variables[0];
-            PageData.Color = Variables[1];
-        }
+        
         HR.RenderAll(req, res, PageData, SableMenu); //Render the page
         })
     .post(function(req, res){
-        HR.HandleSablePost(req, res);
+        HR.HandleSablePost(req, res, _SableState, SableMenu);
     });
 
 app.route('/Diplo')

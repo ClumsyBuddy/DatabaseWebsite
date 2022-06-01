@@ -1,5 +1,7 @@
 const Log = require("./Logger");
 const MasterLogger = require("./MasterLogger");
+const SableMenu = require("./Sable/SableMenuFunction");
+const SablePageState = require("./Sable/SableState");
 
 
 class  ResponseHandler{
@@ -11,11 +13,12 @@ class  ResponseHandler{
         this.PControl = PControl;
         this.MLogger = _Logger
         this.ProductLog = new Log(this.MLogger, "PHandle");
+        this.PreviousRequest = undefined;
         }
 
     RenderAll(req, res, Data, callback){
             this.PControl.getAll().then((result) => {
-               
+                console.log("RenderAll: " + JSON.stringify(Data));
                 var ItemArray = [];
                 //If the result array is empty push result into the array otherwise make itemarray equal to result
                 if(Array.isArray(result) == false){ 
@@ -26,10 +29,11 @@ class  ResponseHandler{
                     ItemArray = result;
                 }
                 if(callback != undefined && Data.DisplayProductList){
-                    ItemArray = callback.ReturnItemList(Data.FindProducts, ItemArray, Data.Query, Data.Color);
+                    ItemArray = callback.ReturnItemList(Data.FindProducts, ItemArray, Data.Query, Data.Optional);
                 }
                 Data.ProductList = ItemArray;
                 this.ProductLog.New("Rendering Items");
+                console.log("ProductList: " + JSON.stringify(Data.ProductList));
                 res.render(Data.PageToRender, {Data});
             })
     }
@@ -85,7 +89,9 @@ class  ResponseHandler{
         });
     }
 
-    #DeleteProduct(FormattedKeys){
+    #DeleteProduct(req, res, postMessage){
+        let Formatted = postMessage._Delete.split(" "); //Split Query by the spaces
+        this.ProductLog.New(`Deleting: [${postMessage._Delete}]`);
         this.PControl.delete(FormattedKeys[0], FormattedKeys[1], FormattedKeys[2]).then((Resolve) => { //Delete specified product based on sku, brand and color
             this.ProductLog.New("Deleted: " + JSON.stringify(Resolve));
         }, (Reject) => {
@@ -107,18 +113,54 @@ class  ResponseHandler{
         })
     }
 
+    /**
+     * 
+     * @param {*} req 
+     * @param {*} res 
+     * @param {SablePageState} _SableState 
+     * @param {SableMenu} SableMenu 
+     * @returns 
+     */
+    HandleSablePost(req, res, _SableState, SableMenu){
 
-    HandleSablePost(req, res){
+       _SableState.Reset();
+
         let postMessage = req.body;
         if(postMessage.id != undefined && postMessage.Brand != undefined && postMessage.I_Product == undefined){
             this.#AddProduct(req, res, postMessage);
         }
         if(postMessage._Delete != undefined){
-            let Formatted = postMessage._Delete.split(" "); //Split Query by the spaces
-            this.ProductLog.New(`Deleting: [${postMessage._Delete}]`);
-            this.#DeleteProduct(Formatted); //Go to Delete function
+            this.#DeleteProduct(req, res, postMessage); //Go to Delete function
             res.redirect(req.get("referer")); //Redirect page to remove results
             postMessage._Delete = undefined;
+        }
+        if(postMessage.CancelButton != undefined && postMessage.CancelButton != ''){
+            _SableState.HandleMenuPost(_SableState.IndexTable.Cancel, postMessage.CancelButton, SableMenu);
+            this.RenderAll(req, res, _SableState.ReturnClassObject(), SableMenu); //Render the page
+        }
+        if(postMessage._Search != undefined){
+            if(postMessage._Search == ''){
+                this.RenderAll(req, res, _SableState.ReturnClassObject(), SableMenu);
+                return;
+            }            
+            _SableState.HandleMenuPost(_SableState.IndexTable.Search, postMessage._Search, SableMenu);
+            this.RenderAll(req, res, _SableState.ReturnClassObject(), SableMenu); //Render the page
+        }
+       if(postMessage.I_Product != undefined && postMessage.I_Product != ''){ // If the query is a product query then add this data
+        _SableState.HandleMenuPost(_SableState.IndexTable.AllDispay, postMessage.I_Product, SableMenu);
+        this.RenderAll(req, res, _SableState.ReturnClassObject(), SableMenu); //Render the page
+        }
+        if(postMessage.E_Product != undefined && postMessage.E_Product != ''){ // If the query is a product query then add this data
+            _SableState.HandleMenuPost(_SableState.IndexTable.BrandDisplay, postMessage.E_Product, SableMenu);
+            this.RenderAll(req, res, _SableState.ReturnClassObject(), SableMenu); //Render the page
+        }
+        if(postMessage._Add != undefined && postMessage._Add != ''){
+            _SableState.HandleMenuPost(_SableState.IndexTable.Add, postMessage._Add, SableMenu);
+            this.RenderAll(req, res, _SableState.ReturnClassObject(), SableMenu); //Render the page
+        }
+        if(postMessage.C_Product != undefined && postMessage.C_Product != ''){
+            _SableState.HandleMenuPost(_SableState.IndexTable.ColorDisplay, postMessage.C_Product, SableMenu);
+            this.RenderAll(req, res, _SableState.ReturnClassObject(), SableMenu); //Render the page
         }
     }
 }
