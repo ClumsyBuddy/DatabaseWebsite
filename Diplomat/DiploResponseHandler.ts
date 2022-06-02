@@ -12,7 +12,7 @@ class DiploResponseHandler extends ResponseHandler{
         CoffeMaker:1,
     }
     constructor(DBController:DatabaseManager, User:Login){
-        super(DBController);
+        super(DBController, User);
         this.DBController.createTable("Diplomat", "Diplomat", "id TEXT, itemtype TEXT"); //Create Diplomat Table
     }
 

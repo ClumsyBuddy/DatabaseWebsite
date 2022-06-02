@@ -20,6 +20,7 @@ const UserLogin = new Login(MainDB);
 const Sable = new SableResponseHandler(MainDB, UserLogin);
 const Diplo = new DiploResponseHandler(MainDB, UserLogin);
 
+
 //Use Ejs for the view engine, We want to use templates
 app.set("view engine", "ejs");
 

@@ -12,10 +12,13 @@ class Login{
     private c_DbController: DatabaseManager;
     private db_Name = "Login";
     private LoginReject: boolean;
+    private LoggedIn:boolean;
+
 
     constructor(DbController:DatabaseManager){
         this.c_DbController = DbController;
         this.c_DbController.createTable(this.db_Name, "Login", "user TEXT, email TEXT, password TEXT, permission TEXT");
+        this.LoggedIn = false;
     }
     
 
@@ -31,6 +34,7 @@ class Login{
                 this.c_Password = result.password;
                 this.c_UserPermissions = result.permission;
                 this.LoginReject = false;
+                this.LoggedIn = true;
             }else{
                 this.LoginReject = true;
             }
@@ -39,16 +43,22 @@ class Login{
     }
 
     /*
-    *   If the User Permission Level is less than the Required then return false else return true
+    *   If the User Permission Level is more than or equal too the Required then return true else return false
     */
     public PermissionLevel(Required:number){
-        return this.c_UserPermissions < Required ? false : true;
+        return this.c_UserPermissions >= Required ? true : false;
     }
 
     public get User() : string { //Gets the Users name
         return this.c_User;
     }
     
+    public get IsLogin() : boolean {
+        return this.LoggedIn;
+    }
+    public set IsLogin(value:boolean){
+        this.LoggedIn = value;
+    } 
 
 
 
