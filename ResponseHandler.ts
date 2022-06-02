@@ -3,13 +3,15 @@ import { Login } from "./LoginHandler";
 
 class  ResponseHandler{
     DBController: DatabaseManager;
-    public PageState: {        
-            LoginForm:boolean,
-            Switch:{On:true, Off:false},
-            PopUp:boolean,
-            Form:{Edit:boolean, Add:boolean},
-            CurrentRenderTarget:string
-        };
+    public PageState:{
+        LoginForm:boolean,
+        Switch:{On:boolean, Off:boolean},
+        PopUp:boolean,
+        Form:{Edit:boolean, Add:boolean},
+        CurrentRenderTarget:string,
+        Title:string,
+        _Action:string
+    };
 
     private User:Login;
     Username:string;
@@ -20,32 +22,36 @@ class  ResponseHandler{
         High:2
     }
 
-    AllowedActions: {
+    public AllowedActions: {
         Delete:boolean,
         Update:boolean,
         Create:boolean,
         ViewLogs:boolean,
-    }
+    };
 
     constructor(DBController: DatabaseManager, User:Login){
         this.DBController = DBController;
         this.User = User;
-        this.PageState.LoginForm = this.PageState.Switch.Off;
-        this.PageState.PopUp = this.PageState.Switch.Off;
-        this.PageState.Form.Add = this.PageState.Switch.Off;
-        this.PageState.Form.Edit = this.PageState.Switch.Off;
         this.PageState.CurrentRenderTarget = "index";
-        this.InitLogin();
+        this.PageState.Form.Add = false;
+        this.PageState.Form.Edit = false;
+        this.PageState.LoginForm = false;
+        this.PageState.PopUp = false;
+        this.PageState.Switch.Off = false;
+        this.PageState.Switch.On = true;
+
+        this.AllowedActions = {
+                Delete:false,
+                Update:false,
+                Create:false,
+                ViewLogs:false,
         }
+    }
 
-
-
-    private InitLogin(){
+    public InitLogin(){
         if(this.User.IsLogin){
             this.Username = this.User.User;
-            Object.keys(this.AllowedActions).forEach(key => { //Set All Allowed Actions to False
-                this.AllowedActions[key] = true;
-                });
+            
             if(this.User.PermissionLevel(this.Permission.High)){
                 Object.keys(this.AllowedActions).forEach(key => {
                     this.AllowedActions[key] = true;
@@ -65,7 +71,7 @@ class  ResponseHandler{
 
     public RenderPage(req, res, PageData){
         var BuildRenderTarget = `pages/${this.PageState.CurrentRenderTarget}`;
-        res.render(BuildRenderTarget, {PageState:this.PageState, PageData:PageData});
+        res.render(BuildRenderTarget, {PageState:this.PageState, Data:PageData});
     }
 
 

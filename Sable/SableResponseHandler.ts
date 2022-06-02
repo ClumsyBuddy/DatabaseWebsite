@@ -26,8 +26,20 @@ class SableResponseHandler extends ResponseHandler{
     constructor(DBController:DatabaseManager, User:Login){
         super(DBController, User);
         this.DBController.createTable("Sable", "Sable", "id TEXT, brand TEXT"); //Create Sable Table
+        this.PageState.CurrentRenderTarget = "Sable";
         
     }
+
+
+    _Get(req, res){
+        this.RenderPage(req, res, this.ItemInformation);
+    }
+    _Post(req, res){
+
+    }
+
+
+
 
 }
 

@@ -12,11 +12,16 @@ import {DatabaseManager} from "./DatabaseManager";
 import {SableResponseHandler} from "./Sable/SableResponseHandler"
 import { DiploResponseHandler } from "./Diplomat/DiploResponseHandler";
 import { Login } from "./LoginHandler";
+import { IndexResponseHandler } from "./IndexResponseHandler";
 
 //Create variables for exported Classes
 const db = new Database('./Main.db');
+//Main Database
 const MainDB = new DatabaseManager(db);
+//Login Manager
 const UserLogin = new Login(MainDB);
+
+const Index = new IndexResponseHandler(MainDB, UserLogin, app);
 const Sable = new SableResponseHandler(MainDB, UserLogin);
 const Diplo = new DiploResponseHandler(MainDB, UserLogin);
 
@@ -56,7 +61,7 @@ app.route('/')
            Title:"DataBase",
            MenuState:{LoginState:"None"}
         }
-        res.render('pages/index', {Data});
+        res.render('pages/index', {Data})
     }).post(function(req, res){
         
     });
@@ -70,7 +75,7 @@ app.route('/Sable')
             ProductList: [],
             _Action: "/Sable"
          }
-         res.render('pages/Sable', {Data});
+        
     }).post(function(req, res){
         console.log(req.body);
         (success) => res.send(success);
