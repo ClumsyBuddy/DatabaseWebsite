@@ -55,7 +55,7 @@ class  ResponseHandler{
             }
         }
         this.PControl.getAll().then((result) => {
-            var _id = postMessage.id;
+            var _id = postMessage.id.replaceAll(" ", "");
             if(result.length == 0){
                 this.PControl.create(_id, "Base", "Base", "Base", "Base", "Base");
                 this.PControl.create(`${postMessage.Brand}-${_id}`, postMessage.Brand, postMessage.Color, CSizes, postMessage.Active_Product, postMessage.Description);
@@ -94,29 +94,42 @@ class  ResponseHandler{
         });
     }
 
-    #DeleteProduct(req, res, postMessage){
-        let Formatted = postMessage._Delete.split(" "); //Split Query by the spaces
-        console.log(Formatted);
+    async #DeleteProduct(req, res, postMessage, _SableState, SableMenu){
+        let PreFormatted = postMessage._Delete.split(" "); //Split Query by the spaces
+        var Formatted = [];
+        for(var _node in  PreFormatted){ //Loop through and dont add blank spaces
+            if(PreFormatted[_node] == ""){
+                continue;
+            }
+            Formatted.push(PreFormatted[_node]);
+        }
         this.ProductLog.New(`Deleting: [${postMessage._Delete}]`);
-        this.PControl.delete(Formatted[0], Formatted[1], Formatted[2]).then((Resolve) => { //Delete specified product based on sku, brand and color
-            this.ProductLog.New("Deleted: " + JSON.stringify(Resolve));
-        }, (Reject) => {
-            this.ProductLog.New("Could not Delete: " + JSON.stringify(Reject));
-        }).bind(this);
-        this.PControl.getAll().then((result)=>{//Check if the only remaining product with specified SKU is the base and if so delete it
-            var Items = [];
-            for(var _node in result){
-                if(result[_node].id.includes(Formatted[0].split("-").pop())){
-                    Items.push(result[_node]);
+        await this.PControl.getAll().then((result)=>{//Get All Products, await for this this promise to resolve before rendering the screen
+            for(var Item in result){ //Get All Items
+                if(result[Item].id == Formatted[0] && result[Item].brand == Formatted[1] && result[Item].color == Formatted[2]){ //Check if the current item is what we are looking for
+                    this.PControl.delete(result[Item].key).then(() => { //Delete the item using the auto incremented key
+                    this.PControl.getAll().then((result) => { //Get the new list of items in db
+                            var Items = [];
+                            for(var _node in result){ //Loop Through the items and look for everything by SKU without brand
+                                if(result[_node].id.includes(Formatted[0].split("-").pop())){
+                                    Items.push(result[_node]);
+                                }
+                            }
+                            if(Items.length == 1){ //If the items without brand and only SKU is only one we can assume its a base item
+                                if(Items[0].brand == "Base"){ //If it is infact a base item
+                                    this.ProductLog.New("No remaining Products with SKU, Deleting Base");
+                                    this.PControl.delete(Items[0].key); //Delete it
+                                }
+                            }
+                        })
+                    })
+                    break;
                 }
             }
-            if(Items.length == 1){
-                if(Items[0].brand == "Base"){
-                    this.ProductLog.New("No remaining Products with SKU, Deleting Base");
-                    this.PControl.delete(Items[0].id, "Base", "Base");
-                }
-            }
+            
         })
+        _SableState.HandleMenuPost(_SableState.IndexTable._ReRender, postMessage, SableMenu); //Setup Menu State
+        this.RenderAll(req, res, _SableState.ReturnClassObject(), SableMenu); //Render new menu state with new items
     }
 
     /**
@@ -126,7 +139,7 @@ class  ResponseHandler{
      * @param {SablePageState} _SableState 
      * @param {Object} NewData 
      */
-    #UpdateProduct(req, res, _SableState, postMessage){
+    #UpdateProduct(req, res, _SableState, postMessage, SableMenu){
         this.PControl.getAll().then((result) =>{
             var CSizes = "";
             for(var Sizes in postMessage.CheckBox){
@@ -138,27 +151,30 @@ class  ResponseHandler{
             }
             var MultipleSKU = 0;
             for(var _node in result){
-                if(result[_node].id.split("-").pop() == _SableState.ProductId.split("-").pop()){
+                if(result[_node].id.split("-").pop() == _SableState.ProductId.split("-").pop() && result[_node].brand != "Base"){
                     MultipleSKU += 1;
                 }
             }
             var UpdateOldBase = false;
             for(var key in result){
                 if(result[key].id == _SableState.ProductId && result[key].color == _SableState.ProductColor){
-                    this.PControl.update("id", postMessage.id, result[key].key);
+                    this.PControl.update("id", postMessage.id.replaceAll(" ", ""), result[key].key);
                     this.PControl.update("sizes", CSizes, result[key].key);
-                    this.PControl.update("active", postMessage.active, result[key].key);
+                    if(postMessage.Active_Product == 'on'){
+                        this.PControl.update("active", true, result[key].key);
+                    }else{
+                        this.PControl.update("active", false, result[key].key);
+                    }                    
                     this.PControl.update("description", postMessage.Description, result[key].key);
                     if(MultipleSKU > 1){
                         this.PControl.create(postMessage.id.split("-").pop(), "Base", "Base", "Base", "Base", "Base");
-                        this.#DeleteProduct(req, res, {_Delete:`${_SableState.ProductId} ${postMessage.Brand} ${_SableState.ProductColor}`});
+                        this.#DeleteProduct(req, res, {_Delete:`${_SableState.ProductId} ${postMessage.Brand} ${_SableState.ProductColor}`}, _SableState, SableMenu);
                     }else{
                         UpdateOldBase = true;
                     }
                     break;
                 }
             }
-            console.log(_SableState.ProductId.split("-").pop());
             if(UpdateOldBase){
                 for(var key in result){
                     if(_SableState.ProductId.split("-").pop() == result[key].id && result[key].brand == "Base"){
@@ -186,16 +202,15 @@ class  ResponseHandler{
         
         
         if(postMessage.saveForm == "Update"){
-            this.#UpdateProduct(req, res, _SableState, postMessage);
+            this.#UpdateProduct(req, res, _SableState, postMessage, SableMenu);
         }
         
         if(postMessage.id != undefined && postMessage.Brand != undefined && postMessage.I_Product == undefined){
             this.#AddProduct(req, res, postMessage);
         }
         if(postMessage._Delete != undefined){
-            this.#DeleteProduct(req, res, postMessage); //Go to Delete function
-            _SableState.HandleMenuPost(_SableState.IndexTable._ReRender, postMessage, SableMenu);
-            this.RenderAll(req, res, _SableState.ReturnClassObject(), SableMenu);
+            this.#DeleteProduct(req, res, postMessage, _SableState, SableMenu); //Go to Delete function
+            
             postMessage._Delete = undefined;
         }
         if(postMessage.CancelButton != undefined && postMessage.CancelButton != ''){

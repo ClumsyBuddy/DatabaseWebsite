@@ -24,10 +24,10 @@ class Products {
         )
       }
 
-      delete(id, brand, color) {
+      delete(key) {
         return this.dao.run(
-          `DELETE FROM ${this.Table} WHERE id = ? AND brand = ? AND color = ?`,
-          [id, brand, color]
+          `DELETE FROM ${this.Table} WHERE key = ?`,
+          [key]
         );
       }
 
