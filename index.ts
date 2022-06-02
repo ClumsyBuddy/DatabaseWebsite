@@ -17,13 +17,8 @@ import { Login } from "./LoginHandler";
 const db = new Database('./Main.db');
 const MainDB = new DatabaseManager(db);
 const UserLogin = new Login(MainDB);
-const Sable = new SableResponseHandler(MainDB);
-const Diplo = new DiploResponseHandler(MainDB);
-
-//Create the main table
-
-
-
+const Sable = new SableResponseHandler(MainDB, UserLogin);
+const Diplo = new DiploResponseHandler(MainDB, UserLogin);
 
 //Use Ejs for the view engine, We want to use templates
 app.set("view engine", "ejs");
@@ -80,11 +75,23 @@ app.route('/Sable')
         (success) => res.send(success);
     });
 
+    app.route('/Diplomat')
+    .get(function(req, res){
+        var Data = {
+            Title:"DataBase",
+            MenuState:{LoginState:"None"},
+            ProductList: [],
+            _Action: "/Diplo"
+         }
+         res.render('pages/Diplomat', {Data});
+    }).post(function(req, res){
+
+    });
 
 
 app.use('/', router);
 app.use('/Sable', router);
-
+app.use('/Diplomat', router);
 
 app.listen(port, function(){
     console.log(`Server running at http://${hostname}:${port}/`);

@@ -35,7 +35,7 @@ class SableResponseHandler extends ResponseHandler{
 
     constructor(DBController:DatabaseManager, User:Login){
         super(DBController);
-        this.DBController.createTable("Sable", "Sable", "id TEXT, brand TEXT");
+        this.DBController.createTable("Sable", "Sable", "id TEXT, brand TEXT"); //Create Sable Table
     }
 
 }

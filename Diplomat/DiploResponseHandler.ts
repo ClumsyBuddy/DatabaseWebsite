@@ -13,7 +13,7 @@ class DiploResponseHandler extends ResponseHandler{
     }
     constructor(DBController:DatabaseManager, User:Login){
         super(DBController);
-        this.DBController.createTable("Diplomat", "Diplomat", "id TEXT, itemtype TEXT");
+        this.DBController.createTable("Diplomat", "Diplomat", "id TEXT, itemtype TEXT"); //Create Diplomat Table
     }
 
 }
