@@ -1,8 +1,5 @@
 import { DatabaseManager } from "./DatabaseManager";
 
-const DBManager = require("./DatabaseManager");
-
-
 class  ResponseHandler{
     DBController: DatabaseManager;
     public PageState: {        
@@ -14,6 +11,15 @@ class  ResponseHandler{
     constructor(DBController: DatabaseManager){
         this.DBController = DBController;
         }
+
+        Init(){ //Initialize PageState
+            this.PageState.LoginForm = this.PageState.Switch.Off;
+            this.PageState.PopUp = this.PageState.Switch.Off;
+            this.PageState.Form.Add = this.PageState.Switch.Off;
+            this.PageState.Form.Edit = this.PageState.Switch.Off;
+        }
+
+
 }
 
 export {ResponseHandler};

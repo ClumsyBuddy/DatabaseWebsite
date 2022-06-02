@@ -1,4 +1,5 @@
 import { DatabaseManager } from "../DatabaseManager";
+import { Login } from "../LoginHandler";
 import {ResponseHandler} from "../ResponseHandler";
 
 
@@ -32,9 +33,9 @@ class SableResponseHandler extends ResponseHandler{
         1:"WH"
     }
 
-    constructor(DBController:DatabaseManager){
+    constructor(DBController:DatabaseManager, User:Login){
         super(DBController);
-        //I need all Columns
+        this.DBController.createTable("Sable", "Sable", "id TEXT, brand TEXT");
     }
 
 }

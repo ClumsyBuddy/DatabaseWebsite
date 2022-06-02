@@ -11,15 +11,18 @@ import {Database} from "./Database";
 import {DatabaseManager} from "./DatabaseManager";
 import {SableResponseHandler} from "./Sable/SableResponseHandler"
 import { DiploResponseHandler } from "./Diplomat/DiploResponseHandler";
+import { Login } from "./LoginHandler";
 
 //Create variables for exported Classes
 const db = new Database('./Main.db');
 const MainDB = new DatabaseManager(db);
+const UserLogin = new Login(MainDB);
 const Sable = new SableResponseHandler(MainDB);
 const Diplo = new DiploResponseHandler(MainDB);
+
 //Create the main table
-Sable.DBController.createTable("Sable", "id TEXT, brand TEXT");
-Diplo.DBController.createTable
+
+
 
 
 //Use Ejs for the view engine, We want to use templates
