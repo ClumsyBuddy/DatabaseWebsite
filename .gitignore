@@ -1,2 +1,3 @@
-Main.db
-DatabaseManager.js
+*.db
+*.js
+!public/javascript*.js
