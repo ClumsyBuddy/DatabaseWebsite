@@ -1,16 +1,21 @@
 <div class="CenteredMenu" style="height: 100%">
     <h1 class="center" style="color:orangered">Items</h1>
+
     <div style="display:inline-flex; margin-bottom: 10px;">
-        <form action=<%= Data._Action %> method="post">
-            <input type="text" name="_Search">
+        
+        <form action=<%= Data._Action %> method="get">
+            <input type="text" name="Search">
             <button type="submit">Search</button>
         </form>
+
         <form action=<%= Data._Action %> method="get">
             <button name="Test" value="SMK110" type="menu" style="margin-left: 10px;">Filter</button>
         </form>
-        <form action=<%= Data._Action %> method="post" style="margin-left: 10px;">
+
+        <form action=<%= Data._Action %> method="get" style="margin-left: 10px;">
             <button type="menu" name="_Add" value="Add">Add</button>
         </form>
+
     </div>
     <h2 class="SectionHeader"><%= Data.SectionId %></h1>
     <%- include('./ProductDisplay') %>

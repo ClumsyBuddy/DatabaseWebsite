@@ -1,3 +1,4 @@
+import { DatabaseManager } from "../DatabaseManager";
 import {ResponseHandler} from "../ResponseHandler";
 
 
@@ -31,7 +32,7 @@ class SableResponseHandler extends ResponseHandler{
         1:"WH"
     }
 
-    constructor(DBController){
+    constructor(DBController:DatabaseManager){
         super(DBController);
         //I need all Columns
     }

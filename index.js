@@ -1,14 +1,11 @@
 "use strict";
 exports.__esModule = true;
 //Downloaded packages
-var http = require('http');
 var path = require('path');
 var express = require('express');
-var _Promise = require("bluebird");
 //Create a app and router variable
 var router = express.Router();
 var app = express();
-var render = require('ejs').render;
 //My exported packages
 var Database_1 = require("./Database");
 var DatabaseManager_1 = require("./DatabaseManager");
@@ -16,12 +13,11 @@ var SableResponseHandler_1 = require("./Sable/SableResponseHandler");
 //Create variables for exported Classes
 var db = new Database_1.Database('./Main.db');
 var SableDB = new DatabaseManager_1.DatabaseManager(db);
-var HR = new SableResponseHandler_1.SableResponseHandler(SableDB);
+var Sable = new SableResponseHandler_1.SableResponseHandler(SableDB);
 //Create the main table
 SableDB.createTable("Sable", "id TEXT, brand TEXT");
 //Use Ejs for the view engine, We want to use templates
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
 //Setup Json and URL parsing
 app.use(express.json()); // Helps Parse Json files
 app.use(express.urlencoded({
@@ -52,7 +48,21 @@ app.route('/')
     res.render('pages/index', { Data: Data });
 }).post(function (req, res) {
 });
+app.route('/Sable')
+    .get(function (req, res) {
+    var Data = {
+        Title: "DataBase",
+        MenuState: { LoginState: "None" },
+        ProductList: [],
+        _Action: "/Sable"
+    };
+    res.render('pages/Sable', { Data: Data });
+}).post(function (req, res) {
+    console.log(req.body);
+    (function (success) { return res.send(success); });
+});
 app.use('/', router);
+app.use('/Sable', router);
 app.listen(port, function () {
     console.log("Server running at http://".concat(hostname, ":").concat(port, "/"));
 });

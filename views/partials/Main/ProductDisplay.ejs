@@ -1,64 +1,21 @@
 <div>
-    <% Data.ProductList.forEach((_product) => { %> 
-
-            <!-- Base Product Display -->
-        <% if (Data.MenuState.ListState == "BaseDisplay") { %> 
-            <div class="ListItem">
-                <form action=<%=Data._Action %> method="post">
-                    <button class="BarButtonMenu" name="I_Product" value=<%= _product.id %> >
-                        <p class="Items" style="border-left: 4px double black;"><%= _product.id %></p>
-                    </button>
-                </form>
-            </div>
-        <% } %>
-            
-
-            <!-- Brand Product Display -->
-        <% if (Data.MenuState.ListState == "BrandDisplay") { %>        
-            <div class="ListItem">
-                <form action=<%=Data._Action %> method="post">
-                    <button class="BarButtonMenu" name="E_Product" value=<%= _product.id %> >
-                        <p class="Items" style="border-left: 4px double black;"><%= _product.id %></p>
-                    </button>
-                </form>
-                <form action=<%= Data._Action %>  method="post" style="margin-left: 1%; margin-right: 10px; margin-top: 1%;">
-                   <!-- <button type="submit" name="_Delete" value='<%= _product.id %> <%= _product.brand %> <%= _product.color %>' >Delete</button> -->
-                </form>
-            </div>
-        <% } %>
-
-
-
-                 <!-- Color Product Display -->
-        <% if (Data.MenuState.ListState == "ColorDisplay") { %>        
-            <div class="ListItem">
-                <form action=<%=Data._Action %> method="post">
-                    <button class="BarButtonMenu" name="C_Product" value='<%= _product.id %>,<%= _product.color %>' >
-                        <p class="Items" style="border-left: 4px double black;"><%= _product.id %></p><p class="Items"><%= _product.color %></p>
-                    </button>
-                </form>
-                <form action=<%= Data._Action %>  method="post" style="margin-left: 1%; margin-right: 10px; margin-top: 1%;">
-                    <button type="submit" name="_Delete" value='<%= _product.id %> <%= _product.brand %> <%= _product.color %>' >Delete</button>
-                </form>
-            </div>
-        <% } %>
-
-
-
-         <!-- Search Product Display -->
-         <% if (Data.MenuState.ListState == "Search") { %>        
-            <div class="ListItem">
-                <form action=<%=Data._Action %> method="get">
-                    <button class="BarButtonMenu" name="I_Product" value=<%= _product.id %> >
-                        <p class="Items" style="border-left: 4px double black;"><%= _product.id %></p> <p class="Items"><%= _product.brand %></p><p class="Items"><%= _product.color %></p>
-                    </button>
-                </form>
-                <form action=<%= Data._Action %>  method="post" style="margin-left: 1%; margin-right: 10px; margin-top: 1%;">
-                    <button type="submit" name="_Delete" value='<%= _product.id %> <%= _product.brand %> <%= _product.color %>' >Delete</button>
-                </form>
-            </div>
-        <% } %>
-
-
-    <% }); %> 
+                    <!-- Product Display -->
+    <% if (Data.ProductList != undefined){ %> 
+        <% Data.ProductList.forEach((_product) => { %> 
+            <% if (Data.MenuState.ListState == "ColorDisplay") { %>        
+                <div class="ListItem">
+                    <form action=<%=Data._Action %> method=<%= SOMETHING %> > <!--  Every variable here needs to be dynamically set instead of hard coded   -->
+                        <button class="BarButtonMenu" name="C_Product" value='<%= _product.id %>,<%= _product.color %>' >
+                            <p class="Items" style="border-left: 4px double black;"><%= _product.id %></p><p class="Items"><%= _product.color %></p>
+                        </button>
+                    </form>
+                    <% if (condition) { %>
+                        <form action=<%= Data._Action %>  method="post" style="margin-left: 1%; margin-right: 10px; margin-top: 1%;">
+                            <button type="submit" name="Delete" value=<%= _product.key %> >Delete</button>
+                        </form>
+                    <% } %>
+                </div>
+            <% } %>
+        <% }); %> 
+    <% } %> 
 </div>
