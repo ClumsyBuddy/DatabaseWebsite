@@ -4,10 +4,17 @@ import {ResponseHandler} from "../ResponseHandler";
 
 class SableResponseHandler extends ResponseHandler{
     
+    private PageData?:{
+        ProductList?:Array<Object>
+    }
 
     constructor(DBController:DatabaseManager, User:Login){
         var Name = "Sable";
         super(DBController, User, Name, Name);
+
+        this.PageData = {
+            ProductList: []
+        }
 
         // TODO Rework SableOptions.json - Needs to be easier to parse. All options need to be Second layer at most
         // The Options different values need to be third layer only
@@ -29,8 +36,8 @@ class SableResponseHandler extends ResponseHandler{
     }
 
 
-    _Get(req, res, Data){
-        this.RenderPage(req, res, Data);
+    _Get(req, res){
+        this.RenderPage(req, res, this.PageData);
     }
     _Post(req, res){
 

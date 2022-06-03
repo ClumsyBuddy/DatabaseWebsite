@@ -1,5 +1,8 @@
-<form action="<% Data._Action %>" method="post" style="width:100%; display:flex; justify-content:center;">
-    <button type="menu" id="LoginButton" class="NavBar" style="margin-left:0;" name="LoginForm" value=<%= PageState.LoginForm %> >
-        <a class="NavBarElements block">Login</a>
-    </button>
-</form>
+<% if (PageState.LoginForm == false) { %>
+    <form action="/LoginForm" method="post" style="width:100%; display:flex; justify-content:center;">
+        <button type="menu" id="LoginButton" class="NavBar" style="margin-left:0;" name="LoginForm" value=<%= PageState.LoginForm %> >
+            <a class="NavBarElements block">Login</a>
+        </button>
+    </form> 
+<% } %>
+

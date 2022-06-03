@@ -54,32 +54,24 @@ app.use(function(req, res, next) {
     next();
 });
 
+
+app.post('/LoginForm', (req, res) => {
+    Index.LoginForm(req, res);
+});
+
+
 //Router for getting all get and post request on '/' which is index
 app.route('/')
     .get(function(req, res){
-        var Data = {
-           Title:"DataBase",
-           MenuState:{LoginState:"None"}
-        }
-        Index._Get(req, res, Data);
+        Index._Get(req, res);
     }).post(function(req, res){
-        var Data = {
-            Title:"DataBase"
-         }
-        Index.OpenLogin(req, res, Data);
-        
+        Index._Get(req, res);
     });
 
 
 app.route('/Sable')
     .get(function(req, res){
-        var Data = {
-            Title:"DataBase",
-            MenuState:{LoginState:"None"},
-            ProductList: [],
-            _Action: "/Sable"
-         }
-        Sable._Get(req, res, Data);
+        Sable._Get(req, res);
     }).post(function(req, res){
         console.log(req.body);
         (success) => res.send(success);
@@ -87,13 +79,7 @@ app.route('/Sable')
 
     app.route('/Diplomat')
     .get(function(req, res){
-        var Data = {
-            Title:"DataBase",
-            MenuState:{LoginState:"None"},
-            ProductList: [],
-            _Action: "/Diplo"
-         }
-         Diplo._Get(req, res, Data);
+         Diplo._Get(req, res);
     }).post(function(req, res){
 
     });

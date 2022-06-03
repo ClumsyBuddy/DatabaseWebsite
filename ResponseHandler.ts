@@ -5,6 +5,8 @@ const fs = require('fs');
 
 class  ResponseHandler{
     DBController: DatabaseManager;
+    
+    //TODO Need to make sure every Button is as variable as CancelButton
     public PageState:{
         LoginForm:boolean,
         Switch:{On:boolean, Off:boolean},
@@ -52,7 +54,6 @@ class  ResponseHandler{
         _Action:"/",
         CancelButton:{}
         };
-
         this.AllowedActions = {
                 Delete:false,
                 Update:false,
@@ -105,7 +106,8 @@ class  ResponseHandler{
     *   Update item information and itemtypes and then parse the table and 
     */
     UpdateItemInformation(newValue:any) : void{
-        //console.log(this.Item_Information_Get);
+        //TODO This functions purpose is to update Iteminformation and 
+        //     Parse and update its corresponding table in the Database
         this.ItemInformation = newValue;
     }
     /*
