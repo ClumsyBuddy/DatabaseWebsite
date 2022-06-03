@@ -3,11 +3,15 @@ import { Login } from "./LoginHandler";
 
 const fs = require('fs');
 
+//TODO Need to implement responsice error handling so a single bug doesnt bring down the server
+//     Try catch and using base state should be able to keep the server from crashing
+//  https://stackoverflow.com/questions/34834151/how-to-catch-errors-when-rendering-ejs-view-node-js
+// Possibly a good method of error handling
 class  ResponseHandler{
     DBController: DatabaseManager;
-    
+
     //TODO Need to make sure every Button is as variable as CancelButton
-    public PageState:{
+    protected PageState:{
         LoginForm:boolean,
         Switch:{On:boolean, Off:boolean},
         PopUp:boolean,
@@ -17,14 +21,26 @@ class  ResponseHandler{
         _Action:string,
         CancelButton:{Name?:string, Value?:boolean}
         };
+    
+    readonly BasePageState = {
+        LoginForm:false,
+        Switch:{On:true, Off:false},
+        PopUp:false,
+        Form:{Edit:false, Add:false},
+        CurrentRenderTarget:"index",
+        Title:"Database",
+        _Action:"/",
+        CancelButton:{}
+        };
 
-    public ItemInformation: any;
+
+    protected ItemInformation: any;
 
     private ClassName: string;
     private TableName: string;
-
+    
     private User:Login;
-    Username:string;
+    protected Username:string;
 
     Permission: {
         Low:0,
@@ -32,7 +48,7 @@ class  ResponseHandler{
         High:2
     }
 
-    public AllowedActions:{
+    protected AllowedActions:{
         Delete:boolean,
         Update:boolean,
         Create:boolean,
@@ -44,22 +60,17 @@ class  ResponseHandler{
         this.User = User;
         this.ClassName = ClassName;
         this.TableName = TableName;
-        this.PageState = {
-        LoginForm:false,
-        Switch:{On:true, Off:false},
-        PopUp:false,
-        Form:{Edit:false, Add:false},
-        CurrentRenderTarget:"index",
-        Title:"Database",
-        _Action:"/",
-        CancelButton:{}
-        };
+        this.PageState = this.BasePageState;
         this.AllowedActions = {
                 Delete:false,
                 Update:false,
                 Create:false,
                 ViewLogs:false,
         }
+    }
+    //Resets a specific Value in PageState to the base value
+    public ResetPageState(ValueToReset:string) : void {
+        this.PageState[ValueToReset] = this.BasePageState[ValueToReset];
     }
 
     /*
@@ -91,7 +102,14 @@ class  ResponseHandler{
     */
     public RenderPage(req, res, PageData){
         var BuildRenderTarget = `pages/${this.PageState.CurrentRenderTarget}`;
-        res.render(BuildRenderTarget, {PageState:this.PageState, Data:PageData});
+        res.render(BuildRenderTarget, {PageState:this.PageState, Data:PageData}, function(err, html) {
+            if(err){
+                console.log(err);
+                res.sendFile(__dirname + "/public/404.html");
+            }else{
+                res.send(html);
+            }
+        });
     }
     /*
     *   Basic Get and Post functions. Ment to be overriden with childerens specfic get and post
