@@ -22,7 +22,7 @@ const MainDB = new DatabaseManager(db);
 const UserLogin = new Login(MainDB);
 
 const Index = new IndexResponseHandler(MainDB, UserLogin, app);
-const Sable = new SableResponseHandler(MainDB, UserLogin, "./Sable/SableOptions.json");
+const Sable = new SableResponseHandler(MainDB, UserLogin);
 const Diplo = new DiploResponseHandler(MainDB, UserLogin);
 
 

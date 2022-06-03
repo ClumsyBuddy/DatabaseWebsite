@@ -15,7 +15,7 @@ class DiploResponseHandler extends ResponseHandler{
         var Name = "Diplomat";
         super(DBController, User, Name, Name);
 
-        this.ParseJson("./Diplomat/DiploOptions.json", this.UpdateItemInformation.bind(this));
+        this.ItemInformation = this.ParseJson("./Diplomat/DiploOptions.json", this.UpdateItemInformation.bind(this));
 
         this.DBController.createTable("Diplomat", "Diplomat", "id TEXT, itemtype TEXT"); //Create Diplomat Table
     }

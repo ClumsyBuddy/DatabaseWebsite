@@ -28,7 +28,6 @@ class  ResponseHandler{
         this.User = User;
         this.ClassName = ClassName;
         this.TableName = TableName;
-        this.ItemInformation = {};
         this.PageState = {
         LoginForm:false,
         Switch:{On:true, Off:false},
@@ -46,6 +45,7 @@ class  ResponseHandler{
                 ViewLogs:false,
         }
     }
+
     /*
     *                               Login Initialization
     *   This will be called when a login has been achieved so that allowed actions can be updated
@@ -90,7 +90,7 @@ class  ResponseHandler{
     *   Update item information and itemtypes and then parse the table and 
     */
     UpdateItemInformation(newValue:any) : void{
-        console.log(newValue);
+        //console.log(this.Item_Information_Get);
         this.ItemInformation = newValue;
     }
     /*
@@ -100,7 +100,6 @@ class  ResponseHandler{
     public ParseJson(FilePath:string, callback:Function) : void{
         let rawdata = fs.readFileSync(FilePath); //Read file
         let ParsedData = JSON.parse(rawdata); //Parse Json data
-        this.ItemInformation = ParsedData;
         fs.watchFile(FilePath, (curr, prev) => { //Watches specfied file
             try{
                 let rawdata = fs.readFileSync(FilePath);
@@ -110,6 +109,7 @@ class  ResponseHandler{
                 console.log(`Error: ${e} | @${FilePath}`);
             }
         })
+        return ParsedData;
     }
 }
 

@@ -7,12 +7,12 @@ const fs = require("fs")
 class SableResponseHandler extends ResponseHandler{
     
 
-    constructor(DBController:DatabaseManager, User:Login, _JSONFilePath:string){
+    constructor(DBController:DatabaseManager, User:Login){
         var Name = "Sable";
         super(DBController, User, Name, Name);
 
         //Get item information from Jsonfile and create a watchfile event
-        this.ParseJson(_JSONFilePath, this.UpdateItemInformation.bind(this));
+        this.ItemInformation = this.ParseJson("./Sable/SableOptions.json", this.UpdateItemInformation.bind(this));
         
         //Now I need to parse the JSON object into useable columns and save the objects as itemtypes for later
         //Then I need to try and create the table with the columns
@@ -29,7 +29,7 @@ class SableResponseHandler extends ResponseHandler{
 
 
     _Get(req, res, Data){
-        console.log(this.ItemInformation);
+        console.log("Get Sable: " + JSON.stringify(this.ItemInformation));
         this.RenderPage(req, res, Data);
     }
     _Post(req, res){
