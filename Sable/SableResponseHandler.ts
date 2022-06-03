@@ -2,37 +2,35 @@ import { DatabaseManager } from "../DatabaseManager";
 import { Login } from "../LoginHandler";
 import {ResponseHandler} from "../ResponseHandler";
 
+const fs = require("fs")
+
 class SableResponseHandler extends ResponseHandler{
-    ItemInformation: {
-        key:string,
-        id:string,
-        itemType:{
-            Uniform:0
-        },
-        Options:{
-            color:{White:"WH", Red:"RED"},
-            size:object,
-            quantity:number,
-            style:string,
-            sideNumber:string,
-            propertyName:string,
-            address:string,
-        }
+    
+
+    constructor(DBController:DatabaseManager, User:Login, _JSONFilePath:string){
+        var Name = "Sable";
+        super(DBController, User, Name, Name);
+
+        //Get item information from Jsonfile and create a watchfile event
+        this.ParseJson(_JSONFilePath, this.UpdateItemInformation.bind(this));
         
-        price:number,
-        decription:string,
+        //Now I need to parse the JSON object into useable columns and save the objects as itemtypes for later
+        //Then I need to try and create the table with the columns
+        //Then I need to parse the table if none was created and check if it has all of the columns
+        //If it doesnt have all of the columns I need to insert the new columns
+    
         
-    }
-    constructor(DBController:DatabaseManager, User:Login){
-        super(DBController, User);
         this.DBController.createTable("Sable", "Sable", "id TEXT, brand TEXT"); //Create Sable Table
         this.PageState.CurrentRenderTarget = "Sable";
+    
+        
         
     }
 
 
-    _Get(req, res){
-        this.RenderPage(req, res, this.ItemInformation);
+    _Get(req, res, Data){
+        console.log(this.ItemInformation);
+        this.RenderPage(req, res, Data);
     }
     _Post(req, res){
 

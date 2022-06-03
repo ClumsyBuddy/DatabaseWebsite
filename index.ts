@@ -22,7 +22,7 @@ const MainDB = new DatabaseManager(db);
 const UserLogin = new Login(MainDB);
 
 const Index = new IndexResponseHandler(MainDB, UserLogin, app);
-const Sable = new SableResponseHandler(MainDB, UserLogin);
+const Sable = new SableResponseHandler(MainDB, UserLogin, "./Sable/SableOptions.json");
 const Diplo = new DiploResponseHandler(MainDB, UserLogin);
 
 
@@ -75,7 +75,7 @@ app.route('/Sable')
             ProductList: [],
             _Action: "/Sable"
          }
-        
+        Sable._Get(req, res, Data);
     }).post(function(req, res){
         console.log(req.body);
         (success) => res.send(success);
