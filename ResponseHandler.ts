@@ -5,7 +5,16 @@ const fs = require('fs');
 
 class  ResponseHandler{
     DBController: DatabaseManager;
-    public PageState:any;
+    public PageState:{
+        LoginForm:boolean,
+        Switch:{On:boolean, Off:boolean},
+        PopUp:boolean,
+        Form:{Edit:boolean, Add:boolean},
+        CurrentRenderTarget:string,
+        Title:string,
+        _Action:string,
+        CancelButton:{Name?:string, Value?:boolean}
+        };
 
     public ItemInformation: any;
 
@@ -21,7 +30,12 @@ class  ResponseHandler{
         High:2
     }
 
-    public AllowedActions:any;
+    public AllowedActions:{
+        Delete:boolean,
+        Update:boolean,
+        Create:boolean,
+        ViewLogs:boolean,
+    };
 
     constructor(DBController: DatabaseManager, User:Login, ClassName, TableName=undefined){
         this.DBController = DBController;
@@ -35,7 +49,8 @@ class  ResponseHandler{
         Form:{Edit:false, Add:false},
         CurrentRenderTarget:"index",
         Title:"Database",
-        _Action:"/"
+        _Action:"/",
+        CancelButton:{}
         };
 
         this.AllowedActions = {

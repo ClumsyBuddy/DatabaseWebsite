@@ -61,8 +61,12 @@ app.route('/')
            Title:"DataBase",
            MenuState:{LoginState:"None"}
         }
-        res.render('pages/index', {Data})
+        Index._Get(req, res, Data);
     }).post(function(req, res){
+        var Data = {
+            Title:"DataBase"
+         }
+        Index.OpenLogin(req, res, Data);
         
     });
 
@@ -89,7 +93,7 @@ app.route('/Sable')
             ProductList: [],
             _Action: "/Diplo"
          }
-         res.render('pages/Diplomat', {Data});
+         Diplo._Get(req, res, Data);
     }).post(function(req, res){
 
     });
