@@ -1,3 +1,5 @@
+import { json } from "express/lib/response";
+import { Interface } from "readline";
 import { DatabaseManager } from "./DatabaseManager";
 import { Login } from "./LoginHandler";
 
@@ -21,17 +23,7 @@ class  ResponseHandler{
         _Action:string,
         CancelButton:{Name?:string, Value?:boolean}
         };
-    
-    readonly BasePageState = {
-        LoginForm:false,
-        Switch:{On:true, Off:false},
-        PopUp:false,
-        Form:{Edit:false, Add:false},
-        CurrentRenderTarget:"index",
-        Title:"Database",
-        _Action:"/",
-        CancelButton:{}
-        };
+    readonly BasePageState: any;
 
 
     protected ItemInformation: any;
@@ -60,7 +52,17 @@ class  ResponseHandler{
         this.User = User;
         this.ClassName = ClassName;
         this.TableName = TableName;
-        this.PageState = this.BasePageState;
+        this.BasePageState = {
+            LoginForm:false,
+            Switch:{On:true, Off:false},
+            PopUp:false,
+            Form:{Edit:false, Add:false},
+            CurrentRenderTarget:"index",
+            Title:"Database",
+            _Action:"/",
+            CancelButton:{}
+            };
+        this.PageState = this.deepCopy(this.BasePageState);
         this.AllowedActions = {
                 Delete:false,
                 Update:false,
@@ -146,6 +148,37 @@ class  ResponseHandler{
         })
         return ParsedData;
     }
+
+
+     deepCopy(obj) {
+        var copy;
+        // Handle the 3 simple types, and null or undefined
+        if (null == obj || "object" != typeof obj) return obj;
+        // Handle Date
+        if (obj instanceof Date) {
+            copy = new Date();
+            copy.setTime(obj.getTime());
+            return copy;
+        }
+        // Handle Array
+        if (obj instanceof Array) {
+            copy = [];
+            for (var i = 0, len = obj.length; i < len; i++) {
+                copy[i] = this.deepCopy(obj[i]);
+            }
+            return copy;
+        }
+        // Handle Object
+        if (obj instanceof Object) {
+            copy = {};
+            for (var attr in obj) {
+                if (obj.hasOwnProperty(attr)) copy[attr] = this.deepCopy(obj[attr]);
+            }
+            return copy;
+        }
+        throw new Error("Unable to copy obj! Its type isn't supported.");
+    }
+
 }
 
 export {ResponseHandler};
