@@ -157,15 +157,36 @@ class  ResponseHandler{
                 });
             }
         }
-        console.log(this.ItemOptions);
+        //console.log(this.ItemOptions);
         /*
         *   Now I need to get all current columns
+        *   Then check each column to see if it already has the option in it
         */
-       
         this.DBController.getColumns(this.TableName).then((result) => {
-            for(var _node in result){
-                console.log(result[_node].name);
+            var newItems = []; //Stores all new Item
+            for(var i = 0; i < this.ItemOptions.length; i++){
+                var NewItem = true; //Boolean check for new items
+                for(var j = 0; j < result.length; j++){
+                    if(j == result.length - 1 && this.ItemOptions[i] != result[j].name){ //If its the end of the loop and they arent equal
+                        if(NewItem){ //And it is a new item
+                            newItems.push(this.ItemOptions[i]); //Add it to the list
+                        }
+                    }
+                    if(this.ItemOptions[i] == result[j].name){//If it is in the Table then continue;
+                        NewItem = false;
+                        continue;
+                    }
+                }
             }
+
+
+            /*
+            *   Now I need To use the the full objects and parse it using the Itemtype and the Options it has to grab it's values
+            */
+
+
+            console.log("List: " + this.ItemOptions);
+            console.log("NewItems: " + newItems);
         })
       
         var ColumnBuilder = ``;
