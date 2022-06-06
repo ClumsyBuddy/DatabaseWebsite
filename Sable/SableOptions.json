@@ -28,10 +28,7 @@
             "Front&Back":0,
             "FrontOnly":1
         },
-        "Inlude_Choice_Priviliges_Logo":{
-            "Yes":1,
-            "No":0
-        },
+        "Inlude_Choice_Priviliges_Logo":false,
         "Logo":"",
         "Name":"",
         "Title":"",
@@ -43,10 +40,7 @@
         "Property_Address":"",
         "Property_Fax_Number":"",
         "Property_Website":"",
-        "Proof":{
-            "Yes":1,
-            "No":0
-        }
+        "Proof":false
     },
-    "HECKYEA":3
+    "HECKYEA":1121241124451124115
 }

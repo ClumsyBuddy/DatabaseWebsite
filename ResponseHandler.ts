@@ -27,6 +27,11 @@ class  ResponseHandler{
 
 
     protected ItemInformation: any;
+    private Items: Array<any>;
+    protected ItemTypes: Array<string>;
+    protected ItemOptions: any;
+    protected ItemValues: Array<string>
+    protected Column: Array<string>;
 
     private ClassName: string;
     private TableName: string;
@@ -52,6 +57,9 @@ class  ResponseHandler{
         this.User = User;
         this.ClassName = ClassName;
         this.TableName = TableName;
+        this.Items = [];
+        this.ItemTypes = [];
+        this.ItemOptions = [];
         this.BasePageState = {
             LoginForm:false,
             Switch:{On:true, Off:false},
@@ -122,14 +130,54 @@ class  ResponseHandler{
     _Post(req, res) : void{
 
     }
+
+
+
+
     /*
     *   Update item information and itemtypes and then parse the table and 
     */
-    UpdateItemInformation(newValue:any) : void{
-        //TODO This functions purpose is to update Iteminformation and 
-        //     Parse and update its corresponding table in the Database
-        this.ItemInformation = newValue;
+    async UpdateItemInformation(newValue:any){
+        /*
+        *   This Blob here Gets the Names of the Objects and the objects themselves
+        */
+        this.Items = Object.values(newValue);
+        for(var _node in newValue){
+            this.ItemTypes = Object.keys(newValue);            
+        }
+        /*
+        * Retrieve all Item Options
+        */
+        for(var Option in this.Items){
+            if(typeof this.Items[Option] === 'object'){            
+                Object.keys(this.Items[Option]).forEach((item) =>{
+                    if(!this.ItemOptions.includes(item)){
+                        this.ItemOptions.push(item);
+                    }
+                });
+            }
+        }
+        console.log(this.ItemOptions);
+        /*
+        *   Now I need to get all current columns
+        */
+       
+        this.DBController.getColumns(this.TableName).then((result) => {
+            for(var _node in result){
+                console.log(result[_node].name);
+            }
+        })
+      
+        var ColumnBuilder = ``;
+        for(var items in this.ItemOptions){
+
+        }
     }
+
+    ParseItemInformation(newValue:any) : void{
+       
+    }
+
     /*
     *   Called in constructor of child class. Starts the watch event for the file
     *   Calls a callback to handle changes to file
@@ -137,7 +185,12 @@ class  ResponseHandler{
     public ParseJson(FilePath:string, callback:Function) : void{
         let rawdata = fs.readFileSync(FilePath); //Read file
         let ParsedData = JSON.parse(rawdata); //Parse Json data
-        fs.watchFile(FilePath, (curr, prev) => { //Watches specfied file
+        this.UpdateItemInformation(ParsedData);
+        fs.watchFile(FilePath, {
+            bigint: false,
+            persistent: true,
+            interval: 500,
+          },(curr, prev) => { //Watches specfied file
             try{
                 let rawdata = fs.readFileSync(FilePath);
                 let ParsedData = JSON.parse(rawdata);
@@ -146,7 +199,6 @@ class  ResponseHandler{
                 console.log(`Error: ${e} | @${FilePath}`);
             }
         })
-        return ParsedData;
     }
 
 

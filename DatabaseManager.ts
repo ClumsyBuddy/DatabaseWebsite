@@ -34,6 +34,20 @@ class DatabaseManager {
       return this.DatabaseConnection.run(sql)//Pass sql to Database
     }
 
+    getColumns(name:string){
+      var sql = `PRAGMA table_info(${name});`;
+      return this.DatabaseConnection.all(sql); 
+    }
+
+    updateTable(name:string, ColumnName, Column_Definition){
+      // Alter TABLE tablename
+      //      ADD new_column_name column_definitions
+      var sql = `ALTER TABLE ${this.DbStorage[name].Table} ADD ${ColumnName} ${Column_Definition}`;
+      return this.DatabaseConnection.run(sql);
+    }
+
+
+
     create(name:string, params = []){ //Create a new item using the Classes Table, Column Data and Questionmark Array built from the Columns. We only need to pass in the params
         return this.DatabaseConnection.run( `INSERT INTO ${this.DbStorage[name].Table} (${this.DbStorage[name].Columns}) VALUES(null${this.DbStorage[name].QuestionMarkArray})`, params);
       }
