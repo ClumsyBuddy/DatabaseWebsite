@@ -34,7 +34,6 @@
     margin-left: 40%;
     margin-top: 4%;
     margin-bottom: 4%;
-    background-color: #04AA6D;
 }
 .block{
     display: flex;
@@ -44,7 +43,14 @@
     font-size: 16px;
     cursor: pointer;
     text-align: center;
-  }
+    border-radius: 10px;
+}
+
+.block:hover{
+    background-color: #2a4175;
+    border-width: 0 .5px;
+    border: solid white;
+}
 
 .ExitButton{
 display: flex;
@@ -83,6 +89,12 @@ z-index: 10;
     margin-right: 10px;
 }
 
+.NavBar:hover{
+    background-color: #2a4175;
+    border-width: 0 .25px;
+    border: solid white;
+}
+
 .NavBarElements{
     /*font-size: 1.5em; */
     color: white;
@@ -93,9 +105,7 @@ z-index: 10;
     border-radius: 0px;
     flex-direction: column;
 }
-.NavBar:hover{
-    background-color: darkgrey;
-}
+
 
 .CenteredMenu{
     width: 100%;
