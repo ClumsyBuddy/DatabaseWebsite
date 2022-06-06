@@ -28,7 +28,7 @@ class SableResponseHandler extends ResponseHandler{
         //If it doesnt have all of the columns I need to insert the new columns
     
         
-        this.DBController.createTable("Sable", "Sable", "email TEXT"); //Create Sable Table
+        
         this.PageState.CurrentRenderTarget = "Sable";
     
         

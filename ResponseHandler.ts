@@ -1,4 +1,6 @@
+import { reject } from "bluebird";
 import { json } from "express/lib/response";
+import { resolve } from "path";
 import { Interface } from "readline";
 import { DatabaseManager } from "./DatabaseManager";
 import { Login } from "./LoginHandler";
@@ -131,8 +133,7 @@ class  ResponseHandler{
 
     }
 
-
-
+    //TODO Need to create utility file that will contain all of the utility functions, need to put deep copy and mergearray into that instead of sitting here
 
     /*
     *   Update item information and itemtypes and then parse the table and 
@@ -178,21 +179,47 @@ class  ResponseHandler{
                     }
                 }
             }
-
-
             /*
             *   Now I need To use the the full objects and parse it using the Itemtype and the Options it has to grab it's values
+            *   I need to grab the values so I know what type the options are
             */
+            console.log(this.Items);
+            var ColumnBuilder = ``;
+            for(let i = 0; i < newItems.length; i++){
+                console.log(i);
+                for(_node in this.Items){
+                    if(this.Items[_node].hasOwnProperty(newItems[i])){
+                        for(var inner in this.Items[_node]){
+                            //TODO NEED TO GET THE VALUES, NEED THEM TO BE CONNECTED TO OPTIONS, NEED OPTIONS TO BE CONNECTED TO ITEMTYPE
+                        }
+                    }
+                }
+            }
 
+            
 
-            console.log("List: " + this.ItemOptions);
-            console.log("NewItems: " + newItems);
+            /*
+            *   Build or Alter the Table with the options
+            */
+           
+
+            if(result.length == 0){
+                console.log("No Table");
+                this.DBController.createTable(this.TableName, this.ClassName, "email TEXT").then((result)=> { //Create Sable Table
+                    //console.log(result);
+                })
+            }else{
+                console.log("Table Exist");
+            }
+            
+
+           
+            
+
+            //console.log("List: " + this.ItemOptions);
+            //console.log("NewItems: " + newItems);
         })
-      
-        var ColumnBuilder = ``;
-        for(var items in this.ItemOptions){
 
-        }
     }
 
     ParseItemInformation(newValue:any) : void{
