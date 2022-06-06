@@ -55,10 +55,13 @@ app.use(function(req, res, next) {
 });
 
 
-app.post('/LoginForm', (req, res) => {
-    Index.LoginForm(req, res);
-});
 
+app.route('/LoginForm')
+    .get((req, res) =>{
+        Index.LoginForm(req, res);
+    }).post((req, res) => {
+        Index.LoginForm(req, res);
+    });
 
 //Router for getting all get and post request on '/' which is index
 app.route('/')
