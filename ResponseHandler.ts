@@ -1,11 +1,24 @@
-import { reject } from "bluebird";
-import { json } from "express/lib/response";
-import { resolve } from "path";
-import { Interface } from "readline";
+import { stringify } from "querystring";
 import { DatabaseManager } from "./DatabaseManager";
 import { Login } from "./LoginHandler";
 
 const fs = require('fs');
+
+
+class ItemData{
+    public ItemType:string;
+    public Options:Array<any>;
+    public Values:Array<any>;
+    constructor(_ItemType){
+        this.ItemType = _ItemType;
+        this.Options = [];
+    }
+    public AddOptions(_option:any, values:Array<string>){
+        this.Options.push({[_option]: values});
+        console.log(this.Options);
+    }
+}
+
 
 //TODO Need to implement responsice error handling so a single bug doesnt bring down the server
 //     Try catch and using base state should be able to keep the server from crashing
@@ -35,6 +48,8 @@ class  ResponseHandler{
     protected ItemValues: Array<string>
     protected Column: Array<string>;
 
+    protected ItemDataArray:Array<ItemData>;
+
     private ClassName: string;
     private TableName: string;
     
@@ -62,6 +77,7 @@ class  ResponseHandler{
         this.Items = [];
         this.ItemTypes = [];
         this.ItemOptions = [];
+        this.ItemDataArray = [];
         this.BasePageState = {
             LoginForm:false,
             Switch:{On:true, Off:false},
@@ -142,14 +158,16 @@ class  ResponseHandler{
         /*
         *   This Blob here Gets the Names of the Objects and the objects themselves
         */
-        this.Items = Object.values(newValue);
+       //console.log(newValue);
+        //this.Items = Object.values(newValue); //Got All ItemTypes
+        this.Items = newValue;
         for(var _node in newValue){
             this.ItemTypes = Object.keys(newValue);            
         }
         /*
         * Retrieve all Item Options
         */
-        for(var Option in this.Items){
+        for(var Option in this.Items){ //Got All Options
             if(typeof this.Items[Option] === 'object'){            
                 Object.keys(this.Items[Option]).forEach((item) =>{
                     if(!this.ItemOptions.includes(item)){
@@ -163,7 +181,7 @@ class  ResponseHandler{
         *   Now I need to get all current columns
         *   Then check each column to see if it already has the option in it
         */
-        this.DBController.getColumns(this.TableName).then((result) => {
+        this.DBController.getColumns(this.TableName).then((result) => { //Got all new options that table didnt have previously
             var newItems = []; //Stores all new Item
             for(var i = 0; i < this.ItemOptions.length; i++){
                 var NewItem = true; //Boolean check for new items
@@ -183,17 +201,36 @@ class  ResponseHandler{
             *   Now I need To use the the full objects and parse it using the Itemtype and the Options it has to grab it's values
             *   I need to grab the values so I know what type the options are
             */
-            console.log(this.Items);
+            
+            for(var key in this.ItemTypes){
+            }
+
+
+            
+
             var ColumnBuilder = ``;
-            for(let i = 0; i < newItems.length; i++){
-                console.log(i);
-                for(_node in this.Items){
-                    if(this.Items[_node].hasOwnProperty(newItems[i])){
-                        for(var inner in this.Items[_node]){
-                            //TODO NEED TO GET THE VALUES, NEED THEM TO BE CONNECTED TO OPTIONS, NEED OPTIONS TO BE CONNECTED TO ITEMTYPE
+            for(var type in  this.ItemTypes){
+                var CurrentItem = new ItemData(this.ItemTypes[type]);
+                var Options = Object.keys(this.Items[this.ItemTypes[type]])
+                for(var _node_one in Options){
+                    var SavedValues = [];
+                    for(var item in newItems){
+                        if(Options[_node_one] == newItems[item]){
+                            ColumnBuilder += ``;
+                            if(typeof this.Items[this.ItemTypes[type]][Options[_node_one]] == 'object'){
+                                for(var values in this.Items[this.ItemTypes[type]][Options[_node_one]]){
+                                    SavedValues.push(this.Items[this.ItemTypes[type]][Options[_node_one]][values]);
+                                }
+                            }else{
+                                SavedValues.push(this.Items[this.ItemTypes[type]][Options[_node_one]])
+                            }
+                            
+                            CurrentItem.AddOptions(Options[_node_one], SavedValues);
                         }
+
                     }
                 }
+                this.ItemDataArray.push(CurrentItem);
             }
 
             
