@@ -177,20 +177,21 @@ class  ResponseHandler{
         *   Now I need to get all current columns
         *   Then check each column to see if it already has the option in it
         */
-        await this.DBController.getColumns(this.TableName).then((result) => { //Got all new options that table didnt have previously
-            //console.log(result);
+        this.DBController.getColumns(this.TableName).then((result) => { //Got all new options that table didnt have previously
+            console.log(result);
             var newItems = []; //Stores all new Item
             for(var i = 0; i < this.ItemOptions.length; i++){
                 var NewItem = true; //Boolean check for new items
                 for(var j = 0; j < result.length; j++){
-                    if(j == result.length && this.ItemOptions[i] != result[j].name){ //If its the end of the loop and they arent equal
+                    if(j == result.length - 1 && this.ItemOptions[i] != result[j].name){ //If its the end of the loop and they arent equal
                         if(NewItem){ //And it is a new item
                             newItems.push(this.ItemOptions[i]); //Add it to the list
                         }
                     }
                     if(this.ItemOptions[i] == result[j].name){//If it is in the Table then continue;
+                        //console.log(result[j]);
                         NewItem = false;
-                        continue;
+                        break;
                     }
                 }
             }
@@ -249,25 +250,23 @@ class  ResponseHandler{
                 var newItemArray = [];
                 for(let i = 0; i < result.length; i++){
                     var Check = true;
-                    var index = -1;
                     for(let j = 0; j < newItems.length; j++){
-                        if(result[i].name != newItems[j] && j == newItems.length){
+                        if(result[i].name != newItems[j] && j == newItems.length - 1){
+                            console.log(result[i]);
                             console.log(newItems[j]);
-                            index = j;
+                            if(Check == true){
+                                if(newItemArray.includes(newItems[j])){
+                                    continue;
+                                }
+                                newItemArray.push(newItems[j]);
+                            }
                         }
                         if(result[i].name == newItems[j]){
                             Check = false;
                         }
                     }
-                    //console.log(newItems);
-                    if(Check){
-                        if(newItemArray.includes((newItems[index]))){
-                            continue;
-                        }
-                        //console.log(newItemArray);
-                        newItemArray.push(newItems[index]);
-                    }
                 }
+                console.log(newItems);
                 if(newItemArray.length > 0){
                     for(var item in newItemArray){
                         for(let i = 1; i < this.Column.length; i += 2){

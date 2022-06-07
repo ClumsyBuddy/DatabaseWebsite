@@ -50,7 +50,19 @@ class Database {
       })
     })
   }
-
+  exec(sql: string, params = []) {
+    return new Promise((resolve, reject) => {
+      this.db.all(sql, params, (err: any, rows: any) => {
+        if (err) {
+          console.log('Error running sql: ' + sql)
+          console.log(err)
+          reject(err)
+        } else {
+          resolve(rows)
+        }
+      })
+    })
+  }
 }
 
 export {Database};

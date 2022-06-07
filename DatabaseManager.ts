@@ -35,14 +35,14 @@ class DatabaseManager {
     }
 
     getColumns(name:string){
-      var sql = `PRAGMA table_info(${name});`;
-      return this.DatabaseConnection.all(sql); 
+      var sql = `PRAGMA table_info('${name}')`;
+      return this.DatabaseConnection.exec(sql); 
     }
 
     updateTable(name:string, ColumnName){
       // Alter TABLE tablename
       //      ADD new_column_name column_definitions
-      var sql = `ALTER TABLE ${name} ADD COLUMN ${ColumnName}`;
+      var sql = `ALTER TABLE ${name} ADD ${ColumnName}`;
       return this.DatabaseConnection.run(sql);
     }
 
