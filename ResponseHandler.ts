@@ -151,6 +151,9 @@ class  ResponseHandler{
     *   Update item information and itemtypes and then parse the table and 
     */
     async UpdateItemInformation(newValue:any){
+        if(newValue === undefined){
+            return;
+        }
         /*
         *   This Blob here Gets the Names of the Objects and the objects themselves
         */
@@ -254,9 +257,15 @@ class  ResponseHandler{
     *   Calls a callback to handle changes to file
     */
     public ParseJson(FilePath:string, callback:Function) : void{
-        let rawdata = fs.readFileSync(FilePath); //Read file
-        let ParsedData = JSON.parse(rawdata); //Parse Json data
-        this.UpdateItemInformation(ParsedData);
+        let ParsedData: any;
+        try{
+            let rawdata = fs.readFileSync(FilePath);
+            ParsedData = JSON.parse(rawdata);
+            this.UpdateItemInformation(ParsedData);
+        }catch(e){
+            console.log(`Error: ${e} | @${FilePath}`);
+            return;
+        }
         fs.watchFile(FilePath, {
             bigint: false,
             persistent: true,
