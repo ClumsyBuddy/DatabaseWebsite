@@ -39,10 +39,10 @@ class DatabaseManager {
       return this.DatabaseConnection.all(sql); 
     }
 
-    updateTable(name:string, ColumnName, Column_Definition){
+    updateTable(name:string, ColumnName){
       // Alter TABLE tablename
       //      ADD new_column_name column_definitions
-      var sql = `ALTER TABLE ${this.DbStorage[name].Table} ADD ${ColumnName} ${Column_Definition}`;
+      var sql = `ALTER TABLE ${name} ADD COLUMN ${ColumnName}`;
       return this.DatabaseConnection.run(sql);
     }
 

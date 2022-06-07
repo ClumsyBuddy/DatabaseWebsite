@@ -40,7 +40,8 @@
         "Property_Address":"",
         "Property_Fax_Number":"",
         "Property_Website":"",
-        "Proof":false
+        "Proof":false,
+        "Test2":true
     },
     "HECKYEA":1121241124451124115
 }

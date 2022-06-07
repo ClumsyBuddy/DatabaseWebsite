@@ -177,12 +177,13 @@ class  ResponseHandler{
         *   Now I need to get all current columns
         *   Then check each column to see if it already has the option in it
         */
-        this.DBController.getColumns(this.TableName).then((result) => { //Got all new options that table didnt have previously
+        await this.DBController.getColumns(this.TableName).then((result) => { //Got all new options that table didnt have previously
+            //console.log(result);
             var newItems = []; //Stores all new Item
             for(var i = 0; i < this.ItemOptions.length; i++){
                 var NewItem = true; //Boolean check for new items
                 for(var j = 0; j < result.length; j++){
-                    if(j == result.length - 1 && this.ItemOptions[i] != result[j].name){ //If its the end of the loop and they arent equal
+                    if(j == result.length && this.ItemOptions[i] != result[j].name){ //If its the end of the loop and they arent equal
                         if(NewItem){ //And it is a new item
                             newItems.push(this.ItemOptions[i]); //Add it to the list
                         }
@@ -230,6 +231,7 @@ class  ResponseHandler{
                 this.ItemDataArray.push(CurrentItem); //Push the Item to the Itemdataarray and restart
             }
             this.Column = ColumnBuilder;
+
             /*
             *   Build or Alter the Table with the options
             */
@@ -244,10 +246,39 @@ class  ResponseHandler{
                 this.DBController.createTable(this.TableName, this.ClassName, TableColumn).then((result)=> { //Create Sable Table
                 })
             }else{
-                for(let i = 1; i < this.Column.length; i += 2){
-                    TableColumn += `${Dot}${this.Column[i]} ${this.Column[i+1]}`;
+                var newItemArray = [];
+                for(let i = 0; i < result.length; i++){
+                    var Check = true;
+                    var index = -1;
+                    for(let j = 0; j < newItems.length; j++){
+                        if(result[i].name != newItems[j] && j == newItems.length){
+                            console.log(newItems[j]);
+                            index = j;
+                        }
+                        if(result[i].name == newItems[j]){
+                            Check = false;
+                        }
+                    }
+                    //console.log(newItems);
+                    if(Check){
+                        if(newItemArray.includes((newItems[index]))){
+                            continue;
+                        }
+                        //console.log(newItemArray);
+                        newItemArray.push(newItems[index]);
+                    }
                 }
-                console.log(TableColumn);
+                if(newItemArray.length > 0){
+                    for(var item in newItemArray){
+                        for(let i = 1; i < this.Column.length; i += 2){
+                            if(newItemArray[item] == this.Column[i]){
+                                this.DBController.updateTable(this.TableName, `${this.Column[i]} ${this.Column[i+1]}`);
+                            }
+                        }
+                    }
+                }
+
+                //console.log(TableColumn);
                 console.log("Table Exist");
             }
         })
