@@ -1,7 +1,7 @@
 //Downloaded packages
 const path = require('path');
 const express = require('express');
-
+const ip = require('ip');
 //Create a app and router variable
 const router = express.Router();
 const app = express();
@@ -42,7 +42,7 @@ app.use('/uploads', express.static(__dirname + '/public'));
 app.use('/javascript', express.static(__dirname + '/public'));
 app.use('/CSS', express.static(__dirname + '/public'));
 
-const hostname = '192.168.1.123';
+const hostname = ip.address();
 const port = 8000;
 
 // Will be used to log activities
