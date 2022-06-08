@@ -37,10 +37,10 @@ class SableResponseHandler extends ResponseHandler{
 
 
     _Get(req, res){
-        this.RenderPage(req, res, this.PageData);
+        this.RenderPage(req, res, this.PageData); //This is normally called at the end
     }
     _Post(req, res){
-
+        this.RenderPage(req, res, this.PageData); //This is normally called at the end
     }
 
 
