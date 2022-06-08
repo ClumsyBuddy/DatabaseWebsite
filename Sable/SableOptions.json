@@ -44,7 +44,8 @@
         "Test2":true,
         "HelloWorld":false,
         "Test3":false,
-        "Test4":false
+        "Test4":false,
+        "Test6":"Hello"
     },
     "HECKYEA":1121241124451124115
 }

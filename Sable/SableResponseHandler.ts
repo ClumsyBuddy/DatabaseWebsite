@@ -10,7 +10,7 @@ class SableResponseHandler extends ResponseHandler{
 
     constructor(DBController:DatabaseManager, User:Login){
         var Name = "Sable";
-        super(DBController, User, Name, Name, "sku TEXT, brand TEXT");
+        super(DBController, User, Name, Name, "sku TEXT, brand TEXT", 2);
 
         this.PageData = {
             ProductList: []
