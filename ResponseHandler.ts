@@ -246,22 +246,26 @@ class  ResponseHandler{
                 for(let i = 1; i < this.Column.length; i += 2){
                     TableColumn += `${Dot}${this.Column[i]} ${this.Column[i+1]}`;
                 }
-                //console.log(TableColumn);
                 this.DBController.createTable(this.TableName, this.ClassName, TableColumn).then((result)=> { //Create Sable Table
                 })
             }else{ //If we are updating a existing table
-                console.log("Test: " + newItems);
                 var newItemArray = [];
-                for(let i = 1+this.CACIndex; i < result.length; i++){
                     var Check = true;
                     for(let j = 0; j < newItems.length; j++){
+                        for(let i = 1+this.CACIndex; i < result.length; i++){
                         if(result[i].name == newItems[j]){
                             Check = false;
                             break;
                         }
-                        if(j == newItems.length - 1){
+                        if(i == result.length - 1){
                             if(Check == true){
-                                if(newItemArray.includes(newItems[j])){
+                                var leave = false;
+                                for(var item in newItemArray){
+                                   if(newItemArray[item] === newItems[j]){
+                                    leave = true;
+                                   } 
+                                }
+                                if(leave){
                                     break;
                                 }
                                 newItemArray.push(newItems[j]);
@@ -269,18 +273,16 @@ class  ResponseHandler{
                         }
                     }
                 }
-                //console.log(newItems);
+                console.log(newItemArray);
                 if(newItemArray.length > 0){
                     for(var item in newItemArray){
                         for(let i = 1; i < this.Column.length; i += 2){
                             if(newItemArray[item] == this.Column[i]){
-                                this.DBController.updateTable(this.TableName, `${this.Column[i]} ${this.Column[i+1]}`);
+                                 this.DBController.updateTable(this.TableName, `${this.Column[i]} ${this.Column[i+1]}`);
                             }
                         }
                     }
                 }
-
-                //console.log(TableColumn);
                 console.log("Table Exist");
             }
         })
