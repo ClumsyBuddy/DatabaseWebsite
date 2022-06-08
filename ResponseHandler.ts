@@ -179,17 +179,17 @@ class  ResponseHandler{
         *   Then check each column to see if it already has the option in it
         */
         this.DBController.getColumns(this.TableName).then((result) => { //Got all new options that table didnt have previously
-            console.log(result);
+            //console.log(result);
             var newItems = []; //Stores all new Item
             for(var i = 0; i < this.ItemOptions.length; i++){
                 var NewItem = true; //Boolean check for new items
-                for(var j = 0; j < result.length; j++){
+                for(var j = 1+this.CACIndex; j < result.length; j++){
                     if(this.ItemOptions[i] == result[j].name){//If it is in the Table then continue;
                         //console.log(result[j]);
                         NewItem = false;
-                        break;
+                        continue;
                     } 
-                    if(j == result.length && this.ItemOptions[i] != result[j].name){ //If its the end of the loop and they arent equal
+                    if(j == result.length - 1){ //If its the end of the loop and they arent equal
                         if(NewItem){ //And it is a new item
                             newItems.push(this.ItemOptions[i]); //Add it to the list
                         }
@@ -250,6 +250,7 @@ class  ResponseHandler{
                 this.DBController.createTable(this.TableName, this.ClassName, TableColumn).then((result)=> { //Create Sable Table
                 })
             }else{ //If we are updating a existing table
+                console.log("Test: " + newItems);
                 var newItemArray = [];
                 for(let i = 1+this.CACIndex; i < result.length; i++){
                     var Check = true;
@@ -268,7 +269,7 @@ class  ResponseHandler{
                         }
                     }
                 }
-                console.log(newItems);
+                //console.log(newItems);
                 if(newItemArray.length > 0){
                     for(var item in newItemArray){
                         for(let i = 1; i < this.Column.length; i += 2){
