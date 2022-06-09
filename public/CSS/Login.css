@@ -6,6 +6,7 @@
   margin: 16px auto;
   font-size: 16px;
   animation: grow .5s, fadein 1.5s;
+  margin-top: 10%;
 }
 
 @keyframes grow{
@@ -75,7 +76,7 @@
   font-size: 0.95em;
 }
 
-.login input[type="email"],
+.login input[type="text"],
 .login input[type="password"] {
   background: #fff;
   border-color: #bbb;
@@ -83,7 +84,7 @@
 }
 
 /* Text fields' focus effect */
-.login input[type="email"]:focus,
+.login input[type="text"]:focus,
 .login input[type="password"]:focus {
   border-color: #888;
 }

@@ -5,12 +5,15 @@ import { ResponseHandler } from "./ResponseHandler";
 
 class IndexResponseHandler extends ResponseHandler{
 
-    private PageData?: {
-
+    private PageData: {
+        LoginFailed:boolean
     };
 
     constructor(DbController:DatabaseManager, User:Login, app:any){
             super(DbController, User, "Index");
+            this.PageData = {
+                LoginFailed: false
+            }
     }
 
 
@@ -22,20 +25,26 @@ class IndexResponseHandler extends ResponseHandler{
     *   What this does it allow the menu to be controller by a single Variable and allow cancel button to 
     *   use its Reponse Object to update the form
     */
-    LoginForm(req: any, res: any) : void{
-        this.PageState.LoginForm = req.body.LoginForm == "true" ? false : true; //if the Login for is true then make it false
-        if(this.PageState.LoginForm){
-            this.PageState.CancelButton.Name = "LoginForm"; //assign cancelbutton to LoginForm so we can change LoginForms value using cancelbutton
-            this.PageState.CancelButton.Value = true; //We assign it to true. This ensures when we press it it will change LoginForm to false
+    async Login(req: any, res: any){
+        
+        var LoginReject = await this.User.LoginAttempt(req.body.email, req.body.password);
+        this.PageData.LoginFailed = LoginReject;
+        if(!LoginReject){
+            this.SetCurrentRenderTarget("DataBaseSelection");
+        }else{
+            req.url = "/";
+            this.SetCurrentRenderTarget("Index");
         }
         this._Get(req, res);
-        this.ResetPageState("LoginForm");
     }
 
     // Override for _Get. This uses PageData from the class
     _Get(req: any, res: any): void {
 
         this.RenderPage(req, res, this.PageData); //Render the page
+    }
+    _Post(req: any, res: any): void {
+        this.RenderPage(req, res, this.PageData);
     }
 }
 

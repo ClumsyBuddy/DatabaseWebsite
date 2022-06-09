@@ -56,11 +56,11 @@ app.use(function(req, res, next) {
 
 
 
-app.route('/LoginForm')
+app.route('/Login')
     .get((req, res) =>{
-        Index.LoginForm(req, res);
+        Index.Login(req, res);
     }).post((req, res) => {
-        Index.LoginForm(req, res);
+        Index.Login(req, res);
     });
 
 //Router for getting all get and post request on '/' which is index
@@ -68,7 +68,7 @@ app.route('/')
     .get(function(req, res){
         Index._Get(req, res);
     }).post(function(req, res){
-        Index._Get(req, res);
+        Index._Post(req, res);
     });
 
 
@@ -80,13 +80,22 @@ app.route('/Sable')
         (success) => res.send(success);
     });
 
-    app.route('/Diplomat')
-    .get(function(req, res){
-         Diplo._Get(req, res);
-    }).post(function(req, res){
+app.route('/Diplomat')
+.get(function(req, res){
+        Diplo._Get(req, res);
+}).post(function(req, res){
 
-    });
+});
 
+app.route('/DataBaseSelection')
+.get(function(req, res){
+    Index.SetCurrentRenderTarget("DataBaseSelection");
+        Index._Get(req, res);
+}).post(function(req, res){
+
+});
+
+    
 
 app.use('/', router);
 app.use('/Sable', router);

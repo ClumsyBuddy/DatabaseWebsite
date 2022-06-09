@@ -14,10 +14,24 @@ class Login{
     private LoginReject: boolean;
     private LoggedIn:boolean;
 
+    protected DataBaseAccess:{
+        WareHouse:boolean,
+        Sable:boolean,
+        Diplomat:boolean,
+        RDI:boolean
+    }
+
 
     constructor(DbController:DatabaseManager){
-        this.c_DbController = DbController;
-        this.c_DbController.createTable(this.db_Name, "Login", "user TEXT, email TEXT, password TEXT, permission TEXT");
+        this.c_DbController = DbController;                     //TODO need to make this more dynamic (Probably auto propogate the ReponseHandler Object)
+        this.c_DbController.createTable(this.db_Name, "Login", "user TEXT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL, permission TEXT NOT NULL, \
+                                                        Warehouse INTEGER NOT NULL, Sable INTEGER NOT NULL, Diplomat INTEGER NOT NULL, RDI INTEGER NOT NULL");
+        this.DataBaseAccess = {
+            WareHouse:false,
+            Sable: false,
+            Diplomat:false,
+            RDI:false
+        }
         this.LoggedIn = false;
     }
     
@@ -28,13 +42,20 @@ class Login{
     */ 
     async LoginAttempt(email:string, password:string){
         await this.c_DbController.getByColumn(this.db_Name, "email", email).then((result:any) => {
-            if(result.password == password && result.email == email){
+            console.log(result);
+            if(result !== undefined && result.password == password && result.email == email){
                 this.c_User = result.user;
                 this.c_Email = result.email;
                 this.c_Password = result.password;
                 this.c_UserPermissions = result.permission;
                 this.LoginReject = false;
                 this.LoggedIn = true;
+                this.DataBaseAccess = {
+                    WareHouse: result.Warehouse,
+                    Sable:result.Sable,
+                    Diplomat: result.Diplomat,
+                    RDI:result.RDI
+                }
             }else{
                 this.LoginReject = true;
             }

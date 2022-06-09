@@ -1,30 +1,12 @@
 <!DOCTYPE html>
 <head>
-    <title>Database</title>
+    <title>Login</title>
     <link rel="stylesheet" href="CSS/Main.css">
 </head>
 <body class="FrontPage">
-    <div>
-        <div><h1 class="center SableOrange"><%= PageState.Title %> </h1></div>
-        <div style="width: 100%; height: auto; display: flex; flex-direction: row; justify-content: center;">
-        <%- include("../partials/Login/LoginButton") %>
-        </div>
-        <%- include("../partials/Login/LoginForm") %> 
-        <div class="center LargeButton">
-            <button type="button" class="block SableOrangeBackground">
-                <a class="center Link" href="/Sable">Sable</a>
-            </button>
-        </div>
-        <div class="center LargeButton">
-            <button type="button" class="block SableOrangeBackground">
-                <a class="center Link " href="/Diplomat">Diplomat</a>
-            </button>
-        </div>
-        <div class="center LargeButton">
-            <button type="button" class="block SableOrangeBackground">
-                <a class="center Link" href="404.html">RDI</a>
-            </button>
-        </div>
+    <div><h1 class="center SableOrange"><%= PageState.Title %> </h1></div>
+    <div> 
+        <%- include("../partials/Login/LoginForm") %>
     </div>
 </body>
 
