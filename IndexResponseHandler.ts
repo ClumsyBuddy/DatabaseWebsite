@@ -6,13 +6,15 @@ import { ResponseHandler } from "./ResponseHandler";
 class IndexResponseHandler extends ResponseHandler{
 
     private PageData: {
-        Warehouse:number
+        Warehouse:number,
+        LoginFailed:boolean
     };
 
     constructor(DbController:DatabaseManager, User:Login, app:any){
             super(DbController, User, "Index");
             this.PageData = {
-                Warehouse:0
+                Warehouse:0,
+                LoginFailed:false
             }
     }
 
@@ -28,25 +30,23 @@ class IndexResponseHandler extends ResponseHandler{
     async Login(req: any, res: any){
         
         await this.User.LoginAttempt(req, res, req.body.email, req.body.password);
-        if(req.session.loggedin){
-            this.InitLogin(req, res, true);
-        }
         this._Get(req, res);
     }
 
     // Override for _Get. This uses PageData from the class
     _Get(req: any, res: any): void {
 
-
+        //console.log(req.session);
         if(req.session.loggedin){
+            this.InitLogin(req, res);
             this.SetCurrentRenderTarget("DataBaseSelection");
-            console.log(req.session.WareHouse);
-            this.PageData = {
-                Warehouse:req.session.WareHouse
-            }
+            this.PageData.Warehouse = req.session.WareHouse;
+            
         }else{
+            this.PageData.LoginFailed = req.session.loginfailed;
             this.SetCurrentRenderTarget("Index");
         }
+        //console.log(this.PageData);
         this.RenderPage(req, res, this.PageData); //Render the page
     }
     _Post(req: any, res: any): void {

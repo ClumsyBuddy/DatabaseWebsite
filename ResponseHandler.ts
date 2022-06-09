@@ -93,9 +93,9 @@ class  ResponseHandler{
         this.PageState = deepCopy(this.BasePageState);
         
         this.Permission = {
-            Low:0,
-            Mid:1,
-            High:2
+            Low:1,
+            Mid:2,
+            High:3
         }
         
     }
@@ -112,29 +112,29 @@ class  ResponseHandler{
     *                               Login Initialization
     *   This will be called when a login has been achieved so that allowed actions can be updated
     */
-    public InitLogin(req, res, IsLogin:boolean) : void{
-        if(req.session.loggedin){
-            if(this.User.PermissionLevel(req, this.Permission.High)){
-                Object.keys(req.session.AllowedActions).forEach(key => {
-                    req.session.AllowedActions[key] = true;
-                    });
-            }
-            if(this.User.PermissionLevel(req, this.Permission.Mid)){
-                req.session.AllowedActions.ViewLogs = true;
-                req.session.AllowedActions.Create = true;
-                req.session.AllowedActions.Update = true;
-            }
-            if(this.User.PermissionLevel(req, this.Permission.Low)){
-                req.session.AllowedActions.ViewLogs = true;
-            }
+    public InitLogin(req, res) : void{
+        console.log(req.session.userPermission);
+        if(req.session.userPermission >= this.Permission.High){
+            console.log("High");
+            Object.keys(req.session.AllowedActions).forEach(key => {
+                req.session.AllowedActions[key] = true;
+                });
+        }else if(req.session.userPermission >= this.Permission.Mid){
+            console.log("Med");
+            req.session.AllowedActions.ViewLogs = true;
+            req.session.AllowedActions.Create = true;
+            req.session.AllowedActions.Update = true;
+        }else if(req.session.userPermission >= this.Permission.Low){
+            console.log("Low");
+            req.session.AllowedActions.ViewLogs = true;
         }
+        req.session.save();
         console.log(req.session.AllowedActions);
     }
     /*
     *   Basic Render Page function that Gives PageData from the child and PageState to handle Templating of the page
     */
     public RenderPage(req, res, PageData){
-        console.log(PageData.Warehouse);
         var BuildRenderTarget = `pages/${this.PageState.CurrentRenderTarget}`;
         res.render(BuildRenderTarget, {PageState:this.PageState, Data:PageData}, function(err, html) {
             if(err){

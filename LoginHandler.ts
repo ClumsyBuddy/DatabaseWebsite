@@ -21,7 +21,7 @@ class Login{
     */ 
     async LoginAttempt(req, res, username:string, password:string){
         await this.c_DbController.getByColumn(this.db_Name, "username", username).then((result:any) => {
-            console.log(result);
+            //console.log(result);
             if(result !== undefined && result.password == password && result.username == username){
                 req.session.loggedin = true; //We are logged in
                 req.session.username = result.username;  //Get the USername
@@ -37,12 +37,13 @@ class Login{
                     ViewLogs:false,
                 }
                 req.session.AllowedActions = AllowedActions;
-
+                req.loginfailed = false;
             }else{
-                return true;
+                req.session.loginfailed = true;
+                req.session.loggedin = false;
+
             }
         })
-        return false;
     }
 
 
