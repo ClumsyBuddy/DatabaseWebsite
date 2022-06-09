@@ -4,24 +4,15 @@
     <link rel="stylesheet" href="CSS/Main.css">
 </head>
 <body class="FrontPage">
-    <div>
-        <div><h1 class="center SableOrange"><%= PageState.Title %> </h1></div>
-        <div class="center LargeButton">
-            <button type="button" class="block SableOrangeBackground">
-                <a class="center Link" href="/Sable">Sable</a>
-            </button>
+    <% if (Data.WareHouse == 0) { %>
+        <div>
+            <%- include("../partials/DBManager") %> 
         </div>
-        <div class="center LargeButton">
-            <button type="button" class="block SableOrangeBackground">
-                <a class="center Link " href="/Diplomat">Diplomat</a>
-            </button>
+    <% } else { %>
+        <div>
+            <%- include("../partials/Warehouse") %> 
         </div>
-        <div class="center LargeButton">
-            <button type="button" class="block SableOrangeBackground">
-                <a class="center Link" href="404.html">RDI</a>
-            </button>
-        </div>
-    </div>
+    <% } %> 
+    
 </body>
-
 </html>

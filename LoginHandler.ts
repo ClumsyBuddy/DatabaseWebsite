@@ -12,7 +12,6 @@ class Login{
     private c_DbController: DatabaseManager;
     private db_Name = "Login";
     private LoginReject: boolean;
-    private LoggedIn:boolean;
 
     protected DataBaseAccess:{
         WareHouse:boolean,
@@ -32,7 +31,6 @@ class Login{
             Diplomat:false,
             RDI:false
         }
-        this.LoggedIn = false;
     }
     
 
@@ -40,7 +38,7 @@ class Login{
     *   Check if the email exists in the database. Then check if the email and password match what we found
     *   Then set all of the variables to their correct values found in the database
     */ 
-    async LoginAttempt(email:string, password:string){
+    async LoginAttempt(req, res, email:string, password:string){
         await this.c_DbController.getByColumn(this.db_Name, "email", email).then((result:any) => {
             console.log(result);
             if(result !== undefined && result.password == password && result.email == email){
@@ -49,13 +47,18 @@ class Login{
                 this.c_Password = result.password;
                 this.c_UserPermissions = result.permission;
                 this.LoginReject = false;
-                this.LoggedIn = true;
                 this.DataBaseAccess = {
                     WareHouse: result.Warehouse,
                     Sable:result.Sable,
                     Diplomat: result.Diplomat,
                     RDI:result.RDI
                 }
+                req.session.username = result.user;
+                req.session.loggedin = true;
+                req.session.userPermission = result.permission;
+                req.session.WareHouse = this.DataBaseAccess.WareHouse;
+
+
             }else{
                 this.LoginReject = true;
             }
@@ -66,21 +69,21 @@ class Login{
     /*
     *   If the User Permission Level is more than or equal too the Required then return true else return false
     */
-    public PermissionLevel(Required:number){
-        return this.c_UserPermissions >= Required ? true : false;
+    public PermissionLevel(req, Required:number){
+        return req.session.userPermission >= Required ? true : false;
     }
 
     public get User() : string { //Gets the Users name
         return this.c_User;
     }
     
-    public get IsLogin() : boolean {
-        return this.LoggedIn;
+    public get Permission() : number{
+        return this.c_UserPermissions;
     }
-    public set IsLogin(value:boolean){
-        this.LoggedIn = value;
-    } 
 
+    public get DBAccess() : any{
+        return this.DataBaseAccess;
+    }
 
 
 

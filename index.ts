@@ -2,9 +2,16 @@
 const path = require('path');
 const express = require('express');
 const ip = require('ip');
+const session = require('express-session');
 //Create a app and router variable
 const router = express.Router();
 const app = express();
+
+app.use(session({
+    secret:"secret",
+    resave:true,
+    saveUnitialized:true
+}));
 
 //My exported packages
 import {Database} from "./Database";

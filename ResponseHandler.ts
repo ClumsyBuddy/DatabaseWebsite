@@ -70,10 +70,10 @@ class  ResponseHandler{
     protected User:Login;
     protected Username:string;
 
-    Permission: {
-        Low:0,
-        Mid:1,
-        High:2
+    protected Permission: {
+        Low: number,
+        Mid:number,
+        High:number
     }
     
     
@@ -105,6 +105,11 @@ class  ResponseHandler{
                 Create:false,
                 ViewLogs:false,
         }
+        this.Permission = {
+            Low:0,
+            Mid:1,
+            High:2
+        }
         
     }
 
@@ -120,21 +125,21 @@ class  ResponseHandler{
     *                               Login Initialization
     *   This will be called when a login has been achieved so that allowed actions can be updated
     */
-    public InitLogin() : void{
-        if(this.User.IsLogin){
+    public InitLogin(req, res, IsLogin:boolean) : void{
+        if(IsLogin){
             this.Username = this.User.User;
             
-            if(this.User.PermissionLevel(this.Permission.High)){
+            if(this.User.PermissionLevel(req, this.Permission.High)){
                 Object.keys(this.AllowedActions).forEach(key => {
                     this.AllowedActions[key] = true;
                     });
             }
-            if(this.User.PermissionLevel(this.Permission.Mid)){
+            if(this.User.PermissionLevel(req, this.Permission.Mid)){
                 this.AllowedActions.ViewLogs = true;
                 this.AllowedActions.Create = true;
                 this.AllowedActions.Update = true;
             }
-            if(this.User.PermissionLevel(this.Permission.Low)){
+            if(this.User.PermissionLevel(req, this.Permission.Low)){
                 this.AllowedActions.ViewLogs = true;
             }
         }

@@ -6,13 +6,15 @@ import { ResponseHandler } from "./ResponseHandler";
 class IndexResponseHandler extends ResponseHandler{
 
     private PageData: {
-        LoginFailed:boolean
+        LoginFailed:boolean,
+        Warehouse:boolean
     };
 
     constructor(DbController:DatabaseManager, User:Login, app:any){
             super(DbController, User, "Index");
             this.PageData = {
-                LoginFailed: false
+                LoginFailed: false,
+                Warehouse:true
             }
     }
 
@@ -27,13 +29,10 @@ class IndexResponseHandler extends ResponseHandler{
     */
     async Login(req: any, res: any){
         
-        var LoginReject = await this.User.LoginAttempt(req.body.email, req.body.password);
+        var LoginReject = await this.User.LoginAttempt(req, res, req.body.email, req.body.password);
         this.PageData.LoginFailed = LoginReject;
-        if(!LoginReject){
-            this.SetCurrentRenderTarget("DataBaseSelection");
-        }else{
-            req.url = "/";
-            this.SetCurrentRenderTarget("Index");
+        if(req.session.loggedin){
+            this.InitLogin(req, res, true);
         }
         this._Get(req, res);
     }
@@ -41,6 +40,14 @@ class IndexResponseHandler extends ResponseHandler{
     // Override for _Get. This uses PageData from the class
     _Get(req: any, res: any): void {
 
+
+        if(req.session.loggedin){
+            this.SetCurrentRenderTarget("DataBaseSelection");
+            console.log(req.session.WareHouse);
+            this.PageData.Warehouse = req.session.WareHouse;
+        }else{
+            this.SetCurrentRenderTarget("Index");
+        }
         this.RenderPage(req, res, this.PageData); //Render the page
     }
     _Post(req: any, res: any): void {
