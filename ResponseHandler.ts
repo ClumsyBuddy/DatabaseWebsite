@@ -32,14 +32,6 @@ class  ResponseHandler{
     DBController: DatabaseManager;
 
     //TODO Need to make sure every Button is as variable as CancelButton
-    
-    protected AllowedActions:{
-        Delete:boolean,
-        Update:boolean,
-        Create:boolean,
-        ViewLogs:boolean,
-    };
-
     protected PageState:{
         LoginForm:boolean,
         Switch:{On:boolean, Off:boolean},
@@ -99,12 +91,7 @@ class  ResponseHandler{
             CancelButton:{}
             };
         this.PageState = deepCopy(this.BasePageState);
-        this.AllowedActions = {
-                Delete:false,
-                Update:false,
-                Create:false,
-                ViewLogs:false,
-        }
+        
         this.Permission = {
             Low:0,
             Mid:1,
@@ -126,28 +113,28 @@ class  ResponseHandler{
     *   This will be called when a login has been achieved so that allowed actions can be updated
     */
     public InitLogin(req, res, IsLogin:boolean) : void{
-        if(IsLogin){
-            this.Username = this.User.User;
-            
+        if(req.session.loggedin){
             if(this.User.PermissionLevel(req, this.Permission.High)){
-                Object.keys(this.AllowedActions).forEach(key => {
-                    this.AllowedActions[key] = true;
+                Object.keys(req.session.AllowedActions).forEach(key => {
+                    req.session.AllowedActions[key] = true;
                     });
             }
             if(this.User.PermissionLevel(req, this.Permission.Mid)){
-                this.AllowedActions.ViewLogs = true;
-                this.AllowedActions.Create = true;
-                this.AllowedActions.Update = true;
+                req.session.AllowedActions.ViewLogs = true;
+                req.session.AllowedActions.Create = true;
+                req.session.AllowedActions.Update = true;
             }
             if(this.User.PermissionLevel(req, this.Permission.Low)){
-                this.AllowedActions.ViewLogs = true;
+                req.session.AllowedActions.ViewLogs = true;
             }
         }
+        console.log(req.session.AllowedActions);
     }
     /*
     *   Basic Render Page function that Gives PageData from the child and PageState to handle Templating of the page
     */
     public RenderPage(req, res, PageData){
+        console.log(PageData.Warehouse);
         var BuildRenderTarget = `pages/${this.PageState.CurrentRenderTarget}`;
         res.render(BuildRenderTarget, {PageState:this.PageState, Data:PageData}, function(err, html) {
             if(err){

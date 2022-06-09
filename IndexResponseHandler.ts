@@ -6,15 +6,13 @@ import { ResponseHandler } from "./ResponseHandler";
 class IndexResponseHandler extends ResponseHandler{
 
     private PageData: {
-        LoginFailed:boolean,
-        Warehouse:boolean
+        Warehouse:number
     };
 
     constructor(DbController:DatabaseManager, User:Login, app:any){
             super(DbController, User, "Index");
             this.PageData = {
-                LoginFailed: false,
-                Warehouse:true
+                Warehouse:0
             }
     }
 
@@ -29,8 +27,7 @@ class IndexResponseHandler extends ResponseHandler{
     */
     async Login(req: any, res: any){
         
-        var LoginReject = await this.User.LoginAttempt(req, res, req.body.email, req.body.password);
-        this.PageData.LoginFailed = LoginReject;
+        await this.User.LoginAttempt(req, res, req.body.email, req.body.password);
         if(req.session.loggedin){
             this.InitLogin(req, res, true);
         }
@@ -44,7 +41,9 @@ class IndexResponseHandler extends ResponseHandler{
         if(req.session.loggedin){
             this.SetCurrentRenderTarget("DataBaseSelection");
             console.log(req.session.WareHouse);
-            this.PageData.Warehouse = req.session.WareHouse;
+            this.PageData = {
+                Warehouse:req.session.WareHouse
+            }
         }else{
             this.SetCurrentRenderTarget("Index");
         }
