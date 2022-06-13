@@ -7,14 +7,20 @@ class IndexResponseHandler extends ResponseHandler{
 
     private PageData: {
         Warehouse:number,
-        LoginFailed:boolean
+        LoginFailed:boolean,
+        Sable:boolean,
+        Diplomat:boolean,
+        RDI:boolean
     };
 
     constructor(DbController:DatabaseManager, User:Login, app:any){
             super(DbController, User, "Index");
             this.PageData = {
                 Warehouse:0,
-                LoginFailed:false
+                LoginFailed:false,
+                Sable: false,
+                Diplomat: false,
+                RDI: false
             }
     }
 
@@ -30,23 +36,22 @@ class IndexResponseHandler extends ResponseHandler{
     async Login(req: any, res: any){
         
         await this.User.LoginAttempt(req, res, req.body.email, req.body.password);
+        if(req.session.loggedin){
+            this.InitLogin(req, res);
+            this.SetCurrentRenderTarget("DataBaseSelection");
+            this.PageData.Warehouse = req.session.WareHouse;
+            this.PageData.Sable = req.session.Sable;
+            this.PageData.Diplomat = req.session.Diplomat;
+            this.PageData.RDI = req.session.RDI;
+            
+        }else{
+            this.PageData.LoginFailed = req.session.loginfailed;
+        }
         this._Get(req, res);
     }
 
     // Override for _Get. This uses PageData from the class
     _Get(req: any, res: any): void {
-
-        //console.log(req.session);
-        if(req.session.loggedin){
-            this.InitLogin(req, res);
-            this.SetCurrentRenderTarget("DataBaseSelection");
-            this.PageData.Warehouse = req.session.WareHouse;
-            
-        }else{
-            this.PageData.LoginFailed = req.session.loginfailed;
-            this.SetCurrentRenderTarget("Index");
-        }
-        //console.log(this.PageData);
         this.RenderPage(req, res, this.PageData); //Render the page
     }
     _Post(req: any, res: any): void {

@@ -113,23 +113,18 @@ class  ResponseHandler{
     *   This will be called when a login has been achieved so that allowed actions can be updated
     */
     public InitLogin(req, res) : void{
-        console.log(req.session.userPermission);
         if(req.session.userPermission >= this.Permission.High){
-            console.log("High");
             Object.keys(req.session.AllowedActions).forEach(key => {
                 req.session.AllowedActions[key] = true;
                 });
         }else if(req.session.userPermission >= this.Permission.Mid){
-            console.log("Med");
             req.session.AllowedActions.ViewLogs = true;
             req.session.AllowedActions.Create = true;
             req.session.AllowedActions.Update = true;
         }else if(req.session.userPermission >= this.Permission.Low){
-            console.log("Low");
             req.session.AllowedActions.ViewLogs = true;
         }
         req.session.save();
-        console.log(req.session.AllowedActions);
     }
     /*
     *   Basic Render Page function that Gives PageData from the child and PageState to handle Templating of the page
