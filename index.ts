@@ -98,8 +98,7 @@ app.route('/Diplomat')
 
 app.route('/DataBaseSelection')
 .get(function(req, res){
-    Index.SetCurrentRenderTarget("DataBaseSelection");
-    Index._Get(req, res);
+    Index._Get(req, res, "DataBaseSelection");
 }).post(function(req, res){
 
 });
