@@ -80,9 +80,19 @@ app.route('/')
         Index._Post(req, res);
     });
 
+app.route("/Delete").post(function(req, res){
+    console.log(req.body);
+    if(req.body.Sable){
+        Sable.DeleteItem(req, res, req.body.Sable, Sable.Get_PageData);
+    }
+    if(req.body.Diplomat){
+
+    }
+});
+
 app.route('/Sable')
     .get(function(req, res){
-        Sable._Get(req, res, Sable.GetAllProducts.bind(Sable));
+        Sable.Start(req, res);
     }).post(function(req, res){
         console.log(req.body);
         (success) => res.send(success);

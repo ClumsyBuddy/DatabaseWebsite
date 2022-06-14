@@ -51,10 +51,6 @@ class Login{
     public PermissionLevel(req, Required:number){
         return req.session.userPermission >= Required ? true : false;
     }
-
-    async Logout(req, res){
-        return;
-    }
 }
 
 

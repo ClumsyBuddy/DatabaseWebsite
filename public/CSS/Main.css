@@ -173,3 +173,17 @@ z-index: 10;
 .SectionHeader{
     color: #F65E00;
 }
+
+
+.ProductListContainer::-webkit-scrollbar{
+    display: none;
+}
+
+.ProductListContainer{
+    width: 35%;
+    height: 60vh;
+    margin: auto;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    overflow: scroll;
+}

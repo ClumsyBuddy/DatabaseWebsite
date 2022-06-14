@@ -50,7 +50,8 @@ class IndexResponseHandler extends ResponseHandler{
         this._Get(req, res);
     }
     async Logout(req, res){
-        req.session.destroy();
+        //req.session.destroy();
+        req.session.loggedin = false;
         this.SetCurrentRenderTarget("/");
         this._Get(req, res);
     }

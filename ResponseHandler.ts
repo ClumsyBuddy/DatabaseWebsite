@@ -126,10 +126,53 @@ class  ResponseHandler{
         }
         req.session.save();
     }
+
+
+    async DeleteItem(req, res, key, PageData){
+        await this.DBController.delete(this.TableName, key);
+        await this.GetAllProducts(req, res, this.TableName);
+        PageData.ProductList = req.session.ProductList;
+        this.RenderPage(req, res, PageData);
+    }
+
+    
+
+
+    async GetAllProducts(req, res, name:string){
+        await this.DBController.getAll(name).then((result) => {
+            req.session.ProductList = result;
+        });
+    }
+
+
+    async CheckForLogin(req, res, PageData){
+        if(req.session.loggedin != undefined){
+            if(!req.session.loggedin){
+                res.render("pages/index", {PageState:this.PageState, Data:PageData}, function(err, html) {
+                    if(err){
+                        console.log(err);
+                        res.sendFile(__dirname + "/public/404.html");
+                    }else{
+                        res.send(html);
+                    }
+                });
+                return false;
+            }
+            return true;
+        }
+    }
+
     /*
     *   Basic Render Page function that Gives PageData from the child and PageState to handle Templating of the page
     */
-    public RenderPage(req, res, PageData){
+    async RenderPage(req, res, PageData){
+
+        if(this.PageState.CurrentRenderTarget != this.BasePageState.CurrentRenderTarget && this.PageState.CurrentRenderTarget != "DataBaseSelection"){
+            if(!await this.CheckForLogin(req, res, PageData)){
+                return;
+            }
+        }
+
         var BuildRenderTarget = `pages/${this.PageState.CurrentRenderTarget}`;
         res.render(BuildRenderTarget, {PageState:this.PageState, Data:PageData}, function(err, html) {
             if(err){

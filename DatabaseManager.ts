@@ -58,7 +58,7 @@ class DatabaseManager {
 
     delete(name:string, key:number) { //Delete the item using the key
       return this.DatabaseConnection.run(
-        `DELETE FROM ${this.DbStorage[name].Table} WHERE key = ?`,
+        `DELETE FROM ${name} WHERE key = ?`,
         [key]
       );
     }
