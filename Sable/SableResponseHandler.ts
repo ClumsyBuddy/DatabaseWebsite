@@ -21,10 +21,7 @@ class SableResponseHandler extends ResponseHandler{
         // The Options different values need to be third layer only
 
         //Get item information from Jsonfile and create a watchfile event 
-        this.ItemInformation = this.ParseJson("./Sable/SableOptions.json", this.UpdateItemInformation.bind(this));
-        this.GetAllProducts(); //Get All products At Startup
-
-        
+        this.ParseJson("./Sable/SableOptions.json", this.UpdateItemInformation.bind(this));
 
         //Now I need to parse the JSON object into useable columns and save the objects as itemtypes for later
         //Then I need to try and create the table with the columns
@@ -51,7 +48,10 @@ class SableResponseHandler extends ResponseHandler{
         });
     }
 
-    async _Get(req, res){
+    async _Get(req, res, cb){
+        if(cb){
+            await cb(); //You need to bind Sable to the callback to use "this"
+        }
         this.RenderPage(req, res, this.PageData); //This is normally called at the end
     }
     async _Post(req, res){

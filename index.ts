@@ -83,7 +83,7 @@ app.route('/')
 
 app.route('/Sable')
     .get(function(req, res){
-        Sable._Get(req, res);
+        Sable._Get(req, res, Sable.GetAllProducts.bind(Sable));
     }).post(function(req, res){
         console.log(req.body);
         (success) => res.send(success);
