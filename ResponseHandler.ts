@@ -127,23 +127,19 @@ class  ResponseHandler{
         req.session.save();
     }
 
-
     async DeleteItem(req, res, key, PageData){
         await this.DBController.delete(this.TableName, key);
         await this.GetAllProducts(req, res, this.TableName);
         PageData.ProductList = req.session.ProductList;
-        this.RenderPage(req, res, PageData);
+        //this.RenderPage(req, res, PageData); Not using this because we dont want delete form to resubmit
+        res.redirect(this.PageState.CurrentRenderTarget);
     }
-
-    
-
 
     async GetAllProducts(req, res, name:string){
         await this.DBController.getAll(name).then((result) => {
             req.session.ProductList = result;
         });
     }
-
 
     async CheckForLogin(req, res, PageData){
         if(req.session.loggedin != undefined){
@@ -186,10 +182,10 @@ class  ResponseHandler{
     /*
     *   Basic Get and Post functions. Ment to be overriden with childerens specfic get and post
     */
-    _Get(req, res, Data) : void{
+    async _Get(req, res, Data){
         this.RenderPage(req, res, Data);
     }
-    _Post(req, res, Data) : void{
+    async _Post(req, res, Data){
         this.RenderPage(req, res, Data)
     }
     //TODO Need to create utility file that will contain all of the utility functions, need to put deep copy and mergearray into that instead of sitting here

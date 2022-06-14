@@ -26,10 +26,10 @@ class DiploResponseHandler extends ResponseHandler{
         this.PageState.CurrentRenderTarget = "Diplomat";
     }
 
-    _Get(req: any, res: any): void {
+    async _Get(req: any, res: any) {
         this.RenderPage(req, res,this.PageData);
     }
-    _Post(req: any, res: any): void {
+    async _Post(req: any, res: any) {
         this.RenderPage(req, res,this.PageData);
     }
 

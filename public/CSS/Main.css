@@ -174,16 +174,121 @@ z-index: 10;
     color: #F65E00;
 }
 
-
-.ProductListContainer::-webkit-scrollbar{
+body::-webkit-scrollbar{
+    display:none;
+}
+.BaseContainer::-webkit-scrollbar{
     display: none;
 }
-
-.ProductListContainer{
-    width: 35%;
-    height: 60vh;
+.BaseContainer{
+    width: 90%;
+    height: 70vh;
     margin: auto;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
     overflow: scroll;
+    padding-bottom: 30px;
+    border: 5px;
+    border-style:solid;
+    border-color: azure;
+
 }
+
+.ProductContainer{
+    background-color: #F65E00;
+    display: inline-flex;    
+    flex-direction: column;
+    width: 15%;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
+
+    transition: all 1s ease;
+    transform: scale(1);
+    border-color: azure;
+    border-radius: 10px;
+    border-style:solid;
+    z-index: 9;
+}
+
+.ProductContainer:hover{
+    background-color: rgb(246, 94, 0, 0.9);
+    transition: all 1s ease;
+    transform: scale(1.1);
+}
+
+
+.ProductButton{
+    width: 100%;
+    background-color: transparent;
+    border: none;
+}
+.ProductButton:hover{
+    background-color: #2a4175;
+    border-radius: 10px;
+}
+
+.DeleteButton{
+    left: 89%;
+    width: 26px;
+    height: 26px;
+    background-color: transparent;
+    background-size: cover;
+    background-image: url("../uploads/cancel-48x.png");
+    position: fixed;
+    z-index: 10;
+    border: none;
+}
+
+.DeleteButton:hover{
+    background-color: azure;
+    border-radius: 20px;
+}
+
+
+.UpdateButton{
+    left: 1%;
+    width: 24px;
+    height: 24px;
+    background-color: transparent;
+    background-size: cover;
+    background-image: url("../uploads/EditButton.png");
+    position: fixed;
+    z-index: 10;
+    border: none;
+}
+
+
+.UpdateButton:hover{
+    background-image: url("../uploads/EditButtonHovered.png");
+    border-radius: 2px;
+}
+
+@keyframes FlyIn {
+    from{
+        transform: scale(0.25);
+    }
+    to{
+        transform: scale(1);
+    }
+}
+
+@keyframes grow{
+  from{
+    transform: rotate(180deg);
+  }
+  to{
+    transform: rotate(90deg);
+  }
+}
+@keyframes shake {
+    30%, 70% {
+      transform: rotate(1deg);
+    }
+    10%, 50%{
+        transform: rotate(-1deg);
+    }
+    0%, 20%, 40%, 60%, 80% {
+      transform: rotate(0);
+    }
+  }

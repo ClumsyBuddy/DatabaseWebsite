@@ -81,7 +81,6 @@ app.route('/')
     });
 
 app.route("/Delete").post(function(req, res){
-    console.log(req.body);
     if(req.body.Sable){
         Sable.DeleteItem(req, res, req.body.Sable, Sable.Get_PageData);
     }

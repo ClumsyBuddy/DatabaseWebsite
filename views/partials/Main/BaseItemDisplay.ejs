@@ -1,0 +1,27 @@
+<div class="BaseContainer">
+    <% if (Data.ProductList != undefined){ %> 
+        <% Data.ProductList.forEach((_product) => { %> 
+            <div class="ProductContainer">
+                <% if (Data.AllowedActions.Delete != undefined) { %>
+                    <% if (Data.AllowedActions.Delete == true) { %>
+                        <form action="Delete"  method="post">
+                            <button class="DeleteButton" type="submit" name="Sable" value=<%= _product.key %>></button>
+                        </form>
+                    <% } %>
+                <% } %>
+                <% if (Data.AllowedActions.Update != undefined) { %>
+                    <% if (Data.AllowedActions.Update == true) { %>
+                        <form action="Update"  method="post">
+                            <button class="UpdateButton" type="submit" name="Sable" value=<%= _product.key %>></button>
+                        </form>
+                    <% } %>
+                <% } %>
+                <form action=<%=PageState._Action %> method="get" > <!--  Every variable here needs to be dynamically set instead of hard coded   -->
+                    <button class="ProductButton" name="C_Product" value='<%= _product.sku %>,<%= _product.Color %>' >
+                        <p class=""><%= _product.sku %></p><p class=""><%= _product.brand %></p><p class=""><%= _product.Color %></p>
+                    </button>
+                </form>
+            </div>
+        <% }); %> 
+    <% } %> 
+</div>
