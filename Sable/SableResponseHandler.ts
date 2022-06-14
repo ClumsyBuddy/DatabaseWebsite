@@ -1,3 +1,4 @@
+import req from "express/lib/request";
 import { DatabaseManager } from "../DatabaseManager";
 import { Login } from "../LoginHandler";
 import {ResponseHandler} from "../ResponseHandler";
@@ -30,7 +31,7 @@ class SableResponseHandler extends ResponseHandler{
         this.PageState.CurrentRenderTarget = "Sable";
     }
 
-    async GetAllProducts(){
+    async GetAllProducts(req, res){
         await this.DBController.getAll(this.Name).then((result) => {
             for(var e_result in result){
                 var dup = false;
@@ -43,18 +44,22 @@ class SableResponseHandler extends ResponseHandler{
                 if(dup){
                     continue;
                 }
-                this.PageData.ProductList = result;
+                req.session.ProductList = result;
             }
         });
+        this.PageData.ProductList = req.session.ProductList;
     }
 
     async _Get(req, res, cb){
         if(cb){
-            await cb(); //You need to bind Sable to the callback to use "this"
+            await cb(req, res); //You need to bind Sable to the callback to use "this"
         }
         this.RenderPage(req, res, this.PageData); //This is normally called at the end
     }
-    async _Post(req, res){
+    async _Post(req, res, cb){
+        if(cb){
+            await cb(); //You need to bind Sable to the callback to use "this"
+        }
         this.RenderPage(req, res, this.PageData); //This is normally called at the end
     }
 

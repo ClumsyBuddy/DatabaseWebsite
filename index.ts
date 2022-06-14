@@ -80,7 +80,6 @@ app.route('/')
         Index._Post(req, res);
     });
 
-
 app.route('/Sable')
     .get(function(req, res){
         Sable._Get(req, res, Sable.GetAllProducts.bind(Sable));
@@ -102,12 +101,6 @@ app.route('/DataBaseSelection')
 }).post(function(req, res){
 
 });
-
-    
-
-//app.use('/', router);
-//app.use('/Sable', router);
-//app.use('/Diplomat', router);
 
 app.listen(port, function(){
     console.log(`Server running at http://${hostname}:${port}/`);

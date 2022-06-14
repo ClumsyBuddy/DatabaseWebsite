@@ -7,7 +7,6 @@
 *
 */
 
-
 class DatabaseManager {
   DatabaseConnection: any;
   KeyCounter:number;
@@ -46,39 +45,36 @@ class DatabaseManager {
       return this.DatabaseConnection.run(sql);
     }
 
-
-
     create(name:string, params = []){ //Create a new item using the Classes Table, Column Data and Questionmark Array built from the Columns. We only need to pass in the params
         return this.DatabaseConnection.run( `INSERT INTO ${this.DbStorage[name].Table} (${this.DbStorage[name].Columns}) VALUES(null${this.DbStorage[name].QuestionMarkArray})`, params);
       }
 
+    update(name:string, itemName:string, newValue: any, key:number) { //update a element using the Name of the Column item and the key of the item.
+      return this.DatabaseConnection.run(
+        `UPDATE ${this.DbStorage[name].Table} SET ${itemName} = ? WHERE key = ?`,
+        [newValue, key]
+      )
+    }
 
-      update(name:string, itemName:string, newValue: any, key:number) { //update a element using the Name of the Column item and the key of the item.
-        return this.DatabaseConnection.run(
-          `UPDATE ${this.DbStorage[name].Table} SET ${itemName} = ? WHERE key = ?`,
-          [newValue, key]
-        )
-      }
+    delete(name:string, key:number) { //Delete the item using the key
+      return this.DatabaseConnection.run(
+        `DELETE FROM ${this.DbStorage[name].Table} WHERE key = ?`,
+        [key]
+      );
+    }
 
-      delete(name:string, key:number) { //Delete the item using the key
-        return this.DatabaseConnection.run(
-          `DELETE FROM ${this.DbStorage[name].Table} WHERE key = ?`,
-          [key]
-        );
-      }
+    getByColumn(name:string, ColumnName:string, ColumnValue:any) { //Find a specfic item using the name of the column and the value you are looking for
+          return this.DatabaseConnection.get(`SELECT * FROM ${this.DbStorage[name].Table} WHERE ${ColumnName} = ?`,
+              [ColumnValue]);
+    }
 
-      getByColumn(name:string, ColumnName:string, ColumnValue:any) { //Find a specfic item using the name of the column and the value you are looking for
-            return this.DatabaseConnection.get(`SELECT * FROM ${this.DbStorage[name].Table} WHERE ${ColumnName} = ?`,
-                [ColumnValue]);
-      }
+    getAll(name:string) { //Gets all items from DB
+      return this.DatabaseConnection.all(`SELECT * FROM ${name}`)
+    }
 
-      getAll(name:string) { //Gets all items from DB
-        return this.DatabaseConnection.all(`SELECT * FROM ${name}`)
-      }
-
-      customQuery(query){ //Custom Query just incase I want to use it
-        return this.DatabaseConnection.run(query);
-      }
+    customQuery(query:string){ //Custom Query just incase I want to use it
+      return this.DatabaseConnection.run(query);
+    }
 
   }
   
