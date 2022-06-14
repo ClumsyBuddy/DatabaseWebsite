@@ -39,6 +39,7 @@ app.set("view engine", "ejs");
 
 //Setup Json and URL parsing
 app.use(express.json()); // Helps Parse Json files
+
 app.use(express.urlencoded({ //Parse POST 
     extended:true
 }));
