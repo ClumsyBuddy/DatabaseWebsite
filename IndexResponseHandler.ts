@@ -49,12 +49,21 @@ class IndexResponseHandler extends ResponseHandler{
         }
         this._Get(req, res);
     }
+    async Logout(req, res){
+        req.session.destroy();
+        this.SetCurrentRenderTarget("/");
+        this._Get(req, res);
+    }
 
     // Override for _Get. This uses PageData from the class
-    _Get(req: any, res: any): void {
-        this.RenderPage(req, res, this.PageData); //Render the page
+    async _Get(req: any, res: any, _Action:string = undefined) {
+        if(_Action != undefined){
+            this.RenderPage(req, res, _Action); //Render the page
+        }else{
+            this.RenderPage(req, res, this.PageData); //Render the page
+        }
     }
-    _Post(req: any, res: any): void {
+    async _Post(req: any, res: any) {
         this.RenderPage(req, res, this.PageData);
     }
 }

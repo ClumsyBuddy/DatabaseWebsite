@@ -73,7 +73,7 @@ class DatabaseManager {
       }
 
       getAll(name:string) { //Gets all items from DB
-        return this.DatabaseConnection.all(`SELECT * FROM ${this.DbStorage[name].Table}`)
+        return this.DatabaseConnection.all(`SELECT * FROM ${name}`)
       }
 
       customQuery(query){ //Custom Query just incase I want to use it
