@@ -12,29 +12,23 @@ const app = express();
 // Setup all pathways for public folders
 app.use(express.static(__dirname + '/public')); //Shows where static files are
 
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+//Setup Json and URL parsing
+app.use(express.json()); // Helps Parse Json files
+app.use(express.urlencoded({ //Parse POST 
+    extended:true
+}));
+app.use(session({
+    store: new SQLiteStore,
+    secret: 'DBSession',
+    cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 1 week
+}));
+app.use(express.static(__dirname + '/public'));
+app.use('/uploads', express.static(__dirname + '/public'));
+app.use('/javascript', express.static(__dirname + '/public'));
+app.use('/CSS', express.static(__dirname + '/public'));
 
-app.configure(function() {
-    app.set('views', __dirname + '/views');
-    app.set('view engine', 'ejs');
-    app.use(express.bodyParser());
-    app.use(express.methodOverride());
-    app.use(express.cookieParser());
-    //Setup Json and URL parsing
-    app.use(express.json()); // Helps Parse Json files
-    app.use(express.urlencoded({ //Parse POST 
-        extended:true
-    }));
-    app.use(session({
-      store: new SQLiteStore,
-      secret: 'your secret',
-      cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 1 week
-    }));
-    app.use(app.router);
-    app.use(express.static(__dirname + '/public'));
-    app.use('/uploads', express.static(__dirname + '/public'));
-    app.use('/javascript', express.static(__dirname + '/public'));
-    app.use('/CSS', express.static(__dirname + '/public'));
-  });
 //My exported packages
 import {Database} from "./Database";
 import {DatabaseManager} from "./DatabaseManager";

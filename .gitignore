@@ -1,3 +1,4 @@
 *.db
 *.js
 !public/javascript*.js
+sessions
