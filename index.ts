@@ -53,12 +53,27 @@ const port = 8000;
 
 // Will be used to log activities
 app.use(function(req, res, next) {
+
+
+    if(req.method != "/Login"){
+        if(!LoginCheck(req, res)){
+            
+        }
+    }
     // log each request to the console
     //var Message = `Method: ${req.method} || At: ${req.url} || IP: ${req.ip.split("ffff:").pop()}`
     //console.log(Message);
     // continue doing what we were doing and go to the route
     next();
 });
+
+var LoginCheck = (req, res) => {
+    if(req.session.loggedin){
+        return true;
+    }
+    return false;
+}
+
 
 app.post("/Logout", (req, res) => {
     Index.Logout(req, res);
