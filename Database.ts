@@ -1,13 +1,14 @@
 const sqlite3 = require('sqlite3')
 
 class Database {
-  db;
+  db:any;
   constructor(dbFilePath: string) {
     this.db = new sqlite3.Database(dbFilePath, (err: any) => {
+
       if (err) {
         console.log('Could not connect to database', err);
       } else {
-        console.log('Connected to database: ' + dbFilePath.split("./").pop().split(".db")[0]);
+        console.log('Connected to database: ' + dbFilePath.split("./").pop()?.split(".db")[0]);
       }
     })
   }

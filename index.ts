@@ -19,10 +19,11 @@ app.use(express.json()); // Helps Parse Json files
 app.use(express.urlencoded({ //Parse POST 
     extended:true
 }));
+var Week = 7 * 24 * 60 * 60 * 1000;
 app.use(session({
     store: new SQLiteStore,
     secret: 'DBSession',
-    cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 1 week
+    cookie: { maxAge: Week } // 1 week
 }));
 app.use(express.static(__dirname + '/public'));
 app.use('/uploads', express.static(__dirname + '/public'));
@@ -54,21 +55,26 @@ const port = 8000;
 // Will be used to log activities
 app.use(function(req, res, next) {
 
-
-    if(req.method != "/Login"){
-        if(!LoginCheck(req, res)){
-            
-        }
+    /*
+    *   If we are not at the index page or logging in check if we have the logged in cookie
+    *   If we do not then Reset the CurrentRenderTarget Back to index and then Get Index
+    *   Else we are logged in and we can go to what we were doing
+    */
+    if(req.url != "/Login" && req.url != "/" && !LoginCheck(req, res)){
+            Index.ResetPageState("CurrentRenderTarget");
+            Index._Get(req, res, "/");
+    }else{
+        next();
     }
     // log each request to the console
     //var Message = `Method: ${req.method} || At: ${req.url} || IP: ${req.ip.split("ffff:").pop()}`
     //console.log(Message);
     // continue doing what we were doing and go to the route
-    next();
+    
 });
 
 var LoginCheck = (req, res) => {
-    if(req.session.loggedin){
+    if(req.session.loggedin == true){
         return true;
     }
     return false;
@@ -77,6 +83,16 @@ var LoginCheck = (req, res) => {
 
 app.post("/Logout", (req, res) => {
     Index.Logout(req, res);
+});
+
+app.get("/Search", (req, res) => {
+    console.log(req.query);
+    if(req.query.Sable != undefined){
+        Sable.ReturnSearchResults(req, res, req.query.Sable, Sable.PageData);
+    }
+    if(req.query.Diplomat != undefined){
+        Diplo.ReturnSearchResults(req, res, req.query.Diplomat, Diplo.PageData);
+    }
 });
 
 app.route('/Login')
@@ -96,7 +112,7 @@ app.route('/')
 
 app.route("/Delete").post(function(req, res){
     if(req.body.Sable){
-        Sable.DeleteItem(req, res, req.body.Sable, Sable.Get_PageData);
+        Sable.DeleteItem(req, res, req.body.Sable, Sable.PageData);
     }
     if(req.body.Diplomat){
 

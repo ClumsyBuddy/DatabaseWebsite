@@ -5,7 +5,7 @@ import {ResponseHandler} from "../ResponseHandler";
 
 class SableResponseHandler extends ResponseHandler{
     
-    private PageData?:{
+    public PageData:{
         ProductList?:Array<any>,
         AllowedActions?:any
     }
@@ -32,12 +32,6 @@ class SableResponseHandler extends ResponseHandler{
         this.PageState.CurrentRenderTarget = "Sable";
     }
 
-
-    
-    public get Get_PageData() : any {
-        return this.PageData;
-    }
-
     async Start(req, res){
         await this.GetAllProducts(req, res, this.Name);
         this.PageData.AllowedActions = req.session.AllowedActions;
@@ -45,7 +39,7 @@ class SableResponseHandler extends ResponseHandler{
         this._Get(req, res);
     }
 
-    async _Get(req, res, cb = undefined){
+    async _Get(req, res, cb : Function = ()=>{return;}){
         if(cb){
             await cb(req, res); //You need to bind Sable to the callback to use "this"
         }

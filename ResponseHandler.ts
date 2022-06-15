@@ -108,11 +108,46 @@ class  ResponseHandler{
     public ResetPageState(ValueToReset:string) : void {
         this.PageState[ValueToReset] = this.BasePageState[ValueToReset];
     }
+
+
+    async ReturnSearchResults(req, res, Query : string = "", PageData){
+        await this.DBController.getAll(this.TableName).then((result) => {
+            PageData.ProductList = Query === "" ? result : [];
+            if(PageData.ProductList.length == 0){
+                for(var item in result){
+                    if(result[item].sku.includes(Query) || result[item].brand.includes(Query)){
+                        PageData.ProductList.push(result[item]);
+                        continue;
+                    }
+                    for(var Data in this.ItemDataArray){
+                        var Options = this.ItemDataArray[Data].Options;
+                        for(var O in Options){
+                            if(typeof Options[O] === 'object'){
+                                for(var i in Options[O]){
+                                    if(result[item][i] != null && result[item][i] != undefined && result[item][i].includes(Query)){
+                                        PageData.ProductList.push(result[item]);
+                                    }
+                                }
+                            }else{
+                                if(result[item][Options[O]].includes(Query)){
+                                    PageData.ProductList.push(result[item]);
+                                }
+                            }
+                            
+                        }
+                    }
+                }
+            }
+        });
+        console.log(PageData.ProductList);
+        this.RenderPage(req, res, PageData);
+    }
+
     /*
     *                               Login Initialization
     *   This will be called when a login has been achieved so that allowed actions can be updated
     */
-    public InitLogin(req, res) : void{
+    async InitLogin(req, res){
         if(req.session.userPermission >= this.Permission.High){
             Object.keys(req.session.AllowedActions).forEach(key => {
                 req.session.AllowedActions[key] = true;
@@ -162,20 +197,19 @@ class  ResponseHandler{
     *   Basic Render Page function that Gives PageData from the child and PageState to handle Templating of the page
     */
     async RenderPage(req, res, PageData){
-
-        if(this.PageState.CurrentRenderTarget != this.BasePageState.CurrentRenderTarget && this.PageState.CurrentRenderTarget != "DataBaseSelection"){
+       /* if(this.PageState.CurrentRenderTarget != this.BasePageState.CurrentRenderTarget && this.PageState.CurrentRenderTarget != "DataBaseSelection"){
             if(!await this.CheckForLogin(req, res, PageData)){
                 return;
             }
-        }
-
+        }*/
+        
         var BuildRenderTarget = `pages/${this.PageState.CurrentRenderTarget}`;
         res.render(BuildRenderTarget, {PageState:this.PageState, Data:PageData}, function(err, html) {
             if(err){
                 console.log(err);
                 res.sendFile(__dirname + "/public/404.html");
             }else{
-                res.send(html);
+                res.status(200).send(html)
             }
         });
     }

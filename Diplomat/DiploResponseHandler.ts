@@ -5,7 +5,7 @@ import { ResponseHandler } from "../ResponseHandler";
 
 class DiploResponseHandler extends ResponseHandler{
 
-    private PageData?:{
+    public PageData?:{
         ProductList?:Array<Object>
     }
 

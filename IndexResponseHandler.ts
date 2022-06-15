@@ -57,8 +57,8 @@ class IndexResponseHandler extends ResponseHandler{
     }
 
     // Override for _Get. This uses PageData from the class
-    async _Get(req: any, res: any, _Action:string = undefined) {
-        if(_Action != undefined){
+    async _Get(req: any, res: any, _Action:string = "") {
+        if(_Action != ""){
             this.RenderPage(req, res, _Action); //Render the page
         }else{
             this.RenderPage(req, res, this.PageData); //Render the page
