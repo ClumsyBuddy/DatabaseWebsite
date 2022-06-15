@@ -86,7 +86,6 @@ app.post("/Logout", (req, res) => {
 });
 
 app.get("/Search", (req, res) => {
-    console.log(req.query);
     if(req.query.Sable != undefined){
         Sable.ReturnSearchResults(req, res, req.query.Sable, Sable.PageData);
     }

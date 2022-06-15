@@ -20,9 +20,9 @@ class Login{
     *   Then set all of the variables to their correct values found in the database
     */ 
     async LoginAttempt(req, res, username:string, password:string){
-        await this.c_DbController.getByColumn(this.db_Name, "username", username).then((result:any) => {
-            //console.log(result);
-            if(result !== undefined && result.password == password && result.username == username){
+        await this.c_DbController.getByColumn(this.db_Name, "username", username.toLowerCase()).then((result:any) => {
+
+            if(result !== undefined && result.password == password && result.username == username.toLowerCase()){
                 req.session.loggedin = true; //We are logged in
                 req.session.username = result.username;  //Get the USername
                 req.session.userPermission = result.permission; //get the Permission level

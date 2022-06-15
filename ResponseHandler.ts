@@ -115,7 +115,7 @@ class  ResponseHandler{
             PageData.ProductList = Query === "" ? result : [];
             if(PageData.ProductList.length == 0){
                 for(var item in result){
-                    if(result[item].sku.includes(Query) || result[item].brand.includes(Query)){
+                    if(result[item].sku.toLowerCase().includes(Query.toLowerCase()) || result[item].brand.toLowerCase().includes(Query.toLowerCase())){
                         PageData.ProductList.push(result[item]);
                         continue;
                     }
@@ -124,12 +124,19 @@ class  ResponseHandler{
                         for(var O in Options){
                             if(typeof Options[O] === 'object'){
                                 for(var i in Options[O]){
-                                    if(result[item][i] != null && result[item][i] != undefined && result[item][i].includes(Query)){
+                                    if(result[item][i] == null || result[item][i] == undefined){
+                                        continue;
+                                    }
+                                    var ResultString : string = result[item][i].toLowerCase();
+                                    if(ResultString.includes(Query.toLowerCase())){
                                         PageData.ProductList.push(result[item]);
                                     }
                                 }
                             }else{
-                                if(result[item][Options[O]].includes(Query)){
+                                if(result[item][Options[O]] == null || result[item][Options[O]] == undefined){
+                                    continue;
+                                }
+                                if(result[item][Options[O]].toLowerCase().includes(Query.toLowerCase())){
                                     PageData.ProductList.push(result[item]);
                                 }
                             }
@@ -139,7 +146,6 @@ class  ResponseHandler{
                 }
             }
         });
-        console.log(PageData.ProductList);
         this.RenderPage(req, res, PageData);
     }
 
