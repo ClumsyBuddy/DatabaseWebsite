@@ -196,6 +196,7 @@ body::-webkit-scrollbar{
     display: inline-flex;    
     flex-direction: column;
     width: 15%;
+    height: 20%;
     margin-left: 10px;
     margin-right: 10px;
     margin-top: 20px;
@@ -206,10 +207,16 @@ body::-webkit-scrollbar{
     border-radius: 10px;
     border-style:solid;
     z-index: 9;
+    background-image: url();
+
+    background-size: 75% 80%;
+    background-repeat: no-repeat;
+    background-position-x: center;
+
 }
 
 .ProductContainer:hover{
-    background-color: rgb(246, 94, 0, 0.9);
+    background-color: rgba(156, 63, 5, 0.2);
     transition: all 1s ease;
     transform: scale(1.1);
 }
@@ -217,11 +224,12 @@ body::-webkit-scrollbar{
 
 .ProductButton{
     width: 100%;
+    height: 100%;
     background-color: transparent;
     border: none;
 }
 .ProductButton:hover{
-    background-color: #2a4175;
+    /*background-color: #2a4175;*/
     border-radius: 10px;
 }
 
@@ -261,10 +269,17 @@ body::-webkit-scrollbar{
     border-radius: 2px;
 }
 
-
+.NameContainer{
+    display: inline-flex; 
+    position: fixed; 
+    left: 0%; 
+    top: 85%;
+    width: 100%;
+}
 .ItemName{
     color: azure;
-    font-size:medium;
+    font-size: .7vw;
+    margin: auto;
     font-weight: 600;
     font-style: normal;
 }

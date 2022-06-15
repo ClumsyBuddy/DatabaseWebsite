@@ -110,37 +110,82 @@ class  ResponseHandler{
     }
 
 
-    async ReturnSearchResults(req, res, Query : string = "", PageData){
+    async ReturnSearchResults(req, res, _Query : string = "", PageData){
         await this.DBController.getAll(this.TableName).then((result) => {
-            PageData.ProductList = Query === "" ? result : [];
+            PageData.ProductList = _Query === "" ? result : [];
             if(PageData.ProductList.length == 0){
-                for(var item in result){
-                    if(result[item].sku.toLowerCase().includes(Query.toLowerCase()) || result[item].brand.toLowerCase().includes(Query.toLowerCase())){
-                        PageData.ProductList.push(result[item]);
-                        continue;
-                    }
-                    for(var Data in this.ItemDataArray){
-                        var Options = this.ItemDataArray[Data].Options;
-                        for(var O in Options){
-                            if(typeof Options[O] === 'object'){
-                                for(var i in Options[O]){
-                                    if(result[item][i] == null || result[item][i] == undefined){
+                var FoundItemArray : any[] = [];
+                var Query : string[] = _Query.split(" ");
+                for(var queries in Query){
+                    for(var item in result){
+                        if(result[item].sku.toLowerCase().includes(Query[queries].toLowerCase()) || result[item].brand.toLowerCase().includes(Query[queries].toLowerCase())){
+                            FoundItemArray.push(result[item]);
+                            continue;
+                        }
+                        for(var Data in this.ItemDataArray){
+                            var Options = this.ItemDataArray[Data].Options;
+                            for(var O in Options){
+                                if(typeof Options[O] === 'object'){
+                                    for(var i in Options[O]){
+                                        if(result[item][i] == null || result[item][i] == undefined){
+                                            continue;
+                                        }
+                                        var ResultString : string = result[item][i].toLowerCase();
+                                        if(ResultString.includes(Query[queries].toLowerCase())){
+                                            FoundItemArray.push(result[item]);
+                                        }
+                                    }
+                                }else{
+                                    if(result[item][Options[O]] == null || result[item][Options[O]] == undefined){
                                         continue;
                                     }
-                                    var ResultString : string = result[item][i].toLowerCase();
-                                    if(ResultString.includes(Query.toLowerCase())){
-                                        PageData.ProductList.push(result[item]);
+                                    if(result[item][Options[O]].toLowerCase().includes(Query[queries].toLowerCase())){
+                                        FoundItemArray.push(result[item]);
                                     }
                                 }
-                            }else{
-                                if(result[item][Options[O]] == null || result[item][Options[O]] == undefined){
-                                    continue;
-                                }
-                                if(result[item][Options[O]].toLowerCase().includes(Query.toLowerCase())){
-                                    PageData.ProductList.push(result[item]);
+                                
+                            }
+                        }
+                    }
+                }
+                //console.log(FoundItemArray);
+                //console.log(Query);
+                for(var item in FoundItemArray){
+                    if(PageData.ProductList.length > 0){
+                        for(var i in PageData.ProductList){
+                            if(PageData.ProductList[i].key == FoundItemArray[item].key){
+                                continue;
+                            }
+                        }
+                    }
+                    var QueryCount : boolean[] = [];
+                    for(let i = 0; i < Query.length; i++){
+                        QueryCount.push(false);
+                    }
+                    
+                    for(let q = 0; q < Query.length; q++){
+                        var Options : any[] = Object.keys(FoundItemArray[item]);
+                        console.log(FoundItemArray[item]);
+                        //console.log(Options);
+                        for(let j  in Options){
+                            //FIXME Need to get the string properly
+                            var ItemString : string = typeof FoundItemArray[item][Options[j]] == Number ? FoundItemArray[item][Options[j]].toString() : FoundItemArray[item][Options[j]];
+                            var lowerItemString : string = ItemString.toLowerCase();
+                            //console.log(ItemString);
+                            if(lowerItemString.includes(Query[q].toLowerCase())){
+                                QueryCount[q] = true;
+                            }    
+                        }
+                        if(q == Query.length - 1){
+                            var Check = true;
+                            for(var C in QueryCount){
+                                if(QueryCount[C] == false){
+                                    Check = false;
                                 }
                             }
-                            
+                            if(Check == true){
+                                PageData.ProductList.push(FoundItemArray[item]);
+                            }
                         }
                     }
                 }
