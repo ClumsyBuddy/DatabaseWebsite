@@ -149,45 +149,64 @@ class  ResponseHandler{
                     }
                 }
                 //console.log(FoundItemArray);
-                //console.log(Query);
-                for(var item in FoundItemArray){
-                    if(PageData.ProductList.length > 0){
-                        for(var i in PageData.ProductList){
-                            if(PageData.ProductList[i].key == FoundItemArray[item].key){
-                                continue;
-                            }
-                        }
-                    }
-                    var QueryCount : boolean[] = [];
-                    for(let i = 0; i < Query.length; i++){
-                        QueryCount.push(false);
-                    }
-                    
-                    for(let q = 0; q < Query.length; q++){
-                        var Options : any[] = Object.keys(FoundItemArray[item]);
-                        console.log(FoundItemArray[item]);
-                        //console.log(Options);
-                        for(let j  in Options){
-                            //FIXME Need to get the string properly
-                            var ItemString : string = typeof FoundItemArray[item][Options[j]] == Number ? FoundItemArray[item][Options[j]].toString() : FoundItemArray[item][Options[j]];
-                            var lowerItemString : string = ItemString.toLowerCase();
-                            //console.log(ItemString);
-                            if(lowerItemString.includes(Query[q].toLowerCase())){
-                                QueryCount[q] = true;
-                            }    
-                        }
-                        if(q == Query.length - 1){
-                            var Check = true;
-                            for(var C in QueryCount){
-                                if(QueryCount[C] == false){
-                                    Check = false;
+                console.log(Query);
+                if(Query.length > 1){
+                    for(var item in FoundItemArray){
+                        if(PageData.ProductList.length > 0){
+                            for(var i in PageData.ProductList){
+                                if(PageData.ProductList[i].key == FoundItemArray[item].key){
+                                    continue;
                                 }
                             }
-                            if(Check == true){
-                                PageData.ProductList.push(FoundItemArray[item]);
+                        }
+                        var QueryCount : boolean[] = [];
+                        for(let i = 0; i < Query.length; i++){
+                            QueryCount.push(false);
+                        }
+                        
+                        for(let q = 0; q < Query.length; q++){
+                            var Options : any[] = Object.keys(FoundItemArray[item]);
+                            console.log(FoundItemArray[item]);
+                            //console.log(Options);
+                            for(let j  in Options){
+                                //FIXME Need to get the string properly
+                                console.log(FoundItemArray[item][Options[j]]);
+                                var ItemString : string;
+                                if(typeof FoundItemArray[item][Options[j]] == 'number' || FoundItemArray[item][Options[j]] == null){
+                                    continue;
+                                }else{
+                                    ItemString = FoundItemArray[item][Options[j]];
+                                }
+                                var lowerItemString : string = ItemString.toLowerCase();
+                                //console.log(ItemString);
+                                if(lowerItemString.includes(Query[q].toLowerCase())){
+                                    QueryCount[q] = true;
+                                }    
+                            }
+                            if(q == Query.length - 1){
+                                var Check = true;
+                                for(var C in QueryCount){
+                                    if(QueryCount[C] == false){
+                                        Check = false;
+                                    }
+                                }
+                                if(Check == true){
+                                    for(var item in FoundItemArray){
+                                        if(PageData.ProductList.length > 0){
+                                            for(var i in PageData.ProductList){
+                                                if(PageData.ProductList[i].key == FoundItemArray[item].key){
+                                                    continue;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    PageData.ProductList.push(FoundItemArray[item]);
+                                }
                             }
                         }
                     }
+                }else{
+                    PageData.ProductList = FoundItemArray;
                 }
             }
         });
