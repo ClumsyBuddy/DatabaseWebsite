@@ -15,11 +15,6 @@ class ItemData{
     }
     public AddOptions(_option:any, values:Array<string>){
         this.Options.push({[_option]: values});
-        //console.log(this.Options);
-    }
-    public Print(){
-        console.log("ItemType: " + this.ItemType);
-        console.log("Options: " + JSON.stringify(this.Options));
     }
 }
 
@@ -110,10 +105,13 @@ class  ResponseHandler{
     }
 
 
-    async ReturnSearchResults(req, res, _Query : string = "", PageData){
+    async ReturnSearchResults(req, res, _Query : string = "", PageData, CurrProductList = []){
         await this.DBController.getAll(this.TableName).then((result) => {
+            if(CurrProductList.length > 0){ //Should possibly save a backup of the result and use it if errors occur
+                result = CurrProductList;
+            }
             PageData.ProductList = _Query === "" ? result : [];
-            if(PageData.ProductList.length == 0){
+            if(PageData.ProductList.length == 0){ //This section checks any products options matches the Query
                 var FoundItemArray : any[] = [];
                 var Query : string[] = _Query.split(" ");
                 for(var queries in Query){
@@ -148,9 +146,7 @@ class  ResponseHandler{
                         }
                     }
                 }
-                //console.log(FoundItemArray);
-                console.log(Query);
-                if(Query.length > 1){
+                if(Query.length > 1){ //This section checks to see if any of the first results match the Query if the Query is multipart and then filters duplicate results
                     for(var item in FoundItemArray){
                         if(PageData.ProductList.length > 0){
                             for(var i in PageData.ProductList){
@@ -166,11 +162,7 @@ class  ResponseHandler{
                         
                         for(let q = 0; q < Query.length; q++){
                             var Options : any[] = Object.keys(FoundItemArray[item]);
-                            console.log(FoundItemArray[item]);
-                            //console.log(Options);
                             for(let j  in Options){
-                                //FIXME Need to get the string properly
-                                console.log(FoundItemArray[item][Options[j]]);
                                 var ItemString : string;
                                 if(typeof FoundItemArray[item][Options[j]] == 'number' || FoundItemArray[item][Options[j]] == null){
                                     continue;
@@ -178,7 +170,6 @@ class  ResponseHandler{
                                     ItemString = FoundItemArray[item][Options[j]];
                                 }
                                 var lowerItemString : string = ItemString.toLowerCase();
-                                //console.log(ItemString);
                                 if(lowerItemString.includes(Query[q].toLowerCase())){
                                     QueryCount[q] = true;
                                 }    
@@ -191,21 +182,24 @@ class  ResponseHandler{
                                     }
                                 }
                                 if(Check == true){
-                                    for(var item in FoundItemArray){
-                                        if(PageData.ProductList.length > 0){
-                                            for(var i in PageData.ProductList){
-                                                if(PageData.ProductList[i].key == FoundItemArray[item].key){
-                                                    continue;
-                                                }
+                                    if(PageData.ProductList.length > 0){
+                                        for(var i in PageData.ProductList){
+                                            var Dup = false;
+                                            if(PageData.ProductList[i].key == FoundItemArray[item].key){
+                                                Dup = true;
+                                            }
+                                            if(PageData.ProductList[PageData.ProductList.length-1] == i && Dup == false){
+                                                PageData.ProductList.push(FoundItemArray[item]);
                                             }
                                         }
+                                    }else{
+                                        PageData.ProductList.push(FoundItemArray[item]);
                                     }
-                                    PageData.ProductList.push(FoundItemArray[item]);
                                 }
                             }
                         }
                     }
-                }else{
+                }else{ //If its not a multipart query then we can just set the found items to the Productlist
                     PageData.ProductList = FoundItemArray;
                 }
             }
