@@ -1,8 +1,5 @@
 import { DatabaseManager } from "./DatabaseManager";
 
-
-
-
 class Login{
 
     private c_DbController: DatabaseManager;
@@ -14,7 +11,6 @@ class Login{
                                                         Warehouse INTEGER NOT NULL, Sable INTEGER NOT NULL, Diplomat INTEGER NOT NULL, RDI INTEGER NOT NULL");
     }
     
-
     /*  Attempt to login using a async function that awaits the results
     *   Check if the email exists in the database. Then check if the email and password match what we found
     *   Then set all of the variables to their correct values found in the database
@@ -46,16 +42,9 @@ class Login{
         })
     }
 
-
-
     public PermissionLevel(req, Required:number){
         return req.session.userPermission >= Required ? true : false;
     }
 }
-
-
-
-
-
 
 export {Login};

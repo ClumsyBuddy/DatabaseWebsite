@@ -1,17 +1,17 @@
-<div class="BaseContainer">
+<ul id="ProductListContainer" class="BaseContainer">
     <% if (Data.ProductList != undefined){ %> 
         <% Data.ProductList.forEach((_product) => { %> 
-            <div class="ProductContainer" style="background-image: url('<%= _product.image %>');">
+            <li class="ProductContainer" style="background-image: url('<%= _product.image %>');">
                 <% if (Data.AllowedActions.Delete != undefined) { %>
                     <% if (Data.AllowedActions.Delete == true) { %>
-                        <form action="Delete"  method="post">
+                        <form id='Delete' action="/Delete"  method="post">
                             <button class="DeleteButton" type="submit" name="Sable" value=<%= _product.key %>></button>
                         </form>
                     <% } %>
                 <% } %>
                 <% if (Data.AllowedActions.Update != undefined) { %>
                     <% if (Data.AllowedActions.Update == true) { %>
-                        <form action="Update"  method="post">
+                        <form id='Update' action="/Update"  method="get">
                             <button class="UpdateButton" type="submit" name="Sable" value=<%= _product.key %>></button>
                         </form>
                     <% } %>
@@ -25,7 +25,7 @@
                         </div>
                     </button>
                 </form>
-            </div>
+            </li>
         <% }); %> 
     <% } %> 
-</div>
+</ul>

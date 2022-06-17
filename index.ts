@@ -57,23 +57,24 @@ const Diplo = new DiploResponseHandler(MainDB, UserLogin, io);
 const hostname = ip.address();
 const port = 8000;
 
-io.on('Delete', (socket) => {
-    socket.on('Delete', (msg) => {
-
+io.on('connection', async(socket) => {
+    socket.on('Delete', async (msg) => {
+        if(msg == "Sable"){
+            var ProductList = await Sable.GetProductList("Delete");
+            socket.broadcast.emit(ProductList);
+        }
     });
-});
-
-io.on('Add', (socket) => {
     socket.on('Add', (msg) => {
-
+        console.log(msg);
+        if(msg == "Sable"){
+            console.log(msg);
+        }
     });
-});
-io.on('Update', (socket) => {
+    
     socket.on('Update', (msg) => {
-
+        console.log(`Get ${msg} - Update Others`);
     });
 });
-
 
 // Will be used to log activities
 app.use(function(req, res, next) {
@@ -117,6 +118,15 @@ app.get("/Search", (req, res) => {
     }
 });
 
+app.get("/Update", (req, res) => {
+    if(req.query.Sable != undefined){
+        console.log(req.query);
+    }
+    if(req.query.Diplomat != undefined){
+        console.log(req.query);
+    }
+    res.redirect("back");
+});
 
 app.get("/AddItem", (req, res) => {
     if(req.query.Sable != undefined){
@@ -125,6 +135,7 @@ app.get("/AddItem", (req, res) => {
     if(req.query.Diplomat != undefined){
         console.log(req.query);
     }
+    res.redirect("back");
 });
 
 app.route('/Login')

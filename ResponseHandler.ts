@@ -66,7 +66,6 @@ class  ResponseHandler{
         High:number
     }
     
-    
     constructor(DBController: DatabaseManager, User:Login, io : Socket, options?:{ClassName?:string, TableName?:string, ClassAutoColumn?:string, CACIndex?:number} ){
         this.DBController = DBController;
         this.User = User;
@@ -96,7 +95,6 @@ class  ResponseHandler{
             Mid:2,
             High:3
         }
-        
     }
 
     public SetCurrentRenderTarget(name:string){
@@ -214,7 +212,7 @@ class  ResponseHandler{
         if(Returned){
             this.RenderPage(req, res, PageData);
         }else{
-            res.redirect("/Sable");
+            res.redirect("/" + this.ClassName);
         }
     }
 
@@ -268,16 +266,20 @@ class  ResponseHandler{
         }
     }
 
+
+    async GetProductList(Type:string){
+        var ProductList = [];
+        await this.DBController.getAll(this.ClassName).then((result) => {
+            ProductList = result;
+        });    
+        return ProductList;
+    }
+
+
     /*
     *   Basic Render Page function that Gives PageData from the child and PageState to handle Templating of the page
     */
     async RenderPage(req, res, PageData){
-       /* if(this.PageState.CurrentRenderTarget != this.BasePageState.CurrentRenderTarget && this.PageState.CurrentRenderTarget != "DataBaseSelection"){
-            if(!await this.CheckForLogin(req, res, PageData)){
-                return;
-            }
-        }*/
-        
         var BuildRenderTarget = `pages/${this.PageState.CurrentRenderTarget}`;
         res.render(BuildRenderTarget, {PageState:this.PageState, Data:PageData}, function(err, html) {
             if(err){
@@ -297,8 +299,6 @@ class  ResponseHandler{
     async _Post(req, res, Data){
         this.RenderPage(req, res, Data)
     }
-    //TODO Need to create utility file that will contain all of the utility functions, need to put deep copy and mergearray into that instead of sitting here
-
     /*
     *   This Function Does a few things
     *   1. This function gets the different item types and Options
@@ -465,10 +465,6 @@ class  ResponseHandler{
             }
         })
     }
-
-
-     
-
 }
 
 export {ResponseHandler};
