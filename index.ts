@@ -7,6 +7,10 @@ const SQLiteStore = require('connect-sqlite3')(session);
 //Create a app and router variable
 const router = express.Router();
 const app = express();
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
 
 
 // Setup all pathways for public folders
@@ -37,6 +41,7 @@ import {SableResponseHandler} from "./Sable/SableResponseHandler"
 import { DiploResponseHandler } from "./Diplomat/DiploResponseHandler";
 import { Login } from "./LoginHandler";
 import { IndexResponseHandler } from "./IndexResponseHandler";
+import { Socket } from "socket.io";
 
 //Create variables for exported Classes
 const db = new Database('./Main.db');
@@ -51,6 +56,31 @@ const Diplo = new DiploResponseHandler(MainDB, UserLogin);
 
 const hostname = ip.address();
 const port = 8000;
+
+
+
+io.on('connection', (socket) => {
+    console.log('a user connected');
+  });
+
+
+io.on('Delete', (socket) => {
+    socket.on('Delete', (msg) => {
+
+    });
+});
+
+io.on('Add', (socket) => {
+    socket.on('Add', (msg) => {
+
+    });
+});
+io.on('Update', (socket) => {
+    socket.on('Update', (msg) => {
+
+    });
+});
+
 
 // Will be used to log activities
 app.use(function(req, res, next) {
@@ -150,6 +180,6 @@ app.route('/DataBaseSelection')
 
 });
 
-app.listen(port, function(){
+server.listen(port, function(){
     console.log(`Server running at http://${hostname}:${port}/`);
 });
