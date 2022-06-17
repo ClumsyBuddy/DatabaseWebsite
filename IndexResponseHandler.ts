@@ -13,8 +13,8 @@ class IndexResponseHandler extends ResponseHandler{
         RDI:boolean
     };
 
-    constructor(DbController:DatabaseManager, User:Login, app:any){
-            super(DbController, User, "Index");
+    constructor(DbController:DatabaseManager, User:Login, io){
+            super(DbController, User, io, {ClassName:"Index", TableName:"Index"});
             this.PageData = {
                 Warehouse:0,
                 LoginFailed:false,

@@ -12,8 +12,8 @@ class SableResponseHandler extends ResponseHandler{
 
     Name:string;
     
-    constructor(DBController:DatabaseManager, User:Login, name:string = "Sable"){
-        super(DBController, User, name, name, "sku TEXT, brand TEXT, itemtype TEXT, image TEXT", 3);
+    constructor(DBController:DatabaseManager, User:Login, name:string = "Sable", io){
+        super(DBController, User, io, {ClassName:name, TableName:name, ClassAutoColumn:"sku TEXT, brand TEXT, itemtype TEXT, image TEXT", CACIndex:3});
         this.PageData = {
             ProductList: [],
             AllowedActions:{

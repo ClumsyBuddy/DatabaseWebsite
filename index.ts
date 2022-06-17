@@ -50,19 +50,12 @@ const MainDB = new DatabaseManager(db);
 //Login Manager
 const UserLogin = new Login(MainDB);
 
-const Index = new IndexResponseHandler(MainDB, UserLogin, app);
-const Sable = new SableResponseHandler(MainDB, UserLogin);
-const Diplo = new DiploResponseHandler(MainDB, UserLogin);
+const Index = new IndexResponseHandler(MainDB, UserLogin, io);
+const Sable = new SableResponseHandler(MainDB, UserLogin, "Sable", io);
+const Diplo = new DiploResponseHandler(MainDB, UserLogin, io);
 
 const hostname = ip.address();
 const port = 8000;
-
-
-
-io.on('connection', (socket) => {
-    console.log('a user connected');
-  });
-
 
 io.on('Delete', (socket) => {
     socket.on('Delete', (msg) => {

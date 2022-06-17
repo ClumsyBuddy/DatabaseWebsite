@@ -9,9 +9,9 @@ class DiploResponseHandler extends ResponseHandler{
         ProductList?:Array<Object>
     }
 
-    constructor(DBController:DatabaseManager, User:Login){
+    constructor(DBController:DatabaseManager, User:Login, io){
         var Name = "Diplomat";
-        super(DBController, User, Name, Name);
+        super(DBController, User, io, {ClassName:Name, TableName:Name} );
 
         this.PageData = {
             ProductList: []
