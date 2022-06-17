@@ -110,7 +110,7 @@ class  ResponseHandler{
             if(CurrProductList.length > 0){ //Should possibly save a backup of the result and use it if errors occur
                 result = CurrProductList;
             }
-            PageData.ProductList = _Query === "" ? result : [];
+            PageData.ProductList = _Query === "" ? result : []; //If we have no query then we can just get all results
             if(PageData.ProductList.length == 0){ //This section checks any products options matches the Query
                 var FoundItemArray : any[] = [];
                 var Query : string[] = _Query.split(" ");

@@ -94,6 +94,16 @@ app.get("/Search", (req, res) => {
     }
 });
 
+
+app.get("/AddItem", (req, res) => {
+    if(req.query.Sable != undefined){
+        console.log(req.query);
+    }
+    if(req.query.Diplomat != undefined){
+        console.log(req.query);
+    }
+});
+
 app.route('/Login')
     .get((req, res) =>{
         Index.Login(req, res);
