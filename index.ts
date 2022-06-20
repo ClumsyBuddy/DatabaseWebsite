@@ -57,11 +57,15 @@ const Diplo = new DiploResponseHandler(MainDB, UserLogin, io);
 const hostname = ip.address();
 const port = 8000;
 
-io.on('connection', async(socket) => {
-    socket.on('Delete', async (msg) => {
+io.on('connection', (socket) => {
+    socket.on('Delete', (msg) => {
+        console.log(msg);
         if(msg == "Sable"){
-            var ProductList = await Sable.GetProductList("Delete");
-            socket.broadcast.emit(ProductList);
+            setTimeout(async () => {
+                var ProductList = await Sable.GetProductList("Delete");
+                io.emit("Delete", ProductList);
+            }, 25);
+            
         }
     });
     socket.on('Add', (msg) => {

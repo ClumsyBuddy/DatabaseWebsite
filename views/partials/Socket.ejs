@@ -3,13 +3,14 @@
 var socket = io();
 
 var ProductList = [];
+var List = document.getElementById("ProductContainer");
+var BaseContainer = document.getElementById("ProductListContainer");
 var DeleteButtons = document.getElementsByClassName("DeleteButton");
 var UpdateButtons = document.getElementsByClassName("UpdateButton");
 var Add = document.getElementById("Add");
-var List = document.getElementById("ProductContainer");
-var BaseContainer = document.getElementById("ProductListContainer");
 
 function BuildProduct(msg){
+    
     var HTML = "";
     var count = 0;
     console.log(BaseContainer.children[0]);
@@ -24,18 +25,35 @@ function BuildProduct(msg){
         HTML += `<li class="ProductContainer" style="background-image: url('${msg[i].image}');"><form id='Delete' action="/Delete"  method="post"><button class="DeleteButton" type="submit" name="Sable" value=${msg[i].key}></button></form><form id='Update' action="/Update"  method="get"><button class="UpdateButton" type="submit" name="Sable" value=${msg[i].key}></button></form><form action=<%=PageState._Action %> method="get" style="height:100%"> <!--  Every variable here needs to be dynamically set instead of hard coded   --><button class="ProductButton" name="C_Product" value='${msg[i].sku},${msg[i].color}' ><div class="NameContainer"><p class="ItemName">SKU:${msg[i].sku}</p><p class="ItemName">Brand:${msg[i].brand}</p><p class="ItemName">Color:${msg[i].Color}</p></div></button></form></li>`;
     }
     BaseContainer.innerHTML = HTML;
+    DeleteButtons = [];
+    UpdateButtons = [];
+    List = document.getElementById("ProductContainer");
+    DeleteButtons = document.getElementsByClassName("DeleteButton");
+    UpdateButtons = document.getElementsByClassName("UpdateButton");
+    for(let i = 0; i < DeleteButtons.length; i++){
+        DeleteButtons[i].addEventListener('click', function(e) {
+            socket.emit('Delete', msg="<%- PageState.CurrentRenderTarget %>");
+    });
+    }
+  for(let j = 0; j < UpdateButtons.length; j++){
+        UpdateButtons[j].addEventListener('click', function(e) {
+            socket.emit('Update', msg="Sable");
+        });
+    }
 }
 
+
 for(let i = 0; i < DeleteButtons.length; i++){
-    DeleteButtons[i].addEventListener('click', function(e) {
-        socket.emit('Delete', msg="<%- PageState.CurrentRenderTarget %>");
-  });
-}
-for(let j = 0; j < UpdateButtons.length; j++){
-    UpdateButtons[j].addEventListener('click', function(e) {
-        socket.emit('Update', msg="Sable");
-  });
-}
+        DeleteButtons[i].addEventListener('click', function(e) {
+            socket.emit('Delete', msg="<%- PageState.CurrentRenderTarget %>");
+    });
+    }
+  for(let j = 0; j < UpdateButtons.length; j++){
+        UpdateButtons[j].addEventListener('click', function(e) {
+            socket.emit('Update', msg="Sable");
+        });
+    }
+
 Add.addEventListener('click', function(e) {
     socket.emit('Add', msg="Add");
   });
