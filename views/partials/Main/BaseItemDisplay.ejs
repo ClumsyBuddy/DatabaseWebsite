@@ -1,7 +1,7 @@
-<ul id="ProductListContainer" class="BaseContainer">
+<div id="ProductListContainer" class="BaseContainer">
     <% if (Data.ProductList != undefined){ %> 
         <% Data.ProductList.forEach((_product) => { %> 
-            <li class="ProductContainer" style="background-image: url('<%= _product.image %>');">
+            <div class="ProductContainer" style="background-image: url('<%= _product.image %>');">
                 <% if (Data.AllowedActions.Delete != undefined) { %>
                     <% if (Data.AllowedActions.Delete == true) { %>
                         <form id='Delete' action="/Delete"  method="post">
@@ -25,7 +25,7 @@
                         </div>
                     </button>
                 </form>
-            </li>
+            </div>
         <% }); %> 
     <% } %> 
-</ul>
+</div>

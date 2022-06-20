@@ -22,7 +22,7 @@ function BuildProduct(msg){
         count++;
     }
     for(let i = 0; i < msg.length; i++){
-        HTML += `<li class="ProductContainer" style="background-image: url('${msg[i].image}');"><form id='Delete' action="/Delete"  method="post"><button class="DeleteButton" type="submit" name="Sable" value=${msg[i].key}></button></form><form id='Update' action="/Update"  method="get"><button class="UpdateButton" type="submit" name="Sable" value=${msg[i].key}></button></form><form action=<%=PageState._Action %> method="get" style="height:100%"> <!--  Every variable here needs to be dynamically set instead of hard coded   --><button class="ProductButton" name="C_Product" value='${msg[i].sku},${msg[i].color}' ><div class="NameContainer"><p class="ItemName">SKU:${msg[i].sku}</p><p class="ItemName">Brand:${msg[i].brand}</p><p class="ItemName">Color:${msg[i].Color}</p></div></button></form></li>`;
+        HTML += `<div class="ProductContainer" style="background-image: url('${msg[i].image}');"><form id='Delete' action="/Delete"  method="post"><button class="DeleteButton" type="submit" name="Sable" value=${msg[i].key}></button></form><form id='Update' action="/Update"  method="get"><button class="UpdateButton" type="submit" name="Sable" value=${msg[i].key}></button></form><form action=<%=PageState._Action %> method="get" style="height:100%"><button class="ProductButton" name="C_Product" value='${msg[i].sku},${msg[i].color}' ><div class="NameContainer"><p class="ItemName">SKU:${msg[i].sku}</p><p class="ItemName">Brand:${msg[i].brand}</p><p class="ItemName">Color:${msg[i].Color}</p></div></button></form></div>`;
     }
     BaseContainer.innerHTML = HTML;
     DeleteButtons = [];
