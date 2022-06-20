@@ -37,35 +37,53 @@ class IndexResponseHandler extends ResponseHandler{
         
         await this.User.LoginAttempt(req, res, req.body.email, req.body.password);
         if(req.session.loggedin){
-            this.InitLogin(req, res);
-            this.SetCurrentRenderTarget("DataBaseSelection");
-            this.PageData.Warehouse = req.session.WareHouse;
-            this.PageData.Sable = req.session.Sable;
-            this.PageData.Diplomat = req.session.Diplomat;
-            this.PageData.RDI = req.session.RDI;
-            
+            req.session.PageState.CurrentRenderTarget = "DataBaseSelection";
+            this._Get(req, res);
         }else{
-            this.PageData.LoginFailed = req.session.loginfailed;
+            this.RenderLogin(req, res);
         }
-        this._Get(req, res);
+        
     }
     async Logout(req, res){
-        //req.session.destroy();
-        req.session.loggedin = false;
-        this.SetCurrentRenderTarget("/");
-        this._Get(req, res);
+        req.session.destroy();
+        //req.session.loggedin = false;
+        //req.session.PageState.CurrentRenderTarget = "/";
+        this.RenderLogin(req, res);
     }
 
+    async RenderLogin(req, res){
+        var BuildRenderTarget = `pages/index`;
+        var PageState = {
+            CurrentRenderTarget:"index",
+            Title:"Database",
+            _Action:"/",
+        };
+        var PageData = {
+            ProductList: [],
+            AllowedActions:{
+                Delete:false,
+                Update:false,
+                Create:false,
+                ViewLogs:false
+            }
+        };
+        res.render(BuildRenderTarget, {PageState:PageState, Data:PageData}, function(err, html) {
+            if(err){
+                console.log(err);
+                res.sendFile(__dirname + "/public/404.html");
+            }else{
+                res.status(200).send(html)
+            }
+        });
+    }
+
+
     // Override for _Get. This uses PageData from the class
-    async _Get(req: any, res: any, _Action:string = "") {
-        if(_Action != ""){
-            this.RenderPage(req, res, _Action); //Render the page
-        }else{
-            this.RenderPage(req, res, this.PageData); //Render the page
-        }
+    async _Get(req: any, res: any) {
+        this.RenderPage(req, res); //Render the page
     }
     async _Post(req: any, res: any) {
-        this.RenderPage(req, res, this.PageData);
+        this.RenderPage(req, res);
     }
 }
 

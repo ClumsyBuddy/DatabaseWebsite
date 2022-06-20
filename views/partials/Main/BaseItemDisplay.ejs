@@ -4,9 +4,7 @@
             <div class="ProductContainer" style="background-image: url('<%= _product.image %>');">
                 <% if (Data.AllowedActions.Delete != undefined) { %>
                     <% if (Data.AllowedActions.Delete == true) { %>
-                        <form id='Delete' action="/Delete"  method="post">
-                            <button class="DeleteButton" type="submit" name="Sable" value=<%= _product.key %>></button>
-                        </form>
+                        <button class="DeleteButton" type="submit" name="Sable" value=<%= _product.key %>></button>
                     <% } %>
                 <% } %>
                 <% if (Data.AllowedActions.Update != undefined) { %>

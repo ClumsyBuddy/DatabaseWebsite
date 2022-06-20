@@ -1,11 +1,9 @@
 //Downloaded packages
-const path = require('path');
 const express = require('express');
 const ip = require('ip');
 const session = require('express-session');
 const SQLiteStore = require('connect-sqlite3')(session);
 //Create a app and router variable
-const router = express.Router();
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
@@ -24,11 +22,8 @@ app.use(express.urlencoded({ //Parse POST
     extended:true
 }));
 var Week = 7 * 24 * 60 * 60 * 1000;
-app.use(session({
-    store: new SQLiteStore,
-    secret: 'DBSession',
-    cookie: { maxAge: Week } // 1 week
-}));
+
+
 app.use(express.static(__dirname + '/public'));
 app.use('/uploads', express.static(__dirname + '/public'));
 app.use('/javascript', express.static(__dirname + '/public'));
@@ -41,7 +36,6 @@ import {SableResponseHandler} from "./Sable/SableResponseHandler"
 import { DiploResponseHandler } from "./Diplomat/DiploResponseHandler";
 import { Login } from "./LoginHandler";
 import { IndexResponseHandler } from "./IndexResponseHandler";
-import { Socket } from "socket.io";
 
 //Create variables for exported Classes
 const db = new Database('./Main.db');
@@ -57,17 +51,37 @@ const Diplo = new DiploResponseHandler(MainDB, UserLogin, io);
 const hostname = ip.address();
 const port = 8000;
 
+const SessionMiddleWare = session({
+    store: new SQLiteStore,
+    secret: 'DBSession',
+    resave: true,
+    saveUninitialized:true,
+    cookie: { maxAge: Week } // 1 week
+});
+
+
+io.use(function(socket, next){
+    SessionMiddleWare(socket.request, {}, next);
+});
+
+app.use(SessionMiddleWare);
+
+
+//FIXME Need to fix Duplicate Products appearing in the productlist
 io.on('connection', (socket) => {
-    socket.on('Delete', (msg) => {
-        console.log(msg);
-        if(msg == "Sable"){
-            setTimeout(async () => {
-                var ProductList = await Sable.GetProductList("Delete");
+
+    socket.on('Delete', async (msg) => {
+        if(msg.Target == "Sable"){
+            console.log("Delete Clicked");
+            var ProductList = await Sable.DeleteItem(msg.Value);
+            socket.request.session.PageData.Productlist = ProductList;
+            console.log(ProductList);
+            setTimeout(() => {
                 io.emit("Delete", ProductList);
             }, 25);
-            
         }
     });
+
     socket.on('Add', (msg) => {
         console.log(msg);
         if(msg == "Sable"){
@@ -89,8 +103,9 @@ app.use(function(req, res, next) {
     *   Else we are logged in and we can go to what we were doing
     */
     if(req.url != "/Login" && req.url != "/" && !LoginCheck(req, res)){
-            Index.ResetPageState("CurrentRenderTarget");
-            Index._Get(req, res, "/");
+            req.session.PageData.CurrentRenderTarget = "/";
+            //Index._Get(req, res, "/");
+            
     }else{
         next();
     }
@@ -115,10 +130,10 @@ app.post("/Logout", (req, res) => {
 
 app.get("/Search", (req, res) => {
     if(req.query.Sable != undefined){
-        Sable.ReturnSearchResults(req, res, req.query.Sable, Sable.PageData);
+        Sable.ReturnSearchResults(req, res, req.query.Sable, req.session.PageData);
     }
     if(req.query.Diplomat != undefined){
-        Diplo.ReturnSearchResults(req, res, req.query.Diplomat, Diplo.PageData);
+        Diplo.ReturnSearchResults(req, res, req.query.Diplomat, req.session.PageData);
     }
 });
 
@@ -152,19 +167,17 @@ app.route('/Login')
 //Router for getting all get and post request on '/' which is index
 app.route('/')
     .get(function(req, res){
-        Index._Get(req, res);
-    }).post(function(req, res){
-        Index._Post(req, res);
+        Index.RenderLogin(req, res);
     });
 
-app.route("/Delete").post(function(req, res){
-    if(req.body.Sable){
-        Sable.DeleteItem(req, res, req.body.Sable, Sable.PageData);
-    }
-    if(req.body.Diplomat){
-
-    }
-});
+//app.route("/Delete").post(function(req, res){
+ //   if(req.body.Sable){
+ //       Sable.DeleteItem(req, res, req.body.Sable);
+  //  }
+ //   if(req.body.Diplomat){
+//
+  //  }
+//});
 
 app.route('/Sable')
     .get(function(req, res){
@@ -183,7 +196,7 @@ app.route('/Diplomat')
 
 app.route('/DataBaseSelection')
 .get(function(req, res){
-    Index._Get(req, res, "DataBaseSelection");
+    Index._Get(req, res);
 }).post(function(req, res){
 
 });
