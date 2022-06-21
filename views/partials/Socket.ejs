@@ -42,32 +42,24 @@ async function BuildProduct(msg){
     BaseContainer = document.getElementById("ProductListContainer");
     DeleteButtons = document.getElementsByClassName("DeleteButton");
     UpdateButtons = document.getElementsByClassName("UpdateButton");
+    AddButtonEventListeners();
+}
+
+async function AddButtonEventListeners(){
     for(let i = 0; i < DeleteButtons.length; i++){
         DeleteButtons[i].addEventListener('click', function(e) {
-            console.log("Click1");
-            console.log(DeleteButtons[i].getAttribute("value"));
+            console.log("Click");
             socket.emit('Delete', msg={Target:'<%- PageState.CurrentRenderTarget %>', Value:DeleteButtons[i].getAttribute("value")});
         });
     }
-  for(let j = 0; j < UpdateButtons.length; j++){
+    for(let j = 0; j < UpdateButtons.length; j++){
         UpdateButtons[j].addEventListener('click', function(e) {
             socket.emit('Update', msg="Sable");
         });
     }
 }
 
-
-for(let i = 0; i < DeleteButtons.length; i++){
-        DeleteButtons[i].addEventListener('click', function(e) {
-            console.log("Click");
-            socket.emit('Delete', msg={Target:'<%- PageState.CurrentRenderTarget %>', Value:DeleteButtons[i].getAttribute("value")});
-    });
-}
-for(let j = 0; j < UpdateButtons.length; j++){
-    UpdateButtons[j].addEventListener('click', function(e) {
-        socket.emit('Update', msg="Sable");
-    });
-}
+AddButtonEventListeners();
 
 Add.addEventListener('click', function(e) {
     socket.emit('Add', msg={Target:"Sable"});
