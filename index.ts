@@ -63,8 +63,21 @@ io.use(function(socket, next){
 
 app.use(SessionMiddleWare);
 
+
+
 //FIXME Need to fix Duplicate Products appearing in the productlist
 io.on('connection', (socket) => {
+    console.log(socket.request.session.PageData.ProductList);
+    if(socket.request.session.PageData.ProductList.length == 0){
+        console.log("Send Emit");
+        var StartUp = async () => {
+            var ProductList = await Sable.GetAllProducts("Sable");
+            socket.request.session.PageData.ProductList = ProductList;
+            socket.request.session.save();
+            socket.emit("init", ProductList);
+        }
+        StartUp();
+    }
 
     socket.on('Delete', (msg) => {
         if(msg.Target == "Sable"){
@@ -148,6 +161,7 @@ app.get("/Update", (req, res) => {
 app.get("/AddItem", (req, res) => {
     if(req.query.Sable != undefined){
         console.log(req.query);
+        Sable.MakeTestData(req, res);
     }
     if(req.query.Diplomat != undefined){
         console.log(req.query);

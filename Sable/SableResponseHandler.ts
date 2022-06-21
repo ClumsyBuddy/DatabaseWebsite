@@ -1,3 +1,4 @@
+import { randomInt } from "crypto";
 import req from "express/lib/request";
 import { DatabaseManager } from "../DatabaseManager";
 import { Login } from "../LoginHandler";
@@ -17,8 +18,15 @@ class SableResponseHandler extends ResponseHandler{
         
     }
 
+    async MakeTestData(req, res){
+        for(let i = 0; i < 200; i++){
+            this.DBController.create("Sable", "sku, brand, itemtype, Color, Size", "?, ?, ?, ?, ?", ["SML" + randomInt(30000), "CLA", "Uniform", "NA", "XL"]);
+        }
+    }
+
+
     async Start(req, res){
-        await this.GetAllProducts(this.Name, req);
+        //await this.GetAllProducts(this.Name, req);
         this._Get(req, res);
     }
 

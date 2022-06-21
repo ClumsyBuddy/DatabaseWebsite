@@ -45,8 +45,8 @@ class DatabaseManager {
       return this.DatabaseConnection.run(sql);
     }
 
-    create(name:string, params = []){ //Create a new item using the Classes Table, Column Data and Questionmark Array built from the Columns. We only need to pass in the params
-        return this.DatabaseConnection.run( `INSERT INTO ${this.DbStorage[name].Table} (${this.DbStorage[name].Columns}) VALUES(null${this.DbStorage[name].QuestionMarkArray})`, params);
+    create(name:string, columns:string, QuestionMark:string, params: string[] = []){ //Create a new item using the Classes Table, Column Data and Questionmark Array built from the Columns. We only need to pass in the params
+        return this.DatabaseConnection.run( `INSERT INTO ${name} (${columns}) VALUES(${QuestionMark})`, params);
       }
 
     update(name:string, itemName:string, newValue: any, key:number) { //update a element using the Name of the Column item and the key of the item.

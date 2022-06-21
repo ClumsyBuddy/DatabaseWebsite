@@ -1,5 +1,5 @@
 <script src="/socket.io/socket.io.js"></script>
-<script>
+<script defer="defer">
 var socket = io();
 
 var BaseContainer = document.getElementById("ProductListContainer");
@@ -7,16 +7,34 @@ var DeleteButtons = document.getElementsByClassName("DeleteButton");
 var UpdateButtons = document.getElementsByClassName("UpdateButton");
 var Add = document.getElementById("Add");
 
-async function BuildProduct(msg){
-    var ProductArray = [];
-    if(msg.length > 0){
-        if(BaseContainer.children.length > 0){
-            for(let j = 0; j < msg.length; j++){
-                ProductArray.push(BaseContainer.children[0].cloneNode(true));
-            }
-        }
-    }
-    for(let j = 0; j < ProductArray.length; j++)
+
+function setAttributes(el, attrs) {
+  for(var key in attrs) {
+    el.setAttribute(key, attrs[key]);
+  }
+}
+
+function CreateElement(){
+    var BaseContainer = document.getElementById("ProductListContainer");
+    var Container = document.createElement("div");
+    setAttributes(Container, {'class':'ProductContainer', 'style':'background-image: url("");'});
+    var Form1 = document.createElement("form");
+    setAttributes(Form1, {"id":'Delete', 'action':'/Delete', 'method':'post'});
+    Form1.insertAdjacentHTML("beforeend", "<button class='DeleteButton' type='submit' name='Sable' value='null'></button>");
+    var Form2 = document.createElement("form");
+    setAttributes(Form2, {"id":'Update', 'action':'/Update', 'method':'get'});
+    Form2.insertAdjacentHTML("beforeend", "<button class='UpdateButton' type='submit' name='Sable' value='null'></button>");
+    var Form3 = document.createElement("form");
+    setAttributes(Form3, {'action':'null', 'method':'get', 'style':'height:100%;'});
+    Form3.insertAdjacentHTML("beforeend", '<button class="ProductButton" name="C_Product" value="null" ><div class="NameContainer"><p class="ItemName">SKU:null</p><p class="ItemName">Brand:null</p><p class="ItemName">Color:null</p></div></button>');    
+    Container.appendChild(Form1);
+    Container.appendChild(Form2);
+    Container.appendChild(Form3);
+    return Container;
+}
+
+function BuildProductArray(ProductArray){
+    for(let j = 0; j < ProductArray.length; j++) //Build the elements
     {
         ProductArray[j].setAttribute("style", `background-image: url()`);
         ProductArray[j].children[0].setAttribute("value", `${msg[j].key}`);
@@ -26,15 +44,39 @@ async function BuildProduct(msg){
         ProductArray[j].children[2].children[0].children[0].children[1].textContent = `Brand:${msg[j].brand}`;
         ProductArray[j].children[2].children[0].children[0].children[2].textContent = `Color:${msg[j].Color}`;
     }
+    return ProductArray;
+}
+
+function RemoveChildNodes(Element){
     var count = 0;
-    while(BaseContainer.hasChildNodes()){
-        BaseContainer.removeChild(BaseContainer.firstChild);
+    while(Element.hasChildNodes()){ //Remove all childeren from the BaseContainer
+        Element.removeChild(Element.firstChild);
         if(count > 100000){
-            break;
+            return false;
         }
         count++;
     }
-    for(var items in ProductArray){
+    return true;
+}
+
+
+async function BuildProduct(msg){
+    var ProductArray = []; //This Will hold our finished Elements
+    if(msg.length > 0){
+        if(BaseContainer.children.length > 0){
+            for(let j = 0; j < msg.length; j++){
+                ProductArray.push(BaseContainer.children[0].cloneNode(true)); //Push Clones into the array to fill our product need
+            }
+        }
+    }
+    
+    
+    
+
+    //Add a initial amount of 100 products
+    var DisplayAmount = ProductArray.length <= 100 ? ProductArray.length : 100;
+    console.log(DisplayAmount);
+    for(let items = 0; items < DisplayAmount; items++){
         BaseContainer.appendChild(ProductArray[items]);
     }
     DeleteButtons = [];
@@ -48,7 +90,6 @@ async function BuildProduct(msg){
 async function AddButtonEventListeners(){
     for(let i = 0; i < DeleteButtons.length; i++){
         DeleteButtons[i].addEventListener('click', function(e) {
-            console.log("Click");
             socket.emit('Delete', msg={Target:'<%- PageState.CurrentRenderTarget %>', Value:DeleteButtons[i].getAttribute("value")});
         });
     }
@@ -70,5 +111,8 @@ socket.on("Delete", function(msg){
 socket.on("Add", function(msg){
     console.log(msg);
 });
-
+socket.on("init", function(msg){
+    BaseContainer.appendChild(CreateElement());
+    BuildProduct(msg);
+});
 </script>
