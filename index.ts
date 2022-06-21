@@ -10,7 +10,6 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
-
 // Setup all pathways for public folders
 app.use(express.static(__dirname + '/public')); //Shows where static files are
 
@@ -22,7 +21,6 @@ app.use(express.urlencoded({ //Parse POST
     extended:true
 }));
 var Week = 7 * 24 * 60 * 60 * 1000;
-
 
 app.use(express.static(__dirname + '/public'));
 app.use('/uploads', express.static(__dirname + '/public'));
@@ -59,33 +57,38 @@ const SessionMiddleWare = session({
     cookie: { maxAge: Week } // 1 week
 });
 
-
 io.use(function(socket, next){
     SessionMiddleWare(socket.request, {}, next);
 });
 
 app.use(SessionMiddleWare);
 
-
 //FIXME Need to fix Duplicate Products appearing in the productlist
 io.on('connection', (socket) => {
 
-    socket.on('Delete', async (msg) => {
+    socket.on('Delete', (msg) => {
         if(msg.Target == "Sable"){
-            console.log("Delete Clicked");
-            var ProductList = await Sable.DeleteItem(msg.Value);
-            socket.request.session.PageData.Productlist = ProductList;
-            console.log(ProductList);
-            setTimeout(() => {
+            const EmitMsg = async () => {
+                try{
+                var ProductList = await Sable.DeleteItem(msg.Value);
+                socket.request.session.PageData.Productlist = ProductList;
                 io.emit("Delete", ProductList);
-            }, 25);
+                return true;
+                }
+                catch(e){
+                    console.log(e);
+                    return false;
+                }
+            }
+            if(!EmitMsg()){
+                console.log("Coudln't Emit Message: " + JSON.stringify(msg));
+            }
         }
     });
 
     socket.on('Add', (msg) => {
-        console.log(msg);
-        if(msg == "Sable"){
-            console.log(msg);
+        if(msg.Target == "Sable"){
+            io.emit("Add", "Hello");
         }
     });
     
@@ -96,7 +99,6 @@ io.on('connection', (socket) => {
 
 // Will be used to log activities
 app.use(function(req, res, next) {
-
     /*
     *   If we are not at the index page or logging in check if we have the logged in cookie
     *   If we do not then Reset the CurrentRenderTarget Back to index and then Get Index
@@ -104,8 +106,6 @@ app.use(function(req, res, next) {
     */
     if(req.url != "/Login" && req.url != "/" && !LoginCheck(req, res)){
             req.session.PageData.CurrentRenderTarget = "/";
-            //Index._Get(req, res, "/");
-            
     }else{
         next();
     }
@@ -113,7 +113,6 @@ app.use(function(req, res, next) {
     //var Message = `Method: ${req.method} || At: ${req.url} || IP: ${req.ip.split("ffff:").pop()}`
     //console.log(Message);
     // continue doing what we were doing and go to the route
-    
 });
 
 var LoginCheck = (req, res) => {
@@ -122,7 +121,6 @@ var LoginCheck = (req, res) => {
     }
     return false;
 }
-
 
 app.post("/Logout", (req, res) => {
     Index.Logout(req, res);
@@ -169,15 +167,6 @@ app.route('/')
     .get(function(req, res){
         Index.RenderLogin(req, res);
     });
-
-//app.route("/Delete").post(function(req, res){
- //   if(req.body.Sable){
- //       Sable.DeleteItem(req, res, req.body.Sable);
-  //  }
- //   if(req.body.Diplomat){
-//
-  //  }
-//});
 
 app.route('/Sable')
     .get(function(req, res){
