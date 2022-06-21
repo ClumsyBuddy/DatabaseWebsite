@@ -1,33 +1,16 @@
 
-<% if(Data.DisplayPopUp) { %> 
+<% if(PageState.MainPopUp) { %> 
     <div id="PopContainer">
-        <% if (Data.MenuState.ListState == "PopUp") { %>
-        
-            <% if (Data.MenuState.PopUpState == "Edit") { %>
-            
-                <div id="InnerPopUp" class="InnerPopUp">
-                    <%- include('../CancelButton', {Data:'PopUp'}) %>
-                    <%- include('./SimpleEditForm') %>
-                </div>
-            
-            <% } else{ %>
-            
-                <div id="InnerPopUp" class="InnerPopUpDisplay">
-                    <%- include('./CancelButton', {Data:'PopUp'}) %>
-                    <%- include('./SimpleDisplayForm') %>
-                </div>
-            
-            <% }  %> 
-        
-        <% } %>
+        <div id="InnerPopUp" class="InnerPopUp">
+            <%- include('../CancelButton', {Data:'PopUp'}) %>
 
-        <% if(Data.MenuState.PopUpState == "Add"){ %> 
-            <div id="InnerPopUp" class="InnerPopUp">
-                <%- include('../CancelButton', {Data:'PopUp'}) %>
-                <%- include('./SimpleAddForm') %>
-            </div>
-        <% } %> 
+            <% if (Edit) { %>
+                <%- include('./SimpleEditForm') %>
+            <% } %>            
+
+            <% if (Add) { %>
+                <%- include('./SimpleAddForm') %>             
+            <% } %>
+        </div>
     </div>
-
-
-<% } %>
+<% } %> 

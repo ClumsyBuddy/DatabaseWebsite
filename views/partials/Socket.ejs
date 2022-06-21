@@ -1,0 +1,74 @@
+<script src="/socket.io/socket.io.js"></script>
+<script>
+var socket = io();
+
+var BaseContainer = document.getElementById("ProductListContainer");
+var DeleteButtons = document.getElementsByClassName("DeleteButton");
+var UpdateButtons = document.getElementsByClassName("UpdateButton");
+var Add = document.getElementById("Add");
+
+async function BuildProduct(msg){
+    var ProductArray = [];
+    if(msg.length > 0){
+        if(BaseContainer.children.length > 0){
+            for(let j = 0; j < msg.length; j++){
+                ProductArray.push(BaseContainer.children[0].cloneNode(true));
+            }
+        }
+    }
+    for(let j = 0; j < ProductArray.length; j++)
+    {
+        ProductArray[j].setAttribute("style", `background-image: url()`);
+        ProductArray[j].children[0].setAttribute("value", `${msg[j].key}`);
+        ProductArray[j].children[1].children[0].setAttribute("value", `${msg[j].key}`);
+        ProductArray[j].children[2].children[0].setAttribute("value", `${msg[j].key}`);
+        ProductArray[j].children[2].children[0].children[0].children[0].textContent = `SKU:${msg[j].sku}`;
+        ProductArray[j].children[2].children[0].children[0].children[1].textContent = `Brand:${msg[j].brand}`;
+        ProductArray[j].children[2].children[0].children[0].children[2].textContent = `Color:${msg[j].Color}`;
+    }
+    var count = 0;
+    while(BaseContainer.hasChildNodes()){
+        BaseContainer.removeChild(BaseContainer.firstChild);
+        if(count > 100000){
+            break;
+        }
+        count++;
+    }
+    for(var items in ProductArray){
+        BaseContainer.appendChild(ProductArray[items]);
+    }
+    DeleteButtons = [];
+    UpdateButtons = [];
+    BaseContainer = document.getElementById("ProductListContainer");
+    DeleteButtons = document.getElementsByClassName("DeleteButton");
+    UpdateButtons = document.getElementsByClassName("UpdateButton");
+    AddButtonEventListeners();
+}
+
+async function AddButtonEventListeners(){
+    for(let i = 0; i < DeleteButtons.length; i++){
+        DeleteButtons[i].addEventListener('click', function(e) {
+            console.log("Click");
+            socket.emit('Delete', msg={Target:'<%- PageState.CurrentRenderTarget %>', Value:DeleteButtons[i].getAttribute("value")});
+        });
+    }
+    for(let j = 0; j < UpdateButtons.length; j++){
+        UpdateButtons[j].addEventListener('click', function(e) {
+            socket.emit('Update', msg="Sable");
+        });
+    }
+}
+
+AddButtonEventListeners();
+
+Add.addEventListener('click', function(e) {
+    socket.emit('Add', msg={Target:"Sable"});
+  });
+socket.on("Delete", function(msg){
+    BuildProduct(msg);
+});
+socket.on("Add", function(msg){
+    console.log(msg);
+});
+
+</script>

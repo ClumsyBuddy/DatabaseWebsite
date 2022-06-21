@@ -34,7 +34,6 @@
     margin-left: 40%;
     margin-top: 4%;
     margin-bottom: 4%;
-    background-color: #04AA6D;
 }
 .block{
     display: flex;
@@ -44,7 +43,14 @@
     font-size: 16px;
     cursor: pointer;
     text-align: center;
-  }
+    border-radius: 10px;
+}
+
+.block:hover{
+    background-color: #2a4175;
+    border-width: 0 .5px;
+    border: solid white;
+}
 
 .ExitButton{
 display: flex;
@@ -56,6 +62,11 @@ text-align: center;
 background-color: transparent;
 float: right;
 z-index: 10;
+}
+
+
+.ExitButton:hover{
+    background-color: rgba(0, 0, 0, .2);
 }
 
 .NavWrapper{
@@ -78,6 +89,12 @@ z-index: 10;
     margin-right: 10px;
 }
 
+.NavBar:hover{
+    background-color: #2a4175;
+    border-width: .1px .1px;
+    border: solid white;
+}
+
 .NavBarElements{
     /*font-size: 1.5em; */
     color: white;
@@ -87,10 +104,9 @@ z-index: 10;
     width: 100%;
     border-radius: 0px;
     flex-direction: column;
+    font-size: 20px;
 }
-.NavBar:hover{
-    background-color: darkgrey;
-}
+
 
 .CenteredMenu{
     width: 100%;
@@ -119,7 +135,7 @@ z-index: 10;
     flex-direction: row;
     justify-content: center;
     width: 50%;
-    background-color: #04AA6D;
+    background-color: #F65E00;
     margin-bottom: 5px;
 }
 
@@ -154,6 +170,183 @@ z-index: 10;
     background-color: rgba(255, 255, 255, .5);
 }
 
-.SectionHeader{
-    color: #F65E00;
+
+body::-webkit-scrollbar{
+    display:none;
 }
+.BaseContainer::-webkit-scrollbar{
+    display: none;
+}
+.BaseContainer{
+    width: 90%;
+    height: 70vh;
+    margin: auto;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    overflow: scroll;
+    padding-bottom: 30px;
+    border: 5px;
+    border-style:solid;
+    border-color: azure;
+
+}
+
+.ProductContainer{
+    background-color: #F65E00;
+    display: inline-flex;    
+    flex-direction: column;
+    width: 15%;
+    height: 20%;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+    margin-top: 2.5%;
+    
+    transition: all 1s ease;
+    transform: scale(1);
+    border-color: azure;
+    border-radius: 10px;
+    border-style:solid;
+    z-index: 9;
+    background-image: url();
+
+    background-size: 75% 80%;
+    background-repeat: no-repeat;
+    background-position-x: center;
+
+}
+
+.ProductContainer:hover{
+    background-color: rgba(156, 63, 5, 0.2);
+    transition: all 1s ease;
+    transform: scale(1.1);
+}
+
+
+.ProductButton{
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border: none;
+}
+.ProductButton:hover{
+    /*background-color: #2a4175;*/
+    border-radius: 10px;
+}
+
+.DeleteButton{
+    left: 89%;
+    width: 26px;
+    height: 26px;
+    background-color: transparent;
+    background-size: cover;
+    background-image: url("../uploads/cancel-48x.png");
+    position: fixed;
+    z-index: 10;
+    border: none;
+}
+
+.DeleteButton:hover{
+    background-color: azure;
+    border-radius: 20px;
+}
+
+
+.UpdateButton{
+    left: 1%;
+    width: 24px;
+    height: 24px;
+    background-color: transparent;
+    background-size: cover;
+    background-image: url("../uploads/EditButton.png");
+    position: fixed;
+    z-index: 10;
+    border: none;
+}
+
+
+.UpdateButton:hover{
+    background-image: url("../uploads/EditButtonHovered.png");
+    border-radius: 2px;
+}
+
+.NameContainer{
+    display: inline-flex; 
+    position: fixed; 
+    left: 0%; 
+    top: 85%;
+    width: 100%;
+}
+.ItemName{
+    color: azure;
+    font-size: .7vw;
+    margin: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+
+.SearchBox{
+    font-size: 25px;
+}
+
+.SearchBar{
+    display: inline-flex;
+    flex-direction: row;
+}
+
+.SearchBarContainer{
+    display: inline-flex;
+    flex-direction: row;
+    margin-left: 10px;
+}
+
+
+.AddButtonContainer{
+    width: 20%;
+    height: auto;
+    background-color: #F65E00;
+    border-color: azure;
+    border-radius: 10px;
+    border-style: solid;
+}
+.AddButtonContainer:hover{
+    background-color: #1E2E54;
+}
+.MenuButtons{
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+    border: none;
+    font-size: larger;
+    display: block;
+    color: azure;
+}
+
+@keyframes FlyIn {
+    from{
+        transform: scale(0.25);
+    }
+    to{
+        transform: scale(1);
+    }
+}
+
+@keyframes grow{
+  from{
+    transform: rotate(180deg);
+  }
+  to{
+    transform: rotate(90deg);
+  }
+}
+@keyframes shake {
+    30%, 70% {
+      transform: rotate(1deg);
+    }
+    10%, 50%{
+        transform: rotate(-1deg);
+    }
+    0%, 20%, 40%, 60%, 80% {
+      transform: rotate(0);
+    }
+  }

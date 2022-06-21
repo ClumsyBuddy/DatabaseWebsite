@@ -1,1 +1,4 @@
-Main.db
+*.db
+*.js
+!public/javascript*.js
+sessions

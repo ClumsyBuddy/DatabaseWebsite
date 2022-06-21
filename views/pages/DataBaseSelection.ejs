@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<head>
+    <title>Database</title>
+    <link rel="stylesheet" href="CSS/Main.css">
+</head>
+<body class="FrontPage">
+    <% if (Data.WareHouse == 0) { %>
+        <div>
+            <%- include("../partials/DBManager") %> 
+        </div>
+    <% } else { %>
+        <div>
+            <%- include("../partials/Warehouse") %> 
+        </div>
+    <% } %> 
+</body>
+</html>

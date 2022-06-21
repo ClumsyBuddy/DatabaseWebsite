@@ -1,0 +1,28 @@
+<div><h1 class="center SableOrange"><%= PageState.Title %> </h1></div>
+<form action="/Logout" method="post">
+    <button>LogOut</button>
+</form>
+    <% if (Data.Sable) { %>
+        <div class="center LargeButton">
+            <button type="button" class="block SableOrangeBackground">
+                <a class="center Link" href="/Sable">Sable</a>
+            </button>
+        </div>
+    <% } %>
+   
+    <% if (Data.Diplomat) { %>
+        <div class="center LargeButton">
+            <button type="button" class="block SableOrangeBackground">
+                <a class="center Link " href="/Diplomat">Diplomat</a>
+            </button>
+        </div>
+    <% } %>
+    
+    <% if (Data.RDI) { %>
+        <div class="center LargeButton">
+            <button type="button" class="block SableOrangeBackground">
+                <a class="center Link" href="404.html">RDI</a>
+            </button>
+        </div>
+    <% } %>
+    
