@@ -33,7 +33,7 @@ function CreateElement(){
     return Container;
 }
 
-function BuildProductArray(ProductArray){
+function BuildProductArray(ProductArray, msg){
     for(let j = 0; j < ProductArray.length; j++) //Build the elements
     {
         ProductArray[j].setAttribute("style", `background-image: url()`);
@@ -47,7 +47,7 @@ function BuildProductArray(ProductArray){
     return ProductArray;
 }
 
-function RemoveChildNodes(Element){
+function RemoveChildNodes(Element){ //Removes All Childeren and returns true if it manages to remove all else return false
     var count = 0;
     while(Element.hasChildNodes()){ //Remove all childeren from the BaseContainer
         Element.removeChild(Element.firstChild);
@@ -59,8 +59,35 @@ function RemoveChildNodes(Element){
     return true;
 }
 
+function isVisible(elem) {
+    if (!(elem instanceof Element)) throw Error('DomUtil: elem is not an element.');
+    const style = getComputedStyle(elem);
+    if (style.display === 'none') return false;
+    if (style.visibility !== 'visible') return false;
+    if (style.opacity < 0.1) return false;
+    if (elem.offsetWidth + elem.offsetHeight + elem.getBoundingClientRect().height +
+        elem.getBoundingClientRect().width === 0) {
+        return false;
+    }
+    const elemCenter   = {
+        x: elem.getBoundingClientRect().left + elem.offsetWidth / 2,
+        y: elem.getBoundingClientRect().top + elem.offsetHeight / 2
+    };
+    if (elemCenter.x < 0) return false;
+    if (elemCenter.x > (document.documentElement.clientWidth || window.innerWidth)) return false;
+    if (elemCenter.y < 0) return false;
+    if (elemCenter.y > (document.documentElement.clientHeight || window.innerHeight)) return false;
+    let pointContainer = document.elementFromPoint(elemCenter.x, elemCenter.y);
+    do {
+        if (pointContainer === elem) return true;
+    } while (pointContainer = pointContainer.parentNode);
+    return false;
+}
 
-async function BuildProduct(msg){
+let Start = false;
+function FirstBuild(msg){
+    console.log("FirstBuild");
+    Start = true;
     var ProductArray = []; //This Will hold our finished Elements
     if(msg.length > 0){
         if(BaseContainer.children.length > 0){
@@ -69,21 +96,63 @@ async function BuildProduct(msg){
             }
         }
     }
-    
-    
-    
-
-    //Add a initial amount of 100 products
-    var DisplayAmount = ProductArray.length <= 100 ? ProductArray.length : 100;
-    console.log(DisplayAmount);
-    for(let items = 0; items < DisplayAmount; items++){
+    BuildProductArray(ProductArray, msg);
+    RemoveChildNodes(BaseContainer);
+    var UseMaxLength = ProductArray.length < 100 ? ProductArray.length : 100;
+    ProductList = ProductArray;
+    for(let items = 0; items < UseMaxLength; items++){
+        IndexList.push(items);
         BaseContainer.appendChild(ProductArray[items]);
     }
+    socket.emit('UpdateList', msg={Target:'Sable', ProductList:ProductArray});
+    Re_getDocuments();
+    AddButtonEventListeners();
+}
+
+var ProductList = [];
+var IndexList = [];
+async function UpdateList(msg){
+    if(isVisible(BaseContainer.children[IndexList[IndexList.length - 11]])){
+        console.log("Display");
+        var Length = IndexList.length;
+        for(let i = Length; i < (Length+50); i++){
+            if(i == ProductList.length){
+                return;
+            }
+            IndexList.push(i);
+            BaseContainer.appendChild(ProductList[i]);
+        }
+        for(let j = 0; j < 49; j++){
+            IndexList.shift();
+            BaseContainer.firstChild.remove();
+        }
+        Re_getDocuments();
+    }
+    if(isVisible(BaseContainer.children[IndexList[0]]) && IndexList[0] > 10){
+       console.log("Start");
+    }
+    
+}
+
+function Re_getDocuments(){
     DeleteButtons = [];
     UpdateButtons = [];
     BaseContainer = document.getElementById("ProductListContainer");
     DeleteButtons = document.getElementsByClassName("DeleteButton");
     UpdateButtons = document.getElementsByClassName("UpdateButton");
+}
+
+async function AddProducts(Start, End, {Side:{Top, Bottom}}){
+    for(let items = Start; items < End; items++){
+        if(Side.Top == true){
+            BaseContainer.insertAdjacentElement("afterbegin", ProductList[items])
+        }
+        if(Side.Bottom == true){
+            BaseContainer.appendChild(ProductList[items]);
+        }
+        
+    }
+    Re_getDocuments();
     AddButtonEventListeners();
 }
 
@@ -100,19 +169,37 @@ async function AddButtonEventListeners(){
     }
 }
 
-AddButtonEventListeners();
+let _scroll = false;
+BaseContainer.addEventListener("scroll", async () => {
+    _scroll = true;
+})
+
+
+
+setInterval(() => {
+    if(_scroll){
+        _scroll = false;
+        socket.emit("Ping");
+    } 
+}, 500);
+
+
+socket.on('Pong', function(msg){
+    console.log("Pong");
+    UpdateList(msg);
+});
 
 Add.addEventListener('click', function(e) {
-    socket.emit('Add', msg={Target:"Sable"});
+    //socket.emit('Add', msg={Target:"Sable"});
   });
 socket.on("Delete", function(msg){
-    BuildProduct(msg);
+    //BuildProduct(msg);
 });
 socket.on("Add", function(msg){
-    console.log(msg);
+    //console.log(msg);
 });
 socket.on("init", function(msg){
-    BaseContainer.appendChild(CreateElement());
-    BuildProduct(msg);
+    console.log("Hello");
+    FirstBuild(msg);
 });
 </script>

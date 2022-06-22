@@ -34,6 +34,7 @@ import {SableResponseHandler} from "./Sable/SableResponseHandler"
 import { DiploResponseHandler } from "./Diplomat/DiploResponseHandler";
 import { Login } from "./LoginHandler";
 import { IndexResponseHandler } from "./IndexResponseHandler";
+import { Socket } from "socket.io";
 
 //Create variables for exported Classes
 const db = new Database('./Main.db');
@@ -60,6 +61,21 @@ const SessionMiddleWare = session({
 io.use(function(socket, next){
     SessionMiddleWare(socket.request, {}, next);
 });
+/*
+io.use((socket, next) => {
+    var socket_subdomain = socket.handshake.headers.host.split('.')[0]
+    // // console.log('socket subdomain: ' + socket_subdomain)
+    SessionMiddleWare(socket.handshake, {}, err => {
+      var session = socket.handshake.session
+      session.user_id = 1125
+      session.save()
+      session.reload(err => {
+        io.sockets.in('room_' + session.id).emit('auth', session)
+      })
+    })
+    SessionMiddleWare(socket.request, {}, next)
+  })
+*/
 
 app.use(SessionMiddleWare);
 
@@ -67,25 +83,35 @@ app.use(SessionMiddleWare);
 
 //FIXME Need to fix Duplicate Products appearing in the productlist
 io.on('connection', (socket) => {
-    console.log(socket.request.session.PageData.ProductList);
+    //console.log(socket.request.session.PageData.ProductList);
     if(socket.request.session.PageData.ProductList.length == 0){
         console.log("Send Emit");
         var StartUp = async () => {
-            var ProductList = await Sable.GetAllProducts("Sable");
-            socket.request.session.PageData.ProductList = ProductList;
+            socket.request.session.PageData.ProductList = await Sable.GetAllProducts("Sable");
             socket.request.session.save();
-            socket.emit("init", ProductList);
+            socket.emit("init", socket.request.session.PageData.ProductList);
         }
         StartUp();
+    }else{
+            socket.emit("init", socket.request.session.PageData.ProductList);
     }
-
+   /*
+    socket.on("UpdateList", (msg) => {
+        socket.request.session.PageData.ProductList = msg;
+    });
+    */
+    socket.on('Ping', async (msg) => {
+        //console.log("Pong");
+        //console.log(socket.request.session.PageData.ProductList);
+        io.emit('Pong', socket.request.session.PageData.ProductList);
+    });
     socket.on('Delete', (msg) => {
         if(msg.Target == "Sable"){
             const EmitMsg = async () => {
                 try{
-                var ProductList = await Sable.DeleteItem(msg.Value);
-                socket.request.session.PageData.Productlist = ProductList;
-                io.emit("Delete", ProductList);
+                    socket.request.session.PageData.Productlist = await Sable.DeleteItem(msg.Value);
+                    socket.request.session.save();
+                    io.emit("Delete", socket.request.session.PageData.Productlist);
                 return true;
                 }
                 catch(e){
