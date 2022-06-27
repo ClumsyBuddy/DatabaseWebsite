@@ -228,7 +228,7 @@ class  ResponseHandler{
                 console.log(err);
                 res.sendFile(__dirname + "/public/404.html");
             }else{
-                res.status(200).send(html)
+                res.send(html)
             }
         });
     }

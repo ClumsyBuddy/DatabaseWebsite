@@ -63,8 +63,6 @@ io.use(function(socket, next){
 });
 /*
 io.use((socket, next) => {
-    var socket_subdomain = socket.handshake.headers.host.split('.')[0]
-    // // console.log('socket subdomain: ' + socket_subdomain)
     SessionMiddleWare(socket.handshake, {}, err => {
       var session = socket.handshake.session
       session.user_id = 1125
@@ -82,24 +80,22 @@ app.use(SessionMiddleWare);
 
 
 //FIXME Need to fix Duplicate Products appearing in the productlist
-io.on('connection', async (socket) => {
-    //console.log(socket.request.session.PageData.ProductList);
-    if(socket.request.session.PageData.ProductList.length == 0){
-        console.log("Send Emit");
-        socket.request.session.PageData.ProductList = await Sable.GetAllProducts("Sable");
-        socket.request.session.save();
-        socket.emit("init", socket.request.session.PageData.ProductList);
-    }else{
+io.on('connection', (socket) => {
+
+    socket.on("init", async () => {
+        if(socket.request.session.PageData.ProductList.length == 0){
+            console.log("Initial Send");
+            socket.request.session.PageData.ProductList = await Sable.GetAllProducts("Sable");
+            socket.request.session.save();
             socket.emit("init", socket.request.session.PageData.ProductList);
-    }
-   /*
-    socket.on("UpdateList", (msg) => {
-        socket.request.session.PageData.ProductList = msg;
+        }else{
+            console.log("Reload");
+            socket.emit("init", socket.request.session.PageData.ProductList);
+        }
+        
     });
-    */
-    socket.on('Ping', async (msg) => {
-        //console.log("Pong");
-        //console.log(socket.request.session.PageData.ProductList);
+    
+    socket.on('Ping', (msg) => {
         io.emit('Pong', socket.request.session.PageData.ProductList);
     });
     socket.on('Delete', (msg) => {
@@ -120,16 +116,6 @@ io.on('connection', async (socket) => {
                 console.log("Coudln't Emit Message: " + JSON.stringify(msg));
             }
         }
-    });
-
-    socket.on('Add', (msg) => {
-        if(msg.Target == "Sable"){
-            io.emit("Add", "Hello");
-        }
-    });
-    
-    socket.on('Update', (msg) => {
-        console.log(`Get ${msg} - Update Others`);
     });
 });
 
@@ -162,15 +148,17 @@ app.post("/Logout", (req, res) => {
     Index.Logout(req, res);
 });
 
+/*
 app.get("/Search", (req, res) => {
     if(req.query.Sable != undefined){
-        Sable.ReturnSearchResults(req, res, req.query.Sable, req.session.PageData);
+        //Sable.ReturnSearchResults(req, res, req.query.Sable, req.session.PageData);
     }
     if(req.query.Diplomat != undefined){
         Diplo.ReturnSearchResults(req, res, req.query.Diplomat, req.session.PageData);
     }
 });
-
+*/
+/*
 app.get("/Update", (req, res) => {
     if(req.query.Sable != undefined){
         console.log(req.query);
@@ -180,7 +168,8 @@ app.get("/Update", (req, res) => {
     }
     res.redirect("back");
 });
-
+*/
+/*
 app.get("/AddItem", (req, res) => {
     if(req.query.Sable != undefined){
         console.log(req.query);
@@ -191,7 +180,7 @@ app.get("/AddItem", (req, res) => {
     }
     res.redirect("back");
 });
-
+*/
 app.route('/Login')
     .get((req, res) =>{
         Index.Login(req, res);
@@ -208,9 +197,6 @@ app.route('/')
 app.route('/Sable')
     .get(function(req, res){
         Sable.Start(req, res);
-    }).post(function(req, res){
-        console.log(req.body);
-        (success) => res.send(success);
     });
 
 app.route('/Diplomat')
@@ -223,8 +209,6 @@ app.route('/Diplomat')
 app.route('/DataBaseSelection')
 .get(function(req, res){
     Index._Get(req, res);
-}).post(function(req, res){
-
 });
 
 server.listen(port, function(){

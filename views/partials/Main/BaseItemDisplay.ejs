@@ -1,29 +1,25 @@
 <div id="ProductListContainer" class="BaseContainer">
-    <% if (Data.ProductList != undefined){ %> 
-        <% Data.ProductList.forEach((_product) => { %> 
-            <div class="ProductContainer" style="background-image: url('<%= _product.image %>');">
+            <div class="ProductContainer" style="background-image: url('null');">
                 <% if (Data.AllowedActions.Delete != undefined) { %>
                     <% if (Data.AllowedActions.Delete == true) { %>
-                        <button class="DeleteButton" type="submit" name="Sable" value=<%= _product.key %>></button>
+                        <button class="DeleteButton" type="submit" name="Sable" value="null"></button>
                     <% } %>
                 <% } %>
                 <% if (Data.AllowedActions.Update != undefined) { %>
                     <% if (Data.AllowedActions.Update == true) { %>
                         <form id='Update' action="/Update"  method="get">
-                            <button class="UpdateButton" type="submit" name="Sable" value=<%= _product.key %>></button>
+                            <button class="UpdateButton" type="submit" name="Sable" value="null"></button>
                         </form>
                     <% } %>
                 <% } %>
                 <form action=<%=PageState._Action %> method="get" style="height:100%"> <!--  Every variable here needs to be dynamically set instead of hard coded   -->
-                    <button class="ProductButton" name="C_Product" value='<%= _product.sku %>,<%= _product.Color %>' >
+                    <button class="ProductButton" name="C_Product" value='null' >
                         <div class="NameContainer">
-                        <p class="ItemName">SKU:<%= _product.sku %> </p>
-                        <p class="ItemName">Brand:<%= _product.brand %> </p>
-                        <p class="ItemName">Color:<%= _product.Color%> </p>
+                        <p class="ItemName">SKU:null</p>
+                        <p class="ItemName">Brand:null</p>
+                        <p class="ItemName">Color:null</p>
                         </div>
                     </button>
                 </form>
             </div>
-        <% }); %> 
-    <% } %> 
 </div>

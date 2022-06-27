@@ -1,6 +1,8 @@
 <script src="/socket.io/socket.io.js"></script>
-<script defer="defer">
+<script async>
 var socket = io();
+
+socket.emit("init");
 
 var BaseContainer = document.getElementById("ProductListContainer");
 var DeleteButtons = document.getElementsByClassName("DeleteButton");
@@ -10,12 +12,9 @@ let scrollLock = false;
 var ScrollPosY = undefined;
 var ScrollDirection = {Up:false, Down:false};
 let Start = false;
-const MaxStartLength = 100;
-var UseMaxLength = 0;
+const ContainerLength = 100;
+var ElementContainer = [];
 var ProductList = [];
-var ShowIndex = 0;
-const IncrementLength = 50;
-const CheckFromEndLength = 10;
 
 
 function setAttributes(el, attrs) {
@@ -50,17 +49,30 @@ async function Produce(Ele, key, sku, brand, color){
     Ele.children[2].children[0].children[0].children[0].textContent = `SKU:${sku}`;
     Ele.children[2].children[0].children[0].children[1].textContent = `Brand:${brand}`;
     Ele.children[2].children[0].children[0].children[2].textContent = `Color:${color}`;
+    return true;
 }
-
-async function BuildProductArray(msg, StartIndex, FinishIndex){
+function BuildProductArray(msg, StartIndex, FinishIndex){
     for(let j = StartIndex; j < FinishIndex; j++) //Build the elements
     {
         setTimeout(() => {
             Produce(ProductList[j], msg[j].key, msg[j].sku, msg[j].brand, msg[j].Color);
+            BuildContainer(ProductList, StartIndex, FinishIndex);                  
         }, 10*j);
     }
     console.log("Finished: " + StartIndex + " - " + FinishIndex);
 }
+function BuildFactory(msg, Length, Max){
+    try{
+        for(let i = 1; i < Length / Max; i++){
+            setTimeout(() => {
+                BuildProductArray(msg, (Max*i)+1, Max*(i+1));
+            }, 5*i);
+        }
+    }catch(e){
+        console.log(e);
+    }
+}
+
 
 function RemoveChildNodes(Element){ //Removes All Childeren and returns true if it manages to remove all else return false
     var count = 0;
@@ -99,15 +111,21 @@ function isVisible(elem) {
     return false;
 }
 
-
-function BuildFactory(msg, Length, Max){
+function BuildContainer(List, Start, End){
+    var TempArray = [];
+    for(let j = Start; j < End; j++) //Build the elements
+    {
+        TempArray.push(ProductList[j]);
+    }
+    ElementContainer.push(TempArray);
+}
+function BuildDisplayContainers(List, Length, Max){
     try{
         for(let i = 1; i < Length / Max; i++){
             setTimeout(() => {
-                BuildProductArray(msg, (Max*i)+1, Max*(i+1)); 
-            }, 25*i);
+                BuildContainer(List, (Max*i)+1, Max*(i+1)); 
+            }, 10*i);
         }
-        
     }catch(e){
         console.log(e);
     }
@@ -120,14 +138,11 @@ function FirstBuild(msg){
             ProductList.push(Node.cloneNode(true)); //Push Clones into the array to fill our product need
         }
     }
-
-    UseMaxLength = ProductList.length < MaxStartLength ? ProductList.length : MaxStartLength;
-    BuildProductArray(msg, 0, UseMaxLength);
-    BuildFactory(msg, ProductList.length, UseMaxLength);        
+    BuildProductArray(msg, 0, ContainerLength);
+    BuildFactory(msg, ProductList.length, ContainerLength);        
 
     RemoveChildNodes(BaseContainer);
-    ShowIndex = UseMaxLength / 2;
-    for(let items = 0; items < UseMaxLength; items++){
+    for(let items = 0; items < ContainerLength; items++){
         BaseContainer.appendChild(ProductList[items]);
     }
     Re_getDocuments();
@@ -136,40 +151,16 @@ function FirstBuild(msg){
 
 
 function UpdateList(msg){
-    console.log(ShowIndex);
+    console.log(ElementContainer);
     Re_getDocuments();
     AddButtonEventListeners();
-    if(isVisible(BaseContainer.children[BaseContainer.children.length - 1 - 10]) && ScrollDirection.Down == true){
-        if(ShowIndex == Math.floor(ProductList.length / 10) * 10){
-            scrollLock = false;
-            return;
+    for(let i = 0; i < BaseContainer.children.length; i++){
+        if(BaseContainer.childNodes[i].isEqualNode(ProductList[20])){
+            console.log("Equal");
         }
-        ShowIndex = ShowIndex + IncrementLength > ProductList.length ? Math.floor(ProductList.length / 10) * 10 : ShowIndex + IncrementLength;
-        for(let i = ShowIndex; i < ShowIndex + IncrementLength; i++){
-            if(i > ProductList.length-1){
-                break;
-            }
-            BaseContainer.appendChild(ProductList[i]);
-            BaseContainer.firstChild.remove();
-        }
-        console.log("Updating Down");
     }
-    if(isVisible(BaseContainer.firstElementChild) && ScrollDirection.Up == true){
-        if(ShowIndex == 0){
-            scrollLock = false;
-            return;
-        }
-        ShowIndex = ShowIndex - IncrementLength < 0 ? 0 : ShowIndex - IncrementLength;
-        
-        for(let i = ShowIndex + IncrementLength; i > ShowIndex - IncrementLength; i--){
-            if(i < 0){
-                break;
-            }
-            BaseContainer.prepend(ProductList[i]);
-            BaseContainer.lastChild.remove();
-        }
-        console.log("Updating Up");
-    }
+
+
     scrollLock = false;
 }
 
@@ -196,9 +187,6 @@ async function AddButtonEventListeners(){
 
 
 BaseContainer.addEventListener("scroll", (e) => {
-    if(ProductList.length < MaxStartLength){
-        return;
-    }
     if(ScrollPosY === undefined){
         ScrollPosY = BaseContainer.scrollTop;
     }
@@ -232,7 +220,9 @@ socket.on("Add", function(msg){
     //console.log(msg);
 });
 socket.on("init", function(msg){
-    console.log("Hello");
+    FirstBuild(msg);
+});
+socket.on("reload", function(){
     FirstBuild(msg);
 });
 </script>
