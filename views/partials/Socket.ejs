@@ -56,9 +56,9 @@ function BuildProductArray(msg, StartIndex, FinishIndex){
     {
         setTimeout(() => {
             Produce(ProductList[j], msg[j].key, msg[j].sku, msg[j].brand, msg[j].Color);
-            BuildContainer(ProductList, StartIndex, FinishIndex);                  
         }, 10*j);
     }
+    BuildContainer(ProductList, StartIndex, FinishIndex);
     console.log("Finished: " + StartIndex + " - " + FinishIndex);
 }
 function BuildFactory(msg, Length, Max){
@@ -150,14 +150,35 @@ function FirstBuild(msg){
     AddButtonEventListeners();
 }
 
-
+var EndIndex = 1;
+var StartIndex = 0;
 function UpdateList(msg){
-    console.log(ElementContainer);
+    //console.log(ElementContainer);
     Re_getDocuments();
     AddButtonEventListeners();
     for(let i = 0; i < BaseContainer.children.length; i++){
-        if(BaseContainer.childNodes[i].isEqualNode(ProductList[20])){
-            console.log("Equal");
+        if(isVisible(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[EndIndex][ElementContainer[EndIndex].length - 5])){
+            if(EndIndex == 1){
+                for(let i = 0; i < ElementContainer[EndIndex].length - 1; i++){
+                    console.log(i);
+                    BaseContainer.appendChild(ElementContainer[EndIndex + 1][i]);
+                }
+                EndIndex++;
+            }else{
+                for(let i = 0; i < ElementContainer[EndIndex].length - 1; i++){
+                    console.log(i);
+                    BaseContainer.appendChild(ElementContainer[EndIndex + 1][i]);
+                    BaseContainer.firstChild.remove();
+                }
+                EndIndex++;
+                StartIndex++;
+            }
+            
+
+            console.log("End");
+        }
+        if(StartIndex > 1 && isVisible(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[StartIndex][0])){
+            console.log("Start")
         }
     }
 
