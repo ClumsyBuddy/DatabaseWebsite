@@ -63,7 +63,7 @@ function BuildProductArray(msg, StartIndex, FinishIndex){
 }
 function BuildFactory(msg, Length, Max){
     try{
-        for(let i = 1; i < Length / Max; i++){
+        for(let i = 0; i < Length / Max; i++){
             setTimeout(() => {
                 BuildProductArray(msg, (Max*i)+1, Max*(i+1));
             }, 5*i);
@@ -121,7 +121,7 @@ function BuildContainer(List, Start, End){
 }
 function BuildDisplayContainers(List, Length, Max){
     try{
-        for(let i = 1; i < Length / Max; i++){
+        for(let i = 0; i < Length / Max; i++){
             setTimeout(() => {
                 BuildContainer(List, (Max*i)+1, Max*(i+1)); 
             }, 10*i);
@@ -138,6 +138,7 @@ function FirstBuild(msg){
             ProductList.push(Node.cloneNode(true)); //Push Clones into the array to fill our product need
         }
     }
+    console.log(ProductList.length);
     BuildProductArray(msg, 0, ContainerLength);
     BuildFactory(msg, ProductList.length, ContainerLength);        
 
