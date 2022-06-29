@@ -151,13 +151,13 @@ function FirstBuild(msg){
 }
 
 var EndIndex = 1;
-var StartIndex = 1;
+var StartIndex = 0;
 function UpdateList(msg){
     //console.log(ElementContainer);
     Re_getDocuments();
     AddButtonEventListeners();
     for(let i = 0; i < BaseContainer.children.length; i++){
-        if(EndIndex < ElementContainer.length && isVisible(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[EndIndex][ElementContainer[EndIndex].length - 5]) && ScrollDirection.Down){
+        if(EndIndex <= ElementContainer.length-1 && isVisible(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[EndIndex][ElementContainer[EndIndex].length - 5]) && ScrollDirection.Down){
             if(EndIndex == 1){
                 for(let i = 0; i < ElementContainer[EndIndex].length; i++){
                     //console.log(i);
@@ -165,7 +165,7 @@ function UpdateList(msg){
                 }
                 EndIndex++;
             }else{
-                for(let i = 0; i < ElementContainer[EndIndex].length - 1; i++){
+                for(let i = 0; i < ElementContainer[EndIndex].length; i++){
                     //console.log(i);
                     BaseContainer.appendChild(ElementContainer[EndIndex + 1][i]);
                     BaseContainer.firstChild.remove();
@@ -248,7 +248,7 @@ BaseContainer.addEventListener("scroll", (e) => {
 socket.on('Pong', function(msg){
     setTimeout(() => {
         UpdateList(msg);    
-    }, 350);
+    }, 200);
     
 });
 
