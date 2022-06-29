@@ -56,7 +56,7 @@ function BuildProductArray(msg, StartIndex, FinishIndex){
     {
         setTimeout(() => {
             Produce(ProductList[j], msg[j].key, msg[j].sku, msg[j].brand, msg[j].Color);
-        }, 10*j);
+        }, 5*j);
     }
     BuildContainer(ProductList, StartIndex, FinishIndex);
     console.log("Finished: " + StartIndex + " - " + FinishIndex);
@@ -151,13 +151,34 @@ function FirstBuild(msg){
 }
 
 var EndIndex = 1;
-var StartIndex = 0;
+var StartIndex = 1;
 function UpdateList(msg){
     //console.log(ElementContainer);
     Re_getDocuments();
     AddButtonEventListeners();
     for(let i = 0; i < BaseContainer.children.length; i++){
-        if(isVisible(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[EndIndex][ElementContainer[EndIndex].length - 5])){
+        if(EndIndex < ElementContainer.length && isVisible(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[EndIndex][ElementContainer[EndIndex].length - 5]) && ScrollDirection.Down){
+            if(EndIndex == 1){
+                for(let i = 0; i < ElementContainer[EndIndex].length; i++){
+                    //console.log(i);
+                    BaseContainer.appendChild(ElementContainer[EndIndex + 1][i]);
+                }
+                EndIndex++;
+            }else{
+                for(let i = 0; i < ElementContainer[EndIndex].length - 1; i++){
+                    //console.log(i);
+                    BaseContainer.appendChild(ElementContainer[EndIndex + 1][i]);
+                    BaseContainer.firstChild.remove();
+                }
+                EndIndex++;
+                StartIndex++;
+            }
+            
+
+            console.log("End");
+        }
+        if(StartIndex > 1 && isVisible(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[StartIndex][0]) && ScrollDirection.Up){
+            /*
             if(EndIndex == 1){
                 for(let i = 0; i < ElementContainer[EndIndex].length - 1; i++){
                     console.log(i);
@@ -170,14 +191,10 @@ function UpdateList(msg){
                     BaseContainer.appendChild(ElementContainer[EndIndex + 1][i]);
                     BaseContainer.firstChild.remove();
                 }
-                EndIndex++;
-                StartIndex++;
+                EndIndex--;
+                StartIndex--;
             }
-            
-
-            console.log("End");
-        }
-        if(StartIndex > 1 && isVisible(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[StartIndex][0])){
+            */
             console.log("Start")
         }
     }
@@ -229,7 +246,10 @@ BaseContainer.addEventListener("scroll", (e) => {
 });
 
 socket.on('Pong', function(msg){
-    UpdateList(msg);
+    setTimeout(() => {
+        UpdateList(msg);    
+    }, 350);
+    
 });
 
 Add.addEventListener('click', function(e) {
