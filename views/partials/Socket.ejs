@@ -155,7 +155,6 @@ function isScrolledIntoView(el) {
     var rect = el.getBoundingClientRect();
     var elemTop = rect.top;
     var elemBottom = rect.bottom;
-
     // Only completely visible elements return true:
     var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
     // Partially visible elements return true:
@@ -168,41 +167,28 @@ var StartIndex = 1;
 function UpdateList(){
     Re_getDocuments();
     AddButtonEventListeners();
-    //console.log(BaseContainer.getgl);
-    //console.log(BaseContainer.firstChild.scrollTop);
     for(let i = 0; i < BaseContainer.children.length; i++){
-        
         if(BaseContainer.children[i] == undefined){
             continue;
         }
-
-
         if(EndIndex < ElementContainer.length-1 && isScrolledIntoView(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[EndIndex][ElementContainer[EndIndex].length-1]) && ScrollDirection.Down){
             if(EndIndex == 1){
                 for(let j = 0; j < ElementContainer[EndIndex].length; j++){
-                    //console.log(i);
                     BaseContainer.appendChild(ElementContainer[EndIndex + 1][j]);
                 }
                 EndIndex++;
             }else{
                 for(let j = 0; j < ElementContainer[EndIndex].length; j++){
-                    //console.log(i);
                     BaseContainer.appendChild(ElementContainer[EndIndex + 1][j]);
                     BaseContainer.firstChild.remove(); 
                 }
                 EndIndex++;
                 StartIndex++;
             }
-            
-
-            console.log("End");
         }
         if(StartIndex > 1 && isScrolledIntoView(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[StartIndex][0]) && ScrollDirection.Up){
-            //var lastScrollHeight = ElementContainer[StartIndex][0].scrollHeight;
             for(let j = ElementContainer[StartIndex].length - 1; j >= 0; j--){
-                //console.log(i);
                 try{
-                    
                     BaseContainer.prepend(ElementContainer[StartIndex - 1][j]);
                     BaseContainer.lastChild.remove();
                 }catch(e){
@@ -211,18 +197,12 @@ function UpdateList(){
                     console.log("StartIndex: " + StartIndex);
                     console.log("Current Index: " + j);
                 }
-                
             }
-            //var scrollDiff = ElementContainer[StartIndex][0].scrollHeight - lastScrollHeight;
-            //ElementContainer[StartIndex][0].scrollTop += scrollDiff;
             EndIndex--;
             StartIndex--;
-            console.log("Start")
         }
     }
-
-
-   // scrollLock = false;
+    scrollLock = false;
 }
 
 function Re_getDocuments(){
@@ -262,12 +242,12 @@ BaseContainer.addEventListener("scroll", (e) => {
         ScrollPosY = BaseContainer.scrollTop;
     }
 
-    setTimeout(() => {
-          UpdateList();      
-    }, 100);
+    
     if(!scrollLock){
         scrollLock = true;
-        
+        setTimeout(() => {
+          UpdateList();      
+        }, 100);
     }
 });
 
