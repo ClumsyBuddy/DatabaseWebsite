@@ -56,7 +56,7 @@ function BuildProductArray(msg, StartIndex, FinishIndex){
     {
         setTimeout(() => {
             Produce(ProductList[j], msg[j].key, msg[j].sku, msg[j].brand, msg[j].Color);
-        }, 5*j);
+        }, 2*j);
     }
     BuildContainer(ProductList, StartIndex, FinishIndex);
     console.log("Finished: " + StartIndex + " - " + FinishIndex);
@@ -65,8 +65,9 @@ function BuildFactory(msg, Length, Max){
     try{
         for(let i = 0; i < Length / Max; i++){
             setTimeout(() => {
-                BuildProductArray(msg, (Max*i)+1, Max*(i+1));
-            }, 5*i);
+                BuildProductArray(msg, (Max*i), Max*(i+1));
+                console.log((Max*i), Max*(i+1));
+            }, 2*i);
         }
     }catch(e){
         console.log(e);
@@ -87,7 +88,7 @@ function RemoveChildNodes(Element){ //Removes All Childeren and returns true if 
 }
 
 function isVisible(elem) {
-    if (!(elem instanceof Element)) throw Error('DomUtil: elem is not an element.');
+    if (!(elem instanceof Element)) throw Error('DomUtil: elem is not an element. ');
     const style = getComputedStyle(elem);
     if (style.display === 'none') return false;
     if (style.visibility !== 'visible') return false;
@@ -121,10 +122,10 @@ function BuildContainer(List, Start, End){
 }
 function BuildDisplayContainers(List, Length, Max){
     try{
-        for(let i = 0; i < Length / Max; i++){
+        for(let i = 1; i < Length / Max; i++){
             setTimeout(() => {
                 BuildContainer(List, (Max*i)+1, Max*(i+1)); 
-            }, 10*i);
+            }, 5*i);
         }
     }catch(e){
         console.log(e);
@@ -150,25 +151,44 @@ function FirstBuild(msg){
     AddButtonEventListeners();
 }
 
+function isScrolledIntoView(el) {
+    var rect = el.getBoundingClientRect();
+    var elemTop = rect.top;
+    var elemBottom = rect.bottom;
+
+    // Only completely visible elements return true:
+    var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+    // Partially visible elements return true:
+    //isVisible = elemTop < window.innerHeight && elemBottom >= 0;
+    return isVisible;
+}
+
 var EndIndex = 1;
-var StartIndex = 0;
-function UpdateList(msg){
-    //console.log(ElementContainer);
+var StartIndex = 1;
+function UpdateList(){
     Re_getDocuments();
     AddButtonEventListeners();
+    //console.log(BaseContainer.getgl);
+    //console.log(BaseContainer.firstChild.scrollTop);
     for(let i = 0; i < BaseContainer.children.length; i++){
-        if(EndIndex <= ElementContainer.length-1 && isVisible(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[EndIndex][ElementContainer[EndIndex].length - 5]) && ScrollDirection.Down){
+        
+        if(BaseContainer.children[i] == undefined){
+            continue;
+        }
+
+
+        if(EndIndex < ElementContainer.length-1 && isScrolledIntoView(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[EndIndex][ElementContainer[EndIndex].length-1]) && ScrollDirection.Down){
             if(EndIndex == 1){
-                for(let i = 0; i < ElementContainer[EndIndex].length; i++){
+                for(let j = 0; j < ElementContainer[EndIndex].length; j++){
                     //console.log(i);
-                    BaseContainer.appendChild(ElementContainer[EndIndex + 1][i]);
+                    BaseContainer.appendChild(ElementContainer[EndIndex + 1][j]);
                 }
                 EndIndex++;
             }else{
-                for(let i = 0; i < ElementContainer[EndIndex].length; i++){
+                for(let j = 0; j < ElementContainer[EndIndex].length; j++){
                     //console.log(i);
-                    BaseContainer.appendChild(ElementContainer[EndIndex + 1][i]);
-                    BaseContainer.firstChild.remove();
+                    BaseContainer.appendChild(ElementContainer[EndIndex + 1][j]);
+                    BaseContainer.firstChild.remove(); 
                 }
                 EndIndex++;
                 StartIndex++;
@@ -177,30 +197,32 @@ function UpdateList(msg){
 
             console.log("End");
         }
-        if(StartIndex > 1 && isVisible(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[StartIndex][0]) && ScrollDirection.Up){
-            /*
-            if(EndIndex == 1){
-                for(let i = 0; i < ElementContainer[EndIndex].length - 1; i++){
-                    console.log(i);
-                    BaseContainer.appendChild(ElementContainer[EndIndex + 1][i]);
+        if(StartIndex > 1 && isScrolledIntoView(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[StartIndex][0]) && ScrollDirection.Up){
+            //var lastScrollHeight = ElementContainer[StartIndex][0].scrollHeight;
+            for(let j = ElementContainer[StartIndex].length - 1; j >= 0; j--){
+                //console.log(i);
+                try{
+                    
+                    BaseContainer.prepend(ElementContainer[StartIndex - 1][j]);
+                    BaseContainer.lastChild.remove();
+                }catch(e){
+                    console.log(e);
+                    console.log(ElementContainer[StartIndex - 1][j]);
+                    console.log("StartIndex: " + StartIndex);
+                    console.log("Current Index: " + j);
                 }
-                EndIndex++;
-            }else{
-                for(let i = 0; i < ElementContainer[EndIndex].length - 1; i++){
-                    console.log(i);
-                    BaseContainer.appendChild(ElementContainer[EndIndex + 1][i]);
-                    BaseContainer.firstChild.remove();
-                }
-                EndIndex--;
-                StartIndex--;
+                
             }
-            */
+            //var scrollDiff = ElementContainer[StartIndex][0].scrollHeight - lastScrollHeight;
+            //ElementContainer[StartIndex][0].scrollTop += scrollDiff;
+            EndIndex--;
+            StartIndex--;
             console.log("Start")
         }
     }
 
 
-    scrollLock = false;
+   // scrollLock = false;
 }
 
 function Re_getDocuments(){
@@ -239,16 +261,17 @@ BaseContainer.addEventListener("scroll", (e) => {
         ScrollDirection.Down = false;
         ScrollPosY = BaseContainer.scrollTop;
     }
+
+    setTimeout(() => {
+          UpdateList();      
+    }, 100);
     if(!scrollLock){
         scrollLock = true;
-        socket.emit("Ping");
+        
     }
 });
 
 socket.on('Pong', function(msg){
-    setTimeout(() => {
-        UpdateList(msg);    
-    }, 200);
     
 });
 
