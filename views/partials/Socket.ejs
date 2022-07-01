@@ -171,7 +171,7 @@ function UpdateList(){
         if(BaseContainer.children[i] == undefined){
             continue;
         }
-        if(EndIndex < ElementContainer.length-1 && isScrolledIntoView(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[EndIndex][ElementContainer[EndIndex].length-1]) && ScrollDirection.Down){
+        if(EndIndex < ElementContainer.length-1 && isScrolledIntoView(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[EndIndex][ElementContainer[EndIndex].length-1])){
             if(EndIndex == 1){
                 for(let j = 0; j < ElementContainer[EndIndex].length; j++){
                     BaseContainer.appendChild(ElementContainer[EndIndex + 1][j]);
@@ -186,10 +186,24 @@ function UpdateList(){
                 StartIndex++;
             }
         }
-        if(StartIndex > 1 && isScrolledIntoView(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[StartIndex][0]) && ScrollDirection.Up){
+        if(StartIndex > 1 && isScrolledIntoView(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[StartIndex][0])){
+            var curScrollPos = BaseContainer.scrollTop;
+            var oldScroll = BaseContainer.scrollHeight - BaseContainer.clientHeight;
             for(let j = ElementContainer[StartIndex].length - 1; j >= 0; j--){
                 try{
                     BaseContainer.prepend(ElementContainer[StartIndex - 1][j]);
+                }catch(e){
+                    console.log(e);
+                    console.log(ElementContainer[StartIndex - 1][j]);
+                    console.log("StartIndex: " + StartIndex);
+                    console.log("Current Index: " + j);
+                }
+            }
+            var newScroll = BaseContainer.scrollHeight - BaseContainer.clientHeight;
+            BaseContainer.scrollTop = curScrollPos + (newScroll - oldScroll);
+
+           for(let j = ElementContainer[StartIndex].length - 1; j >= 0; j--){
+                try{
                     BaseContainer.lastChild.remove();
                 }catch(e){
                     console.log(e);
@@ -198,6 +212,7 @@ function UpdateList(){
                     console.log("Current Index: " + j);
                 }
             }
+
             EndIndex--;
             StartIndex--;
         }
@@ -247,10 +262,9 @@ BaseContainer.addEventListener("scroll", (e) => {
         scrollLock = true;
         setTimeout(() => {
           UpdateList();      
-        }, 100);
+        }, 10);
     }
 });
-
 socket.on('Pong', function(msg){
     
 });
