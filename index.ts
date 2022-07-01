@@ -169,7 +169,7 @@ app.get("/Update", (req, res) => {
     res.redirect("back");
 });
 */
-/*
+
 app.get("/AddItem", (req, res) => {
     if(req.query.Sable != undefined){
         console.log(req.query);
@@ -180,7 +180,7 @@ app.get("/AddItem", (req, res) => {
     }
     res.redirect("back");
 });
-*/
+
 app.route('/Login')
     .get((req, res) =>{
         Index.Login(req, res);

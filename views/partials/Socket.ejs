@@ -56,18 +56,26 @@ function BuildProductArray(msg, StartIndex, FinishIndex){
     {
         setTimeout(() => {
             Produce(ProductList[j], msg[j].key, msg[j].sku, msg[j].brand, msg[j].Color);
-        }, 2*j);
+        }, 3*j);
     }
     BuildContainer(ProductList, StartIndex, FinishIndex);
     console.log("Finished: " + StartIndex + " - " + FinishIndex);
 }
 function BuildFactory(msg, Length, Max){
+    console.log((Length / Max % 1));
+    console.log(Length / Max);
+
     try{
-        for(let i = 0; i < Length / Max; i++){
+        for(let i = 0; i < Math.ceil(Length / Max); i++){
             setTimeout(() => {
-                BuildProductArray(msg, (Max*i), Max*(i+1));
+                if(i >= Math.floor(Length / Max) && Length / Max % 1 < 1){
+                    BuildProductArray(msg, (Max*i), Length);
+                    console.log("End");
+                }else{
+                    BuildProductArray(msg, (Max*i), Max*(i+1));
+                }
                 //console.log((Max*i), Max*(i+1));
-            }, 2*i);
+            }, 5*i);
         }
     }catch(e){
         console.log(e);
@@ -173,14 +181,19 @@ function UpdateList(){
         }
         if(EndIndex < ElementContainer.length-1 && isScrolledIntoView(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[EndIndex][ElementContainer[EndIndex].length-1])){
             if(EndIndex == 1){
-                for(let j = 0; j < ElementContainer[EndIndex].length; j++){
+                for(let j = 0; j < ElementContainer[EndIndex + 1].length; j++){
                     BaseContainer.appendChild(ElementContainer[EndIndex + 1][j]);
                 }
                 EndIndex++;
             }else{
-                for(let j = 0; j < ElementContainer[EndIndex].length; j++){
+                for(let j = 0; j < ElementContainer[EndIndex + 1].length; j++){
+                    try{
                     BaseContainer.appendChild(ElementContainer[EndIndex + 1][j]);
                     BaseContainer.firstChild.remove(); 
+                    }catch(e){
+                        console.log(e);
+                        console.log(j);
+                    }
                 }
                 EndIndex++;
                 StartIndex++;
@@ -243,26 +256,11 @@ async function AddButtonEventListeners(){
 
 
 BaseContainer.addEventListener("scroll", (e) => {
-    if(ScrollPosY === undefined){
-        ScrollPosY = BaseContainer.scrollTop;
-    }
-    if(BaseContainer.scrollTop > ScrollPosY){
-        ScrollDirection.Down = true;
-        ScrollDirection.Up = false;
-        ScrollPosY = BaseContainer.scrollTop;
-    }
-    if(BaseContainer.scrollTop < ScrollPosY){
-        ScrollDirection.Up = true;
-        ScrollDirection.Down = false;
-        ScrollPosY = BaseContainer.scrollTop;
-    }
-
-    
     if(!scrollLock){
         scrollLock = true;
         setTimeout(() => {
           UpdateList();      
-        }, 10);
+        }, 100);
     }
 });
 socket.on('Pong', function(msg){

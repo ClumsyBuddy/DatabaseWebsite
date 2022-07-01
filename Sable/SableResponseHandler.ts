@@ -19,7 +19,7 @@ class SableResponseHandler extends ResponseHandler{
     }
 
     async MakeTestData(){
-        for(let i = 0; i < 10000; i++){
+        for(let i = 0; i < 5056; i++){
             await this.DBController.create("Sable", "sku, brand, itemtype, Color, Size", "?, ?, ?, ?, ?", ["SML" + i, "CLA", "Uniform", "NA", "XL"]);
         }
     }
