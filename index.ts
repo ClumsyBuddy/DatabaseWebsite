@@ -95,17 +95,14 @@ io.on('connection', (socket) => {
         
     });
     
-    socket.on('Ping', (msg) => {
-        io.emit('Pong', socket.request.session.PageData.ProductList);
-    });
-    socket.on('Delete', (msg) => {
+    socket.on('Delete', (msg) => { //TODO Need to update database and respond with sucess or not
         if(msg.Target == "Sable"){
             const EmitMsg = async () => {
                 try{
                     socket.request.session.PageData.Productlist = await Sable.DeleteItem(msg.Value);
                     socket.request.session.save();
-                    io.emit("Delete", socket.request.session.PageData.Productlist);
-                return true;
+                    io.emit("Delete", true);
+                    return true;
                 }
                 catch(e){
                     console.log(e);

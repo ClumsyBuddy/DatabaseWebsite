@@ -26,14 +26,14 @@ function setAttributes(el, attrs) {
 function CreateElement(){
     var Container = document.createElement("div");
     setAttributes(Container, {'class':'ProductContainer', 'style':'background-image: url("");'});
-    var Form1 = document.createElement("form");
-    setAttributes(Form1, {"id":'Delete', 'action':'/Delete', 'method':'post'});
+    var Form1 = document.createElement("div");
+    setAttributes(Form1, {"id":'Delete'});
     Form1.insertAdjacentHTML("beforeend", "<button class='DeleteButton' type='submit' name='Sable' value='null'></button>");
-    var Form2 = document.createElement("form");
-    setAttributes(Form2, {"id":'Update', 'action':'/Update', 'method':'get'});
+    var Form2 = document.createElement("div");
+    setAttributes(Form2, {"id":'Update'});
     Form2.insertAdjacentHTML("beforeend", "<button class='UpdateButton' type='submit' name='Sable' value='null'></button>");
-    var Form3 = document.createElement("form");
-    setAttributes(Form3, {'action':'null', 'method':'get', 'style':'height:100%;'});
+    var Form3 = document.createElement("div");
+    setAttributes(Form3, {'style':'height:100%;'});
     Form3.insertAdjacentHTML("beforeend", '<button class="ProductButton" name="C_Product" value="null" ><div class="NameContainer"><p class="ItemName">SKU:null</p><p class="ItemName">Brand:null</p><p class="ItemName">Color:null</p></div></button>');    
     Container.appendChild(Form1);
     Container.appendChild(Form2);
@@ -241,7 +241,7 @@ function Re_getDocuments(){
     UpdateButtons = document.getElementsByClassName("UpdateButton");
 }
 
-async function AddButtonEventListeners(){
+function AddButtonEventListeners(){
     for(let i = 0; i < DeleteButtons.length; i++){
         DeleteButtons[i].addEventListener('click', function(e) {
             socket.emit('Delete', msg={Target:'<%- PageState.CurrentRenderTarget %>', Value:DeleteButtons[i].getAttribute("value")});
@@ -263,15 +263,12 @@ BaseContainer.addEventListener("scroll", (e) => {
         }, 100);
     }
 });
-socket.on('Pong', function(msg){
-    
-});
 
 Add.addEventListener('click', function(e) {
     //socket.emit('Add', msg={Target:"Sable"});
   });
-socket.on("Delete", function(msg){
-    //BuildProduct(msg);
+socket.on("Delete", function(msg){ //TODO Recieve whether delete succeeded and if it did then remove the item and possibly rebuild?
+    console.log(msg);
 });
 socket.on("Add", function(msg){
     //console.log(msg);
