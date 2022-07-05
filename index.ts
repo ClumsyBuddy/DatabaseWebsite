@@ -99,13 +99,15 @@ io.on('connection', (socket) => {
         if(msg.Target == "Sable"){
             const EmitMsg = async () => {
                 try{
-                    socket.request.session.PageData.Productlist = await Sable.DeleteItem(msg.Value);
-                    socket.request.session.save();
-                    io.emit("Delete", true);
+                    //socket.request.session.PageData.Productlist = await Sable.DeleteItem(msg.Value);
+                    //socket.request.session.save();
+                    console.log(msg.Value);
+                    io.emit("Delete", {Response:true, Value:msg.Value});
                     return true;
                 }
                 catch(e){
                     console.log(e);
+                    //io.emit("Delete", {Response:false, Value:undefined});
                     return false;
                 }
             }

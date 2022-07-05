@@ -5,8 +5,6 @@ var socket = io();
 socket.emit("init");
 
 var BaseContainer = document.getElementById("ProductListContainer");
-var DeleteButtons = document.getElementsByClassName("DeleteButton");
-var UpdateButtons = document.getElementsByClassName("UpdateButton");
 var Add = document.getElementById("Add");
 let scrollLock = false;
 var ScrollPosY = undefined;
@@ -15,6 +13,31 @@ let Start = false;
 const ContainerLength = 100;
 var ElementContainer = [];
 var ProductList = [];
+
+var ClientData = {
+    DisplayIndexInternal: 0,
+    DisplayIndexListener: function(val){},
+    set DisplayIndex(val){
+        this.DisplayIndexInternal = val;
+        this.DisplayIndexListener(val);
+    },
+    get DisplayIndex(){
+        return this.DisplayIndexInternal;
+    },
+    registerListener: function(listner){
+        this.DisplayIndexListener = listner;
+    }
+}
+
+var PreviousIndex = ClientData.DisplayIndex;
+var NextIndex = ClientData.DisplayIndex + 1;
+
+ClientData.registerListener(function(val){
+    NextIndex = ClientData.DisplayIndex + 1;
+    if(ClientData.DisplayIndex > 1){
+        PreviousIndex = ClientData.DisplayIndex - 1;
+    }
+});
 
 
 function setAttributes(el, attrs) {
@@ -41,9 +64,10 @@ function CreateElement(){
     return Container;
 }
 
-async function Produce(Ele, key, sku, brand, color){
+function Produce(Ele, key, sku, brand, color){
     Ele.setAttribute("style", `background-image: url()`);
     Ele.children[0].setAttribute("value", `${key}`);
+    Ele.children[0].children[0].setAttribute("value", `${key}`);
     Ele.children[1].children[0].setAttribute("value", `${key}`);
     Ele.children[2].children[0].setAttribute("value", `${key}`);
     Ele.children[2].children[0].children[0].children[0].textContent = `SKU:${sku}`;
@@ -58,9 +82,10 @@ function BuildProductArray(msg, StartIndex, FinishIndex){
             Produce(ProductList[j], msg[j].key, msg[j].sku, msg[j].brand, msg[j].Color);
         }, 3*j);
     }
-    BuildContainer(ProductList, StartIndex, FinishIndex);
+    //BuildContainer(ProductList, StartIndex, FinishIndex);
     console.log("Finished: " + StartIndex + " - " + FinishIndex);
 }
+
 function BuildFactory(msg, Length, Max){
     console.log((Length / Max % 1));
     console.log(Length / Max);
@@ -120,6 +145,7 @@ function isVisible(elem) {
     return false;
 }
 
+/*
 function BuildContainer(List, Start, End){
     var TempArray = [];
     for(let j = Start; j < End; j++) //Build the elements
@@ -128,6 +154,8 @@ function BuildContainer(List, Start, End){
     }
     ElementContainer.push(TempArray);
 }
+*/
+/*
 function BuildDisplayContainers(List, Length, Max){
     try{
         for(let i = 1; i < Length / Max; i++){
@@ -139,7 +167,7 @@ function BuildDisplayContainers(List, Length, Max){
         console.log(e);
     }
 }
-
+*/
 function FirstBuild(msg){
     if(msg.length > 0){
         var Node = CreateElement();
@@ -147,7 +175,6 @@ function FirstBuild(msg){
             ProductList.push(Node.cloneNode(true)); //Push Clones into the array to fill our product need
         }
     }
-    console.log(ProductList.length);
     BuildProductArray(msg, 0, ContainerLength);
     BuildFactory(msg, ProductList.length, ContainerLength);        
 
@@ -157,6 +184,44 @@ function FirstBuild(msg){
     }
     Re_getDocuments();
     AddButtonEventListeners();
+}
+
+function RebuildAfterDelete(ItemIndex){
+    var PIndex = undefined;
+    for(let i = 0; i < ProductList.length; i++){
+        if(ProductList[i].children[0].children[0].getAttribute("value") == ItemIndex){
+            //ProductList.splice(i, 1);
+            PIndex = i;
+            break;
+        }
+    }
+
+    for(let k = 0; k < BaseContainer.children.length; k++){
+        if(BaseContainer.children[k].isEqualNode(ProductList[PIndex])){
+            BaseContainer.children[k].remove();
+            BaseContainer.appendChild(ElementContainer[EndIndex+1][0]);
+        }
+    }
+    ElementContainer = [];
+    for(let n = 0; n < Math.ceil(ProductList.length / ContainerLength); n++){
+        var InnerArray = [];
+        for(let m = 0; m < ContainerLength; m++){
+            if(ProductList[n*ContainerLength+m] == undefined){
+                break;
+            }
+            InnerArray.push(ProductList[n*ContainerLength+m]);
+        }
+        ElementContainer.push(InnerArray);
+    }
+    //RemoveChildNodes(BaseContainer);
+    
+    console.log(BaseContainer.children.length);
+    
+}
+
+
+function clone2D(a) {
+  return a.map(o => [...o]);
 }
 
 function isScrolledIntoView(el) {
@@ -170,88 +235,89 @@ function isScrolledIntoView(el) {
     return isVisible;
 }
 
-var EndIndex = 1;
-var StartIndex = 1;
+
 function UpdateList(){
     Re_getDocuments();
-    AddButtonEventListeners();
+    //AddButtonEventListeners();
     for(let i = 0; i < BaseContainer.children.length; i++){
         if(BaseContainer.children[i] == undefined){
             continue;
         }
-        if(EndIndex < ElementContainer.length-1 && isScrolledIntoView(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[EndIndex][ElementContainer[EndIndex].length-1])){
-            if(EndIndex == 1){
-                for(let j = 0; j < ElementContainer[EndIndex + 1].length; j++){
-                    BaseContainer.appendChild(ElementContainer[EndIndex + 1][j]);
+        var CurrentNode = BaseContainer.childNodes[i];
+        var Curr = ClientData.DisplayIndex;
+        var Next = NextIndex;
+        var Prev = PreviousIndex;
+        
+        if(isScrolledIntoView(CurrentNode) && CurrentNode.isEqualNode(ProductList[(Curr+1) * ContainerLength-1])){
+            if(Curr == 0){
+                console.log("up");
+                console.log(CurrentNode);
+                for(let j = (Prev*ContainerLength); j < ((Curr + 1) * ContainerLength); j++){
+                    BaseContainer.appendChild(ProductList[j]);
                 }
-                EndIndex++;
             }else{
-                for(let j = 0; j < ElementContainer[EndIndex + 1].length; j++){
+                for(let j = Prev*ContainerLength+1; j < Curr * ContainerLength; j++){
                     try{
-                    BaseContainer.appendChild(ElementContainer[EndIndex + 1][j]);
+                    BaseContainer.appendChild(ProductList[j]);
                     BaseContainer.firstChild.remove(); 
                     }catch(e){
                         console.log(e);
                         console.log(j);
                     }
                 }
-                EndIndex++;
-                StartIndex++;
             }
+            ClientData.DisplayIndex += 1;
         }
-        if(StartIndex > 1 && isScrolledIntoView(BaseContainer.childNodes[i]) && BaseContainer.childNodes[i].isEqualNode(ElementContainer[StartIndex][0])){
+        /*
+        if(isScrolledIntoView(CurrentNode) && CurrentNode.isEqualNode(ProductList[Prev * ContainerLength])){
             var curScrollPos = BaseContainer.scrollTop;
             var oldScroll = BaseContainer.scrollHeight - BaseContainer.clientHeight;
-            for(let j = ElementContainer[StartIndex].length - 1; j >= 0; j--){
+            for(let j = ElementContainer[DisplayIndex].length - 1; j >= 0; j--){
                 try{
-                    BaseContainer.prepend(ElementContainer[StartIndex - 1][j]);
+                    BaseContainer.prepend(ElementContainer[DisplayIndex - 1][j]);
                 }catch(e){
                     console.log(e);
-                    console.log(ElementContainer[StartIndex - 1][j]);
-                    console.log("StartIndex: " + StartIndex);
+                    console.log(ElementContainer[DisplayIndex - 1][j]);
+                    console.log("DisplayIndex: " + DisplayIndex);
                     console.log("Current Index: " + j);
                 }
             }
             var newScroll = BaseContainer.scrollHeight - BaseContainer.clientHeight;
             BaseContainer.scrollTop = curScrollPos + (newScroll - oldScroll);
 
-           for(let j = ElementContainer[StartIndex].length - 1; j >= 0; j--){
+           for(let j = ElementContainer[DisplayIndex].length - 1; j >= 0; j--){
                 try{
                     BaseContainer.lastChild.remove();
                 }catch(e){
                     console.log(e);
-                    console.log(ElementContainer[StartIndex - 1][j]);
-                    console.log("StartIndex: " + StartIndex);
+                    console.log(ElementContainer[DisplayIndex - 1][j]);
+                    console.log("StartIndex: " + DisplayIndex);
                     console.log("Current Index: " + j);
                 }
             }
-
-            EndIndex--;
-            StartIndex--;
+            DisplayIndex--;
         }
+        */
     }
     scrollLock = false;
 }
 
 function Re_getDocuments(){
-    DeleteButtons = [];
-    UpdateButtons = [];
     BaseContainer = document.getElementById("ProductListContainer");
-    DeleteButtons = document.getElementsByClassName("DeleteButton");
-    UpdateButtons = document.getElementsByClassName("UpdateButton");
 }
 
 function AddButtonEventListeners(){
-    for(let i = 0; i < DeleteButtons.length; i++){
-        DeleteButtons[i].addEventListener('click', function(e) {
-            socket.emit('Delete', msg={Target:'<%- PageState.CurrentRenderTarget %>', Value:DeleteButtons[i].getAttribute("value")});
-        });
-    }
-    for(let j = 0; j < UpdateButtons.length; j++){
-        UpdateButtons[j].addEventListener('click', function(e) {
-            socket.emit('Update', msg="Sable");
-        });
-    }
+    BaseContainer.addEventListener("click", function(e){
+        if(e.target){
+            if(e.target.getAttribute("class") == "DeleteButton"){
+                console.log("hello World");
+                socket.emit('Delete', msg={Target:'<%- PageState.CurrentRenderTarget %>', Value:e.target.getAttribute("value")});
+            }
+            if(e.target.getAttribute("class") == "Update"){
+                console.log("Update");
+            }
+        }
+    });
 }
 
 
@@ -260,7 +326,7 @@ BaseContainer.addEventListener("scroll", (e) => {
         scrollLock = true;
         setTimeout(() => {
           UpdateList();      
-        }, 100);
+        }, 1000);
     }
 });
 
@@ -269,14 +335,18 @@ Add.addEventListener('click', function(e) {
   });
 socket.on("Delete", function(msg){ //TODO Recieve whether delete succeeded and if it did then remove the item and possibly rebuild?
     console.log(msg);
+    RebuildAfterDelete(msg.Value);        
+    //FirstBuild()
 });
 socket.on("Add", function(msg){
     //console.log(msg);
 });
 socket.on("init", function(msg){
+    console.log("Init");
     FirstBuild(msg);
 });
 socket.on("reload", function(){
+    console.log("Reloaded");
     FirstBuild(msg);
 });
 </script>
