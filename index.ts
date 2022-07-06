@@ -89,20 +89,26 @@ io.on('connection', (socket) => {
             socket.request.session.save();
             socket.emit("init", socket.request.session.PageData.ProductList);
         }else{
-            console.log("Reload");
+            //console.log("Reload");
             socket.emit("init", socket.request.session.PageData.ProductList);
         }
         
     });
     
+    socket.on('UpdatePList', async () => {
+        socket.request.session.PageData.ProductList = await Sable.GetAllProducts("Sable");
+        socket.request.session.save();
+    });
+
     socket.on('Delete', (msg) => { //TODO Need to update database and respond with sucess or not
         if(msg.Target == "Sable"){
             const EmitMsg = async () => {
                 try{
                     //socket.request.session.PageData.Productlist = await Sable.DeleteItem(msg.Value);
                     //socket.request.session.save();
-                    console.log(msg.Value);
+                    //console.log(msg.Value);
                     io.emit("Delete", {Response:true, Value:msg.Value});
+                    socket.broadcast.emit("UPL");
                     return true;
                 }
                 catch(e){

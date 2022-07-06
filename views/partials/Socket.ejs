@@ -11,11 +11,12 @@ var ScrollPosY = undefined;
 var ScrollDirection = {Up:false, Down:false};
 let Start = false;
 const ContainerLength = 100;
+var ViewOffset = 1; //Element offset for visibility check
 var ElementContainer = [];
 var ProductList = [];
 
 var ClientData = {
-    DisplayIndexInternal: 0,
+    DisplayIndexInternal: 1,
     DisplayIndexListener: function(val){},
     set DisplayIndex(val){
         this.DisplayIndexInternal = val;
@@ -41,6 +42,9 @@ ClientData.registerListener(function(val){
 
 
 function setAttributes(el, attrs) {
+    if(el == undefined){
+        return;
+    }
   for(var key in attrs) {
     el.setAttribute(key, attrs[key]);
   }
@@ -75,12 +79,13 @@ function Produce(Ele, key, sku, brand, color){
     Ele.children[2].children[0].children[0].children[2].textContent = `Color:${color}`;
     return true;
 }
+
 function BuildProductArray(msg, StartIndex, FinishIndex){
     for(let j = StartIndex; j < FinishIndex; j++) //Build the elements
     {
-        setTimeout(() => {
-            Produce(ProductList[j], msg[j].key, msg[j].sku, msg[j].brand, msg[j].Color);
-        }, 3*j);
+        //setTimeout(() => {
+        Produce(ProductList[j], msg[j].key, msg[j].sku, msg[j].brand, msg[j].Color);
+        //}, 2*j);
     }
     //BuildContainer(ProductList, StartIndex, FinishIndex);
     console.log("Finished: " + StartIndex + " - " + FinishIndex);
@@ -94,7 +99,7 @@ function BuildFactory(msg, Length, Max){
         for(let i = 0; i < Math.ceil(Length / Max); i++){
             setTimeout(() => {
                 if(i >= Math.floor(Length / Max) && Length / Max % 1 < 1){
-                    BuildProductArray(msg, (Max*i), Length);
+                    BuildProductArray(msg, (Max*i), Length-1);
                     console.log("End");
                 }else{
                     BuildProductArray(msg, (Max*i), Max*(i+1));
@@ -195,28 +200,13 @@ function RebuildAfterDelete(ItemIndex){
             break;
         }
     }
-
     for(let k = 0; k < BaseContainer.children.length; k++){
         if(BaseContainer.children[k].isEqualNode(ProductList[PIndex])){
             BaseContainer.children[k].remove();
-            BaseContainer.appendChild(ElementContainer[EndIndex+1][0]);
+            BaseContainer.appendChild(ProductList[(ClientData.DisplayIndex*100)]);
         }
     }
-    ElementContainer = [];
-    for(let n = 0; n < Math.ceil(ProductList.length / ContainerLength); n++){
-        var InnerArray = [];
-        for(let m = 0; m < ContainerLength; m++){
-            if(ProductList[n*ContainerLength+m] == undefined){
-                break;
-            }
-            InnerArray.push(ProductList[n*ContainerLength+m]);
-        }
-        ElementContainer.push(InnerArray);
-    }
-    //RemoveChildNodes(BaseContainer);
-    
-    console.log(BaseContainer.children.length);
-    
+    ProductList.splice(PIndex, 1);
 }
 
 
@@ -244,62 +234,61 @@ function UpdateList(){
             continue;
         }
         var CurrentNode = BaseContainer.childNodes[i];
-        var Curr = ClientData.DisplayIndex;
-        var Next = NextIndex;
-        var Prev = PreviousIndex;
+        var Curr = ClientData.DisplayIndex; //CurrentIndex
+        var Next = NextIndex; //NextIndex
+        var Prev = PreviousIndex; //Previous Index
         
-        if(isScrolledIntoView(CurrentNode) && CurrentNode.isEqualNode(ProductList[(Curr+1) * ContainerLength-1])){
-            if(Curr == 0){
-                console.log("up");
-                console.log(CurrentNode);
-                for(let j = (Prev*ContainerLength); j < ((Curr + 1) * ContainerLength); j++){
-                    BaseContainer.appendChild(ProductList[j]);
-                }
-            }else{
-                for(let j = Prev*ContainerLength+1; j < Curr * ContainerLength; j++){
+        var LastIndexValue = Math.ceil(ProductList.length / ContainerLength);
+        /*
+        *   Check if element is what we are looking for, which is the last element in the index - Offset, then check if it is in the viewport
+        */
+        //console.log(ProductList[(Curr * ContainerLength)+ContainerLength-ViewOffset]);
+        var UpOffset = (Curr * ContainerLength)-ViewOffset;
+        if(Curr < LastIndexValue && CurrentNode.isEqualNode(ProductList[UpOffset]) && isScrolledIntoView(CurrentNode) && ScrollDirection.Down){
+                /*
+                *   Curr equal 1, so Next equals 2, which means we are adding 100 - 200
+                */
+                for(let u = (Curr * ContainerLength); u < (Next * ContainerLength); u++){
                     try{
-                    BaseContainer.appendChild(ProductList[j]);
-                    BaseContainer.firstChild.remove(); 
+                    if(ProductList[u] == undefined){
+                        continue;
+                    }
+                    BaseContainer.appendChild(ProductList[u]);
+                    if(Curr > 1){
+                        BaseContainer.firstChild.remove();
+                    }
                     }catch(e){
                         console.log(e);
-                        console.log(j);
+                        console.log(u);
                     }
                 }
-            }
-            ClientData.DisplayIndex += 1;
+                ClientData.DisplayIndex += 1;
+//                console.log(BaseContainer.children.length);
         }
-        /*
-        if(isScrolledIntoView(CurrentNode) && CurrentNode.isEqualNode(ProductList[Prev * ContainerLength])){
-            var curScrollPos = BaseContainer.scrollTop;
-            var oldScroll = BaseContainer.scrollHeight - BaseContainer.clientHeight;
-            for(let j = ElementContainer[DisplayIndex].length - 1; j >= 0; j--){
-                try{
-                    BaseContainer.prepend(ElementContainer[DisplayIndex - 1][j]);
+        //console.log(Curr)
+        var DownOffset = ((Prev-1) * ContainerLength) + ViewOffset;
+//        console.log(ProductList[DownOffset]);
+        if(Curr > 1 && CurrentNode.isEqualNode(ProductList[DownOffset]) && isScrolledIntoView(CurrentNode) && ScrollDirection.Up){
+            //var curScrollPos = BaseContainer.scrollTop;
+            //var oldScroll = BaseContainer.scrollHeight - BaseContainer.clientHeight;
+            var Offset = 2;
+            if(Curr == 2){
+                Offset = 1;
+            }
+            for(let d = ((Prev-1) * ContainerLength); d > ((Prev-Offset) * ContainerLength)-1; d--){
+                try{                    
+                BaseContainer.prepend(ProductList[d]);
+                BaseContainer.lastChild.remove(); 
                 }catch(e){
                     console.log(e);
-                    console.log(ElementContainer[DisplayIndex - 1][j]);
-                    console.log("DisplayIndex: " + DisplayIndex);
-                    console.log("Current Index: " + j);
+                    console.log(d);
                 }
             }
-            var newScroll = BaseContainer.scrollHeight - BaseContainer.clientHeight;
-            BaseContainer.scrollTop = curScrollPos + (newScroll - oldScroll);
-
-           for(let j = ElementContainer[DisplayIndex].length - 1; j >= 0; j--){
-                try{
-                    BaseContainer.lastChild.remove();
-                }catch(e){
-                    console.log(e);
-                    console.log(ElementContainer[DisplayIndex - 1][j]);
-                    console.log("StartIndex: " + DisplayIndex);
-                    console.log("Current Index: " + j);
-                }
-            }
-            DisplayIndex--;
+            //var newScroll = BaseContainer.scrollHeight - BaseContainer.clientHeight;
+            //BaseContainer.scrollTop = curScrollPos + (newScroll - oldScroll);
+            ClientData.DisplayIndex -= 1;
         }
-        */
     }
-    scrollLock = false;
 }
 
 function Re_getDocuments(){
@@ -320,19 +309,35 @@ function AddButtonEventListeners(){
     });
 }
 
-
+var PrevScrollPosition = 0;
 BaseContainer.addEventListener("scroll", (e) => {
+    if(PrevScrollPosition == 0){
+        PrevScrollPosition = BaseContainer.scrollTop;
+    }
+    if(PrevScrollPosition > BaseContainer.scrollTop){
+        ScrollDirection.Up = true;
+        ScrollDirection.Down = false;
+    }
+    if(PrevScrollPosition < BaseContainer.scrollTop){
+        ScrollDirection.Down = true;
+        ScrollDirection.Up = false;
+    }
+    PrevScrollPosition = BaseContainer.scrollTop;
     if(!scrollLock){
         scrollLock = true;
         setTimeout(() => {
-          UpdateList();      
-        }, 1000);
+          UpdateList();
+          scrollLock = false;      
+        }, 5);
     }
 });
 
 Add.addEventListener('click', function(e) {
     //socket.emit('Add', msg={Target:"Sable"});
-  });
+});
+socket.on("UPL", function(msg){
+    socket.emit("UpdatePList");
+});
 socket.on("Delete", function(msg){ //TODO Recieve whether delete succeeded and if it did then remove the item and possibly rebuild?
     console.log(msg);
     RebuildAfterDelete(msg.Value);        
