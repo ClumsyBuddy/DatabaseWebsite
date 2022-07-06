@@ -84,15 +84,10 @@ io.on('connection', (socket) => {
 
     socket.on("init", async () => {
         if(socket.request.session.PageData.ProductList.length == 0){
-            console.log("Initial Send");
             socket.request.session.PageData.ProductList = await Sable.GetAllProducts("Sable");
             socket.request.session.save();
-            socket.emit("init", socket.request.session.PageData.ProductList);
-        }else{
-            //console.log("Reload");
-            socket.emit("init", socket.request.session.PageData.ProductList);
         }
-        
+        socket.emit("init", socket.request.session.PageData.ProductList);
     });
     
     socket.on('UpdatePList', async () => {

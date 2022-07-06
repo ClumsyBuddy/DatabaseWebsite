@@ -11,7 +11,7 @@ var ScrollPosY = undefined;
 var ScrollDirection = {Up:false, Down:false};
 let Start = false;
 const ContainerLength = 100;
-var ViewOffset = 1; //Element offset for visibility check
+var ViewOffset = 5; //Element offset for visibility check
 var ElementContainer = [];
 var ProductList = [];
 
@@ -83,35 +83,27 @@ function Produce(Ele, key, sku, brand, color){
 function BuildProductArray(msg, StartIndex, FinishIndex){
     for(let j = StartIndex; j < FinishIndex; j++) //Build the elements
     {
-        //setTimeout(() => {
         Produce(ProductList[j], msg[j].key, msg[j].sku, msg[j].brand, msg[j].Color);
-        //}, 2*j);
     }
-    //BuildContainer(ProductList, StartIndex, FinishIndex);
     console.log("Finished: " + StartIndex + " - " + FinishIndex);
 }
 
 function BuildFactory(msg, Length, Max){
-    console.log((Length / Max % 1));
-    console.log(Length / Max);
 
     try{
         for(let i = 0; i < Math.ceil(Length / Max); i++){
             setTimeout(() => {
                 if(i >= Math.floor(Length / Max) && Length / Max % 1 < 1){
-                    BuildProductArray(msg, (Max*i), Length-1);
-                    console.log("End");
+                    BuildProductArray(msg, (Max*i), Length);
                 }else{
                     BuildProductArray(msg, (Max*i), Max*(i+1));
                 }
-                //console.log((Max*i), Max*(i+1));
             }, 5*i);
         }
     }catch(e){
         console.log(e);
     }
 }
-
 
 function RemoveChildNodes(Element){ //Removes All Childeren and returns true if it manages to remove all else return false
     var count = 0;
@@ -125,54 +117,6 @@ function RemoveChildNodes(Element){ //Removes All Childeren and returns true if 
     return true;
 }
 
-function isVisible(elem) {
-    if (!(elem instanceof Element)) throw Error('DomUtil: elem is not an element. ');
-    const style = getComputedStyle(elem);
-    if (style.display === 'none') return false;
-    if (style.visibility !== 'visible') return false;
-    if (style.opacity < 0.1) return false;
-    if (elem.offsetWidth + elem.offsetHeight + elem.getBoundingClientRect().height +
-        elem.getBoundingClientRect().width === 0) {
-        return false;
-    }
-    const elemCenter   = {
-        x: elem.getBoundingClientRect().left + elem.offsetWidth / 2,
-        y: elem.getBoundingClientRect().top + elem.offsetHeight / 2
-    };
-    if (elemCenter.x < 0) return false;
-    if (elemCenter.x > (document.documentElement.clientWidth || window.innerWidth)) return false;
-    if (elemCenter.y < 0) return false;
-    if (elemCenter.y > (document.documentElement.clientHeight || window.innerHeight)) return false;
-    let pointContainer = document.elementFromPoint(elemCenter.x, elemCenter.y);
-    do {
-        if (pointContainer === elem) return true;
-    } while (pointContainer = pointContainer.parentNode);
-    return false;
-}
-
-/*
-function BuildContainer(List, Start, End){
-    var TempArray = [];
-    for(let j = Start; j < End; j++) //Build the elements
-    {
-        TempArray.push(ProductList[j]);
-    }
-    ElementContainer.push(TempArray);
-}
-*/
-/*
-function BuildDisplayContainers(List, Length, Max){
-    try{
-        for(let i = 1; i < Length / Max; i++){
-            setTimeout(() => {
-                BuildContainer(List, (Max*i)+1, Max*(i+1)); 
-            }, 5*i);
-        }
-    }catch(e){
-        console.log(e);
-    }
-}
-*/
 function FirstBuild(msg){
     if(msg.length > 0){
         var Node = CreateElement();
@@ -187,15 +131,13 @@ function FirstBuild(msg){
     for(let items = 0; items < ContainerLength; items++){
         BaseContainer.appendChild(ProductList[items]);
     }
-    Re_getDocuments();
     AddButtonEventListeners();
 }
 
-function RebuildAfterDelete(ItemIndex){
+function DeleteItem(ItemIndex){
     var PIndex = undefined;
     for(let i = 0; i < ProductList.length; i++){
         if(ProductList[i].children[0].children[0].getAttribute("value") == ItemIndex){
-            //ProductList.splice(i, 1);
             PIndex = i;
             break;
         }
@@ -203,16 +145,14 @@ function RebuildAfterDelete(ItemIndex){
     for(let k = 0; k < BaseContainer.children.length; k++){
         if(BaseContainer.children[k].isEqualNode(ProductList[PIndex])){
             BaseContainer.children[k].remove();
-            BaseContainer.appendChild(ProductList[(ClientData.DisplayIndex*100)]);
+            if(ClientData.DisplayIndex < Math.ceil(ProductList.length / ContainerLength)){
+                BaseContainer.appendChild(ProductList[(ClientData.DisplayIndex*100)]);
+            }
         }
     }
     ProductList.splice(PIndex, 1);
 }
 
-
-function clone2D(a) {
-  return a.map(o => [...o]);
-}
 
 function isScrolledIntoView(el) {
     var rect = el.getBoundingClientRect();
@@ -225,10 +165,8 @@ function isScrolledIntoView(el) {
     return isVisible;
 }
 
-
+//FIXME Need to fix Basecontainer having less Items because of deleting items at the end
 function UpdateList(){
-    Re_getDocuments();
-    //AddButtonEventListeners();
     for(let i = 0; i < BaseContainer.children.length; i++){
         if(BaseContainer.children[i] == undefined){
             continue;
@@ -238,11 +176,10 @@ function UpdateList(){
         var Next = NextIndex; //NextIndex
         var Prev = PreviousIndex; //Previous Index
         
-        var LastIndexValue = Math.ceil(ProductList.length / ContainerLength);
+        var LastIndexValue = Math.ceil(ProductList.length-1 / ContainerLength); // <--- Potentially fixed with the -1 addition
         /*
         *   Check if element is what we are looking for, which is the last element in the index - Offset, then check if it is in the viewport
         */
-        //console.log(ProductList[(Curr * ContainerLength)+ContainerLength-ViewOffset]);
         var UpOffset = (Curr * ContainerLength)-ViewOffset;
         if(Curr < LastIndexValue && CurrentNode.isEqualNode(ProductList[UpOffset]) && isScrolledIntoView(CurrentNode) && ScrollDirection.Down){
                 /*
@@ -263,14 +200,9 @@ function UpdateList(){
                     }
                 }
                 ClientData.DisplayIndex += 1;
-//                console.log(BaseContainer.children.length);
         }
-        //console.log(Curr)
         var DownOffset = ((Prev-1) * ContainerLength) + ViewOffset;
-//        console.log(ProductList[DownOffset]);
         if(Curr > 1 && CurrentNode.isEqualNode(ProductList[DownOffset]) && isScrolledIntoView(CurrentNode) && ScrollDirection.Up){
-            //var curScrollPos = BaseContainer.scrollTop;
-            //var oldScroll = BaseContainer.scrollHeight - BaseContainer.clientHeight;
             var Offset = 2;
             if(Curr == 2){
                 Offset = 1;
@@ -284,25 +216,18 @@ function UpdateList(){
                     console.log(d);
                 }
             }
-            //var newScroll = BaseContainer.scrollHeight - BaseContainer.clientHeight;
-            //BaseContainer.scrollTop = curScrollPos + (newScroll - oldScroll);
             ClientData.DisplayIndex -= 1;
         }
     }
-}
-
-function Re_getDocuments(){
-    BaseContainer = document.getElementById("ProductListContainer");
 }
 
 function AddButtonEventListeners(){
     BaseContainer.addEventListener("click", function(e){
         if(e.target){
             if(e.target.getAttribute("class") == "DeleteButton"){
-                console.log("hello World");
                 socket.emit('Delete', msg={Target:'<%- PageState.CurrentRenderTarget %>', Value:e.target.getAttribute("value")});
             }
-            if(e.target.getAttribute("class") == "Update"){
+            if(e.target.getAttribute("class") == "UpdateButton"){
                 console.log("Update");
             }
         }
@@ -339,19 +264,12 @@ socket.on("UPL", function(msg){
     socket.emit("UpdatePList");
 });
 socket.on("Delete", function(msg){ //TODO Recieve whether delete succeeded and if it did then remove the item and possibly rebuild?
-    console.log(msg);
-    RebuildAfterDelete(msg.Value);        
-    //FirstBuild()
+    DeleteItem(msg.Value);        
 });
 socket.on("Add", function(msg){
     //console.log(msg);
 });
 socket.on("init", function(msg){
-    console.log("Init");
-    FirstBuild(msg);
-});
-socket.on("reload", function(){
-    console.log("Reloaded");
     FirstBuild(msg);
 });
 </script>
