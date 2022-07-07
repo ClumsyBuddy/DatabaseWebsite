@@ -146,14 +146,26 @@ function DeleteItem(ItemIndex){
         if(BaseContainer.children[k].isEqualNode(ProductList[PIndex])){
             BaseContainer.children[k].remove();
 
-            if(ProductList[ClientData.DisplayIndex*ContainerLength + 1] != undefined){
+            if(ProductList[ClientData.DisplayIndex*ContainerLength+1] != undefined && PIndex+ContainerLength < ProductList.length && BaseContainer.children.length < ContainerLength){
                 BaseContainer.appendChild(ProductList[ClientData.DisplayIndex*ContainerLength + 1]);
             }
+            if(ProductList[ClientData.DisplayIndex*ContainerLength+1] != undefined && PIndex+ContainerLength < ProductList.length && BaseContainer.children.length > 100){
+                BaseContainer.appendChild(ProductList[NextIndex*ContainerLength + 1]);
+            }
+
+            /*
+            * //FIXME Missing one index when going back up
+            *           One Extra index when going back down
+            */
+
             if(PIndex + ContainerLength > ProductList.length){
-                var Offset = ContainerLength - Math.floor(((ProductList.length / ContainerLength) % 1 * 100));
+                console.log("Length: " + ProductList.length);
+                console.log((ProductList.length / ContainerLength));
+                var Offset = Math.round(((ProductList.length / ContainerLength) % 1) * ContainerLength);
                 console.log(Offset);
                 BaseContainer.prepend(ProductList[(PreviousIndex-1)*ContainerLength - Offset]);
             }
+            break;
         }
     }
     ProductList.splice(PIndex, 1);
@@ -191,7 +203,7 @@ function UpdateList(){
                 /*
                 *   Curr equal 1, so Next equals 2, which means we are adding 100 - 200
                 */
-                for(let u = (Curr * ContainerLength); u < (Next * ContainerLength); u++){
+                for(let u = (Curr * ContainerLength) + 1; u < (Next * ContainerLength) + 1; u++){
                     try{
                     if(ProductList[u] == undefined){
                         continue;
