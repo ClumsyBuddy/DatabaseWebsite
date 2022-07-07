@@ -145,8 +145,14 @@ function DeleteItem(ItemIndex){
     for(let k = 0; k < BaseContainer.children.length; k++){
         if(BaseContainer.children[k].isEqualNode(ProductList[PIndex])){
             BaseContainer.children[k].remove();
-            if(ClientData.DisplayIndex < Math.ceil(ProductList.length / ContainerLength)){
-                BaseContainer.appendChild(ProductList[(ClientData.DisplayIndex*100)]);
+
+            if(ProductList[ClientData.DisplayIndex*ContainerLength + 1] != undefined){
+                BaseContainer.appendChild(ProductList[ClientData.DisplayIndex*ContainerLength + 1]);
+            }
+            if(PIndex + ContainerLength > ProductList.length){
+                var Offset = ContainerLength - Math.floor(((ProductList.length / ContainerLength) % 1 * 100));
+                console.log(Offset);
+                BaseContainer.prepend(ProductList[(PreviousIndex-1)*ContainerLength - Offset]);
             }
         }
     }
@@ -207,10 +213,19 @@ function UpdateList(){
             if(Curr == 2){
                 Offset = 1;
             }
-            for(let d = ((Prev-1) * ContainerLength); d > ((Prev-Offset) * ContainerLength)-1; d--){
+            var Decimal = (ProductList.length / ContainerLength) % 1;
+            var Counter = 0;
+            for(let d = ((Prev-1) * ContainerLength) - 1; d > ((Prev-Offset) * ContainerLength)-1; d--){
                 try{                    
                 BaseContainer.prepend(ProductList[d]);
-                BaseContainer.lastChild.remove(); 
+                if(Curr == Math.ceil(ProductList.length / ContainerLength) && Decimal < 1){
+                    if(Counter < (Decimal * 100)){
+                        BaseContainer.lastChild.remove();
+                    }
+                    Counter++;
+                }else{
+                    BaseContainer.lastChild.remove();
+                }
                 }catch(e){
                     console.log(e);
                     console.log(d);
