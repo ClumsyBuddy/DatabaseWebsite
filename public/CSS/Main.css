@@ -388,14 +388,15 @@ body::-webkit-scrollbar{
     text-align: center;
     margin-top: 30px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     flex-wrap: wrap;
 }
+/*
 .Overlay-Content::after{
     content: "";
     flex: auto;
 }
-
+*/
 .Overlay-Title{
     text-align: center; 
     color: white;
@@ -407,6 +408,12 @@ body::-webkit-scrollbar{
     position: absolute;
     top: 20px;
     right: 45px;
+    font-size: 60px;
+}
+.BackButton{
+    position: absolute;
+    top: 20px;
+    left: 45px;
     font-size: 60px;
 }
 
