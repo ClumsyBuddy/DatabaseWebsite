@@ -2,22 +2,12 @@ import { stringify } from "querystring";
 import { Socket } from "socket.io";
 import { DatabaseManager } from "./DatabaseManager";
 import { Login } from "./LoginHandler";
-import { deepCopy } from "./Utility"; 
+import { deepCopy } from "./Utility";
+import { ItemData } from "./ItemData";
 const fs = require('fs');
 
 
-class ItemData{
-    public ItemType:string;
-    public Options:Array<any>;
-    public Values:Array<any>;
-    constructor(_ItemType){
-        this.ItemType = _ItemType;
-        this.Options = [];
-    }
-    public AddOptions(_option:any, values:Array<string>){
-        this.Options.push({[_option]: values});
-    }
-}
+
 
 
 //TODO Need to implement responsice error handling so a single bug doesnt bring down the server
@@ -249,6 +239,7 @@ class  ResponseHandler{
     *   4. Finally it either creates a new table or it doubles checkes these are new items and then updates the table
     */
     async UpdateItemInformation(newValue:any){
+        this.ItemDataArray = [];
         if(newValue === undefined){
             return;
         }

@@ -285,8 +285,42 @@ BaseContainer.addEventListener("scroll", (e) => {
 });
 
 Add.addEventListener('click', function(e) {
-    //socket.emit('Add', msg={Target:"Sable"});
+    console.log("Getting Add Menu Items From Server");
+    socket.emit('GetAdd', msg={Target:"Sable"}); //Get ItemData from server
 });
+socket.on("AddItemData", (msg) => {
+    if(msg == undefined){
+        throw console.error("ItemData not returned from server");
+    }
+    document.getElementById("FullNav").style.width = "100%";
+    var Overlay_Content = document.getElementById("OVC");
+    document.getElementById("OVT").textContent = "Select ItemType";
+    var ItemTypeArray = [];
+    for(let  i = 0; i < msg.length; i++){
+        ItemTypeArray.push(InfoBlock());
+        ItemTypeArray[i].textContent = msg[i].ItemType;
+        Overlay_Content.appendChild(ItemTypeArray[i]);
+    }
+    
+
+});
+
+
+function InfoBlock(){
+    var ele = document.createElement("a");
+    console.log(ele);
+    setAttributes(ele, {"class":"InfoItem",
+                        "href": "javascript:void(0)",
+                        "data-Selection": ""});
+    return ele;
+}
+
+
+function CloseNav(){
+    document.getElementById("FullNav").style.width = "0%";
+    RemoveChildNodes(document.getElementById("OVC"));
+}
+
 socket.on("UPL", function(msg){
     socket.emit("UpdatePList");
 });

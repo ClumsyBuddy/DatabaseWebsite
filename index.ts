@@ -77,16 +77,13 @@ io.use((socket, next) => {
 
 app.use(SessionMiddleWare);
 
-
-
-//FIXME Need to fix Duplicate Products appearing in the productlist
 io.on('connection', (socket) => {
 
     socket.on("init", async () => {
-        if(socket.request.session.PageData.ProductList.length == 0){
-            socket.request.session.PageData.ProductList = await Sable.GetAllProducts("Sable");
-            socket.request.session.save();
-        }
+        //if(socket.request.session.PageData.ProductList.length == 0){
+        socket.request.session.PageData.ProductList = await Sable.GetAllProducts("Sable");
+        socket.request.session.save();
+        //}
         socket.emit("init", socket.request.session.PageData.ProductList);
     });
     
@@ -95,20 +92,33 @@ io.on('connection', (socket) => {
         socket.request.session.save();
     });
 
-    socket.on('Delete', (msg) => { //TODO Need to update database and respond with sucess or not
+
+    socket.on('GetAdd', (msg) => {
+        if(msg.Target == "Sable"){
+            const EmitAddGet = async () =>{
+                console.log("Sending Item Data");
+                socket.emit("AddItemData", Sable.ItemData);
+            }
+            try{
+                EmitAddGet();
+            }catch(e){
+                console.log("Error Occurred: " + e);
+            }
+        }
+    });
+
+    socket.on('Delete', (msg) => {
         if(msg.Target == "Sable"){
             const EmitMsg = async () => {
                 try{
                     //socket.request.session.PageData.Productlist = await Sable.DeleteItem(msg.Value);
                     //socket.request.session.save();
-                    //console.log(msg.Value);
                     io.emit("Delete", {Response:true, Value:msg.Value});
                     socket.broadcast.emit("UPL");
                     return true;
                 }
                 catch(e){
                     console.log(e);
-                    //io.emit("Delete", {Response:false, Value:undefined});
                     return false;
                 }
             }
@@ -158,28 +168,6 @@ app.get("/Search", (req, res) => {
     }
 });
 */
-/*
-app.get("/Update", (req, res) => {
-    if(req.query.Sable != undefined){
-        console.log(req.query);
-    }
-    if(req.query.Diplomat != undefined){
-        console.log(req.query);
-    }
-    res.redirect("back");
-});
-*/
-
-app.get("/AddItem", (req, res) => {
-    if(req.query.Sable != undefined){
-        console.log(req.query);
-        Sable.MakeTestData();
-    }
-    if(req.query.Diplomat != undefined){
-        console.log(req.query);
-    }
-    res.redirect("back");
-});
 
 app.route('/Login')
     .get((req, res) =>{

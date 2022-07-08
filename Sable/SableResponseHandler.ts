@@ -3,6 +3,7 @@ import req from "express/lib/request";
 import { DatabaseManager } from "../DatabaseManager";
 import { Login } from "../LoginHandler";
 import {ResponseHandler} from "../ResponseHandler";
+import { ItemData } from "../ItemData";
 
 class SableResponseHandler extends ResponseHandler{
 
@@ -17,6 +18,12 @@ class SableResponseHandler extends ResponseHandler{
 
         
     }
+
+    
+    public get ItemData() : Array<ItemData> {
+        return this.ItemDataArray;
+    }
+    
 
     async MakeTestData(){
         for(let i = 0; i < 5056; i++){

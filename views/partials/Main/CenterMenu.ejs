@@ -3,9 +3,7 @@
 
     <div class="SearchBar">
         <div class="AddButtonContainer">
-            <form id='Add' action="/AddItem" method="get" style="width:100%; height:100%;">
-                <button type="submit" name="Sable" class="MenuButtons">Add</button>
-            </form>
+            <button id="Add" type="submit" name="Sable" class="MenuButtons">Add</button>
         </div>
         <div class="">
             <form class="SearchBarContainer" action="/Search" method="get">
@@ -15,5 +13,6 @@
         </div>
     </div>
     <h2 class=""><%= PageState.SectionId %></h1>
+    <%- include('./FullScreenNavigation') %>
     <%- include('./BaseItemDisplay') %>
 </div>
