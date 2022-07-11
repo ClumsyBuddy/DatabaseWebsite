@@ -1,4 +1,5 @@
 *.db
 *.js
 !public/javascript*.js
+!views/partials/Javascript*.js
 sessions
