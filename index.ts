@@ -83,6 +83,7 @@ io.on('connection', (socket) => {
         //if(socket.request.session.PageData.ProductList.length == 0){
         socket.request.session.PageData.ProductList = await Sable.GetAllProducts("Sable");
         socket.request.session.save();
+        console.log("Hello World");
         //}
         socket.emit("init", socket.request.session.PageData.ProductList);
     });
@@ -108,7 +109,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('Delete', (msg) => {
-        if(msg.Target == "Sable"){
+        if(msg.Target.replace(" ", "") == "Sable"){
             const EmitMsg = async () => {
                 try{
                     //socket.request.session.PageData.Productlist = await Sable.DeleteItem(msg.Value);
