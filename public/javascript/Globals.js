@@ -25,11 +25,15 @@ var ItemData = undefined;
 
 
 var AddProductObj = {
-    SelectedItemType:undefined,
-    SelectedOptions:[],
-    BuildProducts(){
-        
+    States:{
+        "ItemType":0,
+        "BrandSelect":1,
+        "OptionSelect":2,
+        "OptionValueSelect":3
     },
+    CurrentState:0,
+    
+    Selection:[{ItemType:undefined, Brand:undefined, BrandOptions:[]}], 
     Reset(){
         this.SelectedItemType = undefined;
         this.SelectedOptions = {};

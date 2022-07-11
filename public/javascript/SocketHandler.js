@@ -7,6 +7,7 @@ import * as shake from "./HandShake.js";
 
 
 mySocket.on("AddItemData", (msg) => {
+    console.log(msg);
     shake.AddItemData(msg);
 });
 

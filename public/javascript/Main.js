@@ -7,7 +7,16 @@ export function AddItemData(msg){
     if(msg == undefined){
         throw console.error("ItemData not returned from server");
     }
-    ItemData = msg;
+    switch (AddProductObj.CurrentState){
+        case AddProductObj.States.ItemType:
+            break;
+        case AddProductObj.States.BrandSelect:
+            break;
+        case AddProductObj.States.OptionSelect:
+            break;
+        case AddProductObj.States.OptionValueSelect:
+            break;
+    }
     document.getElementById("FullNav").style.width = "100%";
     var Overlay_Content = document.getElementById("OVC");
     document.getElementById("OVT").textContent = "Select ItemType";
