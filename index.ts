@@ -34,7 +34,6 @@ import {SableResponseHandler} from "./Sable/SableResponseHandler"
 import { DiploResponseHandler } from "./Diplomat/DiploResponseHandler";
 import { Login } from "./LoginHandler";
 import { IndexResponseHandler } from "./IndexResponseHandler";
-import { Socket } from "socket.io";
 
 //Create variables for exported Classes
 const db = new Database('./Main.db');

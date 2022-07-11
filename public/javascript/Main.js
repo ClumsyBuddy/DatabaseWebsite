@@ -1,20 +1,26 @@
 import "./Globals.js"
 import { isScrolledIntoView, RemoveChildNodes } from "./Utility.js"
-import { CreateElement } from "./HtmlBuilder.js";
+import { CreateProductContainer, Produce, CloseNav, InfoBlock} from "./HtmlBuilder.js";
 
 
-
-export function Produce(Ele, key, sku, brand, color){
-    Ele.setAttribute("style", `background-image: url()`);
-    Ele.children[0].setAttribute("value", `${key}`);
-    Ele.children[0].children[0].setAttribute("value", `${key}`);
-    Ele.children[1].children[0].setAttribute("value", `${key}`);
-    Ele.children[2].children[0].setAttribute("value", `${key}`);
-    Ele.children[2].children[0].children[0].children[0].textContent = `SKU:${sku}`;
-    Ele.children[2].children[0].children[0].children[1].textContent = `Brand:${brand}`;
-    Ele.children[2].children[0].children[0].children[2].textContent = `Color:${color}`;
-    return true;
+export function AddItemData(msg){
+    if(msg == undefined){
+        throw console.error("ItemData not returned from server");
+    }
+    ItemData = msg;
+    document.getElementById("FullNav").style.width = "100%";
+    var Overlay_Content = document.getElementById("OVC");
+    document.getElementById("OVT").textContent = "Select ItemType";
+    var ItemTypeArray = [];
+    for(let  i = 0; i < msg.length; i++){
+        ItemTypeArray.push(InfoBlock(msg[i]));
+        Overlay_Content.appendChild(ItemTypeArray[i]);
+    }
 }
+
+/*
+*   BuildProductArray Builds up the Elements by producing them AKA add each attribute to the element until its finished.
+*/
 export function BuildProductArray(msg, StartIndex, FinishIndex){
     for(let j = StartIndex; j < FinishIndex; j++) //Build the elements
     {
@@ -22,8 +28,9 @@ export function BuildProductArray(msg, StartIndex, FinishIndex){
     }
     console.log("Finished: " + StartIndex + " - " + FinishIndex);
 }
-
-
+/*
+*   Build Factory starts multiple product arrays at set intervals. 101 - 200 | 201 - 300
+*/
 export function BuildFactory(msg, Length, Max){
     try{
         for(let i = 0; i < Math.ceil(Length / Max); i++){
@@ -40,9 +47,15 @@ export function BuildFactory(msg, Length, Max){
     }
 }
 
+
+/*
+*   FirstBuild Creates the Initial empty ProductList, it then Builds the first 100 (Whatever ContainerLength is)
+*   And then starts a build Factory for the remaining. It removes all current nodes on the BaseContainer
+*   Appends the First 100 children and then Starts the button listeners
+*/
 export function FirstBuild(msg){
     if(msg.length > 0){
-        var Node = CreateElement();
+        var Node = CreateProductContainer();
         for(let j = 0; j < msg.length; j++){
             ProductList.push(Node.cloneNode(true)); //Push Clones into the array to fill our product need
         }
@@ -58,7 +71,11 @@ export function FirstBuild(msg){
     IndexTimingListener();
 }
 
-
+/*
+*   DeleteItem First finds the Index the Targeted item is at in the Produstlist
+*   It then finds the product in the base container and removed it. it then appends the next element after our current index to maintain the
+*   Display amount. It finally deletes the item from the ProductList
+*/
 export function DeleteItem(ItemIndex){
     var PIndex = undefined;
     for(let i = 0; i < ProductList.length; i++){
@@ -95,6 +112,11 @@ export function DeleteItem(ItemIndex){
     }
     ProductList.splice(PIndex, 1);
 }
+
+/*
+*   UpdateList checks for the Target Elements by the Display Index. If the Element is the Targeted and its in view
+*   and its Not the last one or the first one then Add 100 and remove 100
+*/
 
 export function UpdateList(){
     for(let i = 0; i < BaseContainer.children.length; i++){
@@ -161,7 +183,7 @@ export function UpdateList(){
 }
 
 
-
+//This is the listener for ClientData.DisplayIndex. This Automatically updates NextIndex and Previous Index;
 function IndexTimingListener(){
     ClientData.registerListener(function(val){
         NextIndex = ClientData.DisplayIndex + 1;
@@ -171,29 +193,9 @@ function IndexTimingListener(){
     });
 }
 
+
+//This function Starts all of the Listeners for the buttons
 export function AddButtonEventListeners(){
-    BaseContainer.addEventListener("click", function(e){
-        if(e.target){
-            if(e.target.getAttribute("class") == "DeleteButton"){
-                mySocket.emit('Delete', {Target:PageState, Value:e.target.getAttribute("value")});
-            }
-            if(e.target.getAttribute("class") == "UpdateButton"){
-                console.log("Update");
-            }
-        }
-    });
-    Add.addEventListener('click', function(e) {
-        console.log("Getting Item Data From Server");
-        mySocket.emit('GetAdd', {Target:"Sable"}); //Get ItemData from server
-    });
-}
-
-    
-
-
-
-//var scrollLock = false;
-export function AddScrollEvent(){
     BaseContainer.addEventListener("scroll", (e) => {
         if(PrevScrollPosition == 0){
             PrevScrollPosition = BaseContainer.scrollTop;
@@ -215,5 +217,21 @@ export function AddScrollEvent(){
             }, 5);
         }
     });
+    BaseContainer.addEventListener("click", function(e){
+        if(e.target){
+            if(e.target.getAttribute("class") == "DeleteButton"){
+                mySocket.emit('Delete', {Target:PageState, Value:e.target.getAttribute("value")});
+            }
+            if(e.target.getAttribute("class") == "UpdateButton"){
+                console.log("Update");
+            }
+        }
+    });
+    Add.addEventListener('click', function(e) {
+        console.log("Getting Item Data From Server");
+        mySocket.emit('GetAdd', {Target:"Sable"}); //Get ItemData from server
+    });
+    document.getElementById('CloseButton').addEventListener('click', (e) =>{
+        CloseNav();
+    });
 }
-

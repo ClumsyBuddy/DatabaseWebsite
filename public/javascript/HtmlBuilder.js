@@ -1,6 +1,10 @@
 import {setAttributes, RemoveChildNodes} from "./Utility.js";
 
-function CreateElement(){
+
+/*
+* This Function Setups the First Element in the ProductList to be Copied and changed for the rest of them
+*/
+export function CreateProductContainer(){
     var Container = document.createElement("div");
     setAttributes(Container, {'class':'ProductContainer', 'style':'background-image: url("");'});
     var Form1 = document.createElement("div");
@@ -18,11 +22,27 @@ function CreateElement(){
     return Container;
 }
 
-function InfoBlock(msg){
+
+/*
+*   This function adds the Attributes and Text to the Empty Elements Created From CreateProductContainer
+*/
+export function Produce(Ele, key, sku, brand, color){
+    Ele.setAttribute("style", `background-image: url()`);
+    Ele.children[0].setAttribute("value", `${key}`);
+    Ele.children[0].children[0].setAttribute("value", `${key}`);
+    Ele.children[1].children[0].setAttribute("value", `${key}`);
+    Ele.children[2].children[0].setAttribute("value", `${key}`);
+    Ele.children[2].children[0].children[0].children[0].textContent = `SKU:${sku}`;
+    Ele.children[2].children[0].children[0].children[1].textContent = `Brand:${brand}`;
+    Ele.children[2].children[0].children[0].children[2].textContent = `Color:${color}`;
+    return true;
+}
+
+export function InfoBlock(msg){
     var ele = document.createElement("a");
     setAttributes(ele, {"class":"InfoItem",
                         "href": "javascript:void(0)",
-                        "data-Selection": ""});
+                        "data-Selection": "ItemType"});
     ele.textContent = msg.ItemType;
     ele.addEventListener("click", () =>{
             console.log("Clicked: " + ele.textContent);
@@ -32,14 +52,7 @@ function InfoBlock(msg){
     return ele;
 }
 
-function FNavCloseButtonListener(){
-    document.getElementById('CloseButton').addEventListener('click', (e) =>{
-        CloseNav();
-    });
-}
-
-
-function CloseNav(){
+export function CloseNav(){
     document.getElementById("FullNav").style.width = "0%";
     setTimeout(() => {
         if(document.getElementById("BButton")){
@@ -49,7 +62,7 @@ function CloseNav(){
     }, 250);
 }
 
-function BackButton(){ //Possibly need something like a state to keep track
+export function BackButton(){ //Possibly need something like a state to keep track
     var ele = document.createElement("a");
     setAttributes(ele, {"class":"BackButton",
                         "href": "javascript:void(0)",
@@ -63,4 +76,3 @@ function BackButton(){ //Possibly need something like a state to keep track
 }
 
 
-export {CreateElement, InfoBlock, BackButton, FNavCloseButtonListener};

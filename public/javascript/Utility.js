@@ -1,3 +1,7 @@
+/*
+*   This File contains all functions that can be used many times over. These are dynamic functions
+*/
+
 function isScrolledIntoView(el) {
     var rect = el.getBoundingClientRect();
     var elemTop = rect.top;
