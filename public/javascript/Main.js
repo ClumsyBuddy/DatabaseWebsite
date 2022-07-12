@@ -1,31 +1,49 @@
 import "./Globals.js"
 import { isScrolledIntoView, RemoveChildNodes } from "./Utility.js"
-import { CreateProductContainer, Produce, CloseNav, InfoBlock} from "./HtmlBuilder.js";
+import { CreateProductContainer, Produce, CloseNav} from "./HtmlBuilder.js";
+import * as AddItem from "./AddItem.js";
 
 
 export function AddItemData(msg){
     if(msg == undefined){
         throw console.error("ItemData not returned from server");
     }
-    switch (AddProductObj.CurrentState){
-        case AddProductObj.States.ItemType:
-            break;
-        case AddProductObj.States.BrandSelect:
-            break;
-        case AddProductObj.States.OptionSelect:
-            break;
-        case AddProductObj.States.OptionValueSelect:
-            break;
-    }
     document.getElementById("FullNav").style.width = "100%";
     var Overlay_Content = document.getElementById("OVC");
-    document.getElementById("OVT").textContent = "Select ItemType";
-    var ItemTypeArray = [];
-    for(let  i = 0; i < msg.length; i++){
-        ItemTypeArray.push(InfoBlock(msg[i]));
-        Overlay_Content.appendChild(ItemTypeArray[i]);
+    RemoveChildNodes(Overlay_Content);
+    var Overlay_Title = document.getElementById("OVT");
+    switch (AddProductObj.CurrentState){
+        case AddProductObj.States.SKU:
+            AddItem.GetSKU(Overlay_Content, Overlay_Title, msg);
+            break;
+        case AddProductObj.States.ItemType:
+            AddItem.GetItemType(Overlay_Content, Overlay_Title, msg);
+            break;
+        case AddProductObj.States.BrandSelect:
+            AddItem.GetItemOptions(Overlay_Content, Overlay_Title, msg);
+            break;
+        case AddProductObj.States.OptionSelect:
+            AddItem.GetBrand(Overlay_Content, Overlay_Title, msg);
+            break;
+        case AddProductObj.States.OptionValueSelect:
+            AddItem.GetOptionsValues(Overlay_Content, Overlay_Title, msg);
+            break;
     }
+    AddItem.ParseItemData(msg);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
 *   BuildProductArray Builds up the Elements by producing them AKA add each attribute to the element until its finished.
@@ -236,6 +254,7 @@ export function AddButtonEventListeners(){
             }
         }
     });
+    console.log(Add);
     Add.addEventListener('click', function(e) {
         console.log("Getting Item Data From Server");
         mySocket.emit('GetAdd', {Target:"Sable"}); //Get ItemData from server

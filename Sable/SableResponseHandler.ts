@@ -8,11 +8,11 @@ import { ItemData } from "../ItemData";
 class SableResponseHandler extends ResponseHandler{
 
     Name:string;
-    
+    Brands:Array<string>;
     constructor(DBController:DatabaseManager, User:Login, name:string = "Sable", io){
         super(DBController, User, io, {ClassName:name, TableName:name, ClassAutoColumn:"sku TEXT, brand TEXT, itemtype TEXT, image TEXT", CACIndex:3});
         this.Name = name;
-
+        this.Brands = [];
         //Get item information from Jsonfile and create a watchfile event 
         this.ParseJson("./Sable/SableOptions.json", this.UpdateItemInformation.bind(this));
 

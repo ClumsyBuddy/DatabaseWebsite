@@ -38,19 +38,7 @@ export function Produce(Ele, key, sku, brand, color){
     return true;
 }
 
-export function InfoBlock(msg){
-    var ele = document.createElement("a");
-    setAttributes(ele, {"class":"InfoItem",
-                        "href": "javascript:void(0)",
-                        "data-Selection": "ItemType"});
-    ele.textContent = msg.ItemType;
-    ele.addEventListener("click", () =>{
-            console.log("Clicked: " + ele.textContent);
-            SelectedItemType = ele.textContent;
-            mySocket.emit("Get_Brand");
-        });
-    return ele;
-}
+
 
 export function CloseNav(){
     document.getElementById("FullNav").style.width = "0%";
@@ -58,8 +46,8 @@ export function CloseNav(){
         if(document.getElementById("BButton")){
             document.getElementById("BButton").remove();
         }
-        RemoveChildNodes(document.getElementById("OVC"));        
-    }, 250);
+        //RemoveChildNodes(document.getElementById("OVC"));        
+    }, 10);
 }
 
 export function BackButton(){ //Possibly need something like a state to keep track

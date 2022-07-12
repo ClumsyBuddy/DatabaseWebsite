@@ -1,4 +1,3 @@
-
 /*
 *   This file contains all Global Variables to be used in the code
 *   A class with all of this would probably be better and or more easily maintained
@@ -25,18 +24,25 @@ var ItemData = undefined;
 
 
 var AddProductObj = {
-    States:{
-        "ItemType":0,
-        "BrandSelect":1,
-        "OptionSelect":2,
-        "OptionValueSelect":3
+    States: {
+        "SKU":0,
+        "ItemType":1,
+        "BrandSelect":2,
+        "OptionSelect":3,
+        "OptionValueSelect":4
     },
-    CurrentState:0,
-    
-    Selection:[{ItemType:undefined, Brand:undefined, BrandOptions:[]}], 
-    Reset(){
-        this.SelectedItemType = undefined;
-        this.SelectedOptions = {};
+    CurrentState: 1,
+    _ItemType:String = "",
+    SKU:"",
+    set ItemType(val){
+        this._ItemType = val;
+    },
+    get ItemType(){
+        return this._ItemType;
+    },
+    OptionData:[], 
+    Reset: function(){
+        
     },
 }
 
