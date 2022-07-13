@@ -43,23 +43,20 @@ export class Add_Item{
         this.Testvar = 1010101;
         console.log(this.Brands);
         RemoveChildNodes(this.Overlay_Content);
+        RemoveChildNodes(this.SKU_Brand_Section);
         this.ParseItemData();
     }
 
     StateHandler(){
         switch (this.AddProductObj.CurrentState){
             case this.AddProductObj.States.ItemType:
-                this.GetItemType(this.Overlay_Content, this.Overlay_Title, this.AllData);
+                OVT.textContent = "Select ItemType";
+                this.CreateSelection(this.Overlay_Content, this.AllData);
                 break;
             case this.AddProductObj.States.DataEntry:
 
                 break;
         }
-    }
-
-    GetItemType(Overlay_Content, OVT, msg){
-        OVT.textContent = "Select ItemType";
-        this.CreateSelection(Overlay_Content, msg);
     }
     CreateSelection(Ele, Items){
         for(let  i = 0; i < Items.length; i++){
@@ -72,6 +69,7 @@ export class Add_Item{
                     this.AddProductObj.CurrentState += 1;
                     console.log("Itemtype: " + this.AddProductObj.ItemType);
                     this.RemoveOtherItemType(this.AddProductObj.ItemType);
+                    this.AddBrands();
                 }
             }.bind(this), CBParam:[Items[i].ItemType, this.AddProductObj], colorChange:{A:true, Color:"#1E2E54"}} ) );
         }
@@ -90,8 +88,35 @@ export class Add_Item{
     }
 
     AddBrands(){
+        this.SKU_Brand_Section.appendChild(this.EleBuilder.TextBox({
+            col:20, row:1, defaultText:"Enter SKU"
+        }, {Data:{DataName:"data-sku", DataValue:""}}));
 
+        this.SKU_Brand_Section.appendChild(this.EleBuilder.DropDownMenu({
+            Values:this.Brands
+        }, {CallBack:this.AddOptions.bind(this)}));
     }
+    
+    AddOptions(Params){
+        var SelectedBrand = Params;
+
+        for(let i = 0; i < this.ItemDataContainer.length; i++){
+            if(this.ItemDataContainer[i].ItemType == this.AddProductObj.ItemType){
+                for(let j = 0; j < this.ItemDataContainer[i].ItemOptions.length; j++){
+                    // this.ItemDataContainer[i].ItemOptions[j] To get the Option Names
+                    console.log(this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]]);
+                    for(let k = 0; k < this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]].length; k++){
+                        // this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]][k] to get the Option values
+                        console.log(this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]][k]);
+                    }
+                }
+            }
+        }
+
+
+        console.log(Params);
+    }
+
 
 
     ParseItemData(){
@@ -156,14 +181,16 @@ class ElementBuilder{
         {VerticalResize = false,
         Horizontalresize = false,
         ResizeAble = false, 
-        col = 10, row =  10,
+        col = 10, row =  10, MaxLength = 20,
         defaultText = "",
-        _class = ""  } = {}, {Callback = undefined, CBParam = [], Event=""} = {})
+        _class = ""  } = {}, {Callback = undefined, CBParam = [], Event="",
+                                Data={A:false, DataName:"", DataValue:""}} = {})
         {
         var t = document.createElement("textarea");
         var Style = [];
-        t.setAttribute("col", col);
-        t.setAttribute("row", row);
+        t.setAttribute("cols", col);
+        t.setAttribute("rows", row);
+        t.setAttribute('maxlength', MaxLength);
         t.setAttribute("placeholder", defaultText);
         t.setAttribute("class", _class);
         if(VerticalResize && !Horizontalresize){
@@ -175,8 +202,10 @@ class ElementBuilder{
         if(!ResizeAble){
             Style.push("resize:none");
         }
-        t.setAttribute("style", StyleStringBuilder(Style));
-    
+        t.setAttribute("style", this.StyleStringBuilder(Style));
+        if(Data.A == true){
+            t.setAttribute(Data.DataName, Data.DataValue);
+        }
         if(Callback == undefined){
             return t;
         }
@@ -223,8 +252,27 @@ class ElementBuilder{
         }
 
     DropDownMenu({Values = [], 
-        _class = ""} = {}){
+        _class = "", Size=0} = {}, {CallBack = undefined, CBParam = [], Event="change",
+                            Data={A:false, DataName:"", DataValue:""}}){
 
+        var MainSelect = document.createElement("select");
+        for(let i = 0; i < Values.length; i++){
+            var NewEle = document.createElement("option");
+            NewEle.value = "_"+Values[i];
+            NewEle.textContent = Values[i];
+            MainSelect.appendChild(NewEle);
+        }
+        if(Size > 0){
+            MainSelect.setAttribute("Size", Size);
+        }
+
+        if(CallBack == undefined){
+            return MainSelect;
+        }
+        MainSelect.addEventListener(Event, () => {
+            CallBack(MainSelect.value, CBParam);
+        });
+        return MainSelect;
     }
         
 }
