@@ -12,7 +12,8 @@ class SableResponseHandler extends ResponseHandler{
     constructor(DBController:DatabaseManager, User:Login, name:string = "Sable", io){
         super(DBController, User, io, {ClassName:name, TableName:name, ClassAutoColumn:"sku TEXT, brand TEXT, itemtype TEXT, image TEXT", CACIndex:3});
         this.Name = name;
-        this.Brands = [];
+        this.Brands = ["CLA", "CLAP", "COM", "COMCOS", "SBN", "EVH", "ASC", "MST", "WDS", "CAM",
+                        "ECO", "QUA", "ROD", "SLP"];
         //Get item information from Jsonfile and create a watchfile event 
         this.ParseJson("./Sable/SableOptions.json", this.UpdateItemInformation.bind(this));
 

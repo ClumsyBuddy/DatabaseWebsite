@@ -23,28 +23,7 @@ var ItemData = undefined;
 // Data Design Pattern 1 {  ItemType:"Uniform", [  {Color:["RED"}, "BLUE"], { Size: [ "SMALL", "LARGE" ] }  ]  }
 
 
-var AddProductObj = {
-    States: {
-        "SKU":0,
-        "ItemType":1,
-        "BrandSelect":2,
-        "OptionSelect":3,
-        "OptionValueSelect":4
-    },
-    CurrentState: 1,
-    _ItemType:String = "",
-    SKU:"",
-    set ItemType(val){
-        this._ItemType = val;
-    },
-    get ItemType(){
-        return this._ItemType;
-    },
-    OptionData:[], 
-    Reset: function(){
-        
-    },
-}
+
 
 var ClientData = { //Saves Current index and sets a listener so we can automatically update NextIndex and Previous Index
     DisplayIndexInternal: 1,

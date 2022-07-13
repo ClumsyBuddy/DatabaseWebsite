@@ -1,49 +1,6 @@
 import "./Globals.js"
 import { isScrolledIntoView, RemoveChildNodes } from "./Utility.js"
 import { CreateProductContainer, Produce, CloseNav} from "./HtmlBuilder.js";
-import * as AddItem from "./AddItem.js";
-
-
-export function AddItemData(msg){
-    if(msg == undefined){
-        throw console.error("ItemData not returned from server");
-    }
-    document.getElementById("FullNav").style.width = "100%";
-    var Overlay_Content = document.getElementById("OVC");
-    RemoveChildNodes(Overlay_Content);
-    var Overlay_Title = document.getElementById("OVT");
-    switch (AddProductObj.CurrentState){
-        case AddProductObj.States.SKU:
-            AddItem.GetSKU(Overlay_Content, Overlay_Title, msg);
-            break;
-        case AddProductObj.States.ItemType:
-            AddItem.GetItemType(Overlay_Content, Overlay_Title, msg);
-            break;
-        case AddProductObj.States.BrandSelect:
-            AddItem.GetItemOptions(Overlay_Content, Overlay_Title, msg);
-            break;
-        case AddProductObj.States.OptionSelect:
-            AddItem.GetBrand(Overlay_Content, Overlay_Title, msg);
-            break;
-        case AddProductObj.States.OptionValueSelect:
-            AddItem.GetOptionsValues(Overlay_Content, Overlay_Title, msg);
-            break;
-    }
-    AddItem.ParseItemData(msg);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 *   BuildProductArray Builds up the Elements by producing them AKA add each attribute to the element until its finished.
@@ -53,14 +10,14 @@ export function BuildProductArray(msg, StartIndex, FinishIndex){
     {
         Produce(ProductList[j], msg[j].key, msg[j].sku, msg[j].brand, msg[j].Color);
     }
-    console.log("Finished: " + StartIndex + " - " + FinishIndex);
+    //console.log("Finished: " + StartIndex + " - " + FinishIndex);
 }
 /*
 *   Build Factory starts multiple product arrays at set intervals. 101 - 200 | 201 - 300
 */
 export function BuildFactory(msg, Length, Max){
     try{
-        for(let i = 0; i < Math.ceil(Length / Max); i++){
+        for(let i = 1; i < Math.ceil(Length / Max); i++){
             setTimeout(() => {
                 if(i >= Math.floor(Length / Max) && Length / Max % 1 < 1){
                     BuildProductArray(msg, (Max*i), Length);
@@ -254,7 +211,7 @@ export function AddButtonEventListeners(){
             }
         }
     });
-    console.log(Add);
+    //console.log(Add);
     Add.addEventListener('click', function(e) {
         console.log("Getting Item Data From Server");
         mySocket.emit('GetAdd', {Target:"Sable"}); //Get ItemData from server

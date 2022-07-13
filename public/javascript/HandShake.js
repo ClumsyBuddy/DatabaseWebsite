@@ -1,5 +1,5 @@
 import * as lib from "./Main.js";
-
+import { Add_Item } from "./AddItem.js";
 /*
 *   This File contains the "MiddleWare" for all Socket client calls. Using this we can log, change or check for errors
 *   before and after any function calls without bloating the SocketHandler with code. This also allows us
@@ -7,13 +7,17 @@ import * as lib from "./Main.js";
 */
 
 export function InitializeProductList(ProductList){
-    console.log("First");
     lib.FirstBuild(ProductList);
 }
 
 
 export function AddItemData(msg){
-    lib.AddItemData(msg);
+    if(msg == undefined){
+        throw console.error("ItemData not returned from server");
+    }
+    var _Add = new Add_Item(msg.ItemData, msg.Brands);
+    _Add.Init(msg);
+    document.getElementById("FullNav").style.width = "100%";
 }
 
 export function DeleteItem(ValueToDelete){

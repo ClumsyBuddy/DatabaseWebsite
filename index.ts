@@ -97,7 +97,7 @@ io.on('connection', (socket) => {
         if(msg.Target == "Sable"){
             const EmitAddGet = async () =>{
                 console.log("Sending Item Data");
-                socket.emit("AddItemData", Sable.ItemData);
+                socket.emit("AddItemData", {ItemData:Sable.ItemData, Brands:Sable.Brands});
             }
             try{
                 EmitAddGet();
