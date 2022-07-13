@@ -99,21 +99,23 @@ export class Add_Item{
     
     AddOptions(Params){
         var SelectedBrand = Params;
-
+        var Options = {};
         for(let i = 0; i < this.ItemDataContainer.length; i++){
             if(this.ItemDataContainer[i].ItemType == this.AddProductObj.ItemType){
                 for(let j = 0; j < this.ItemDataContainer[i].ItemOptions.length; j++){
                     // this.ItemDataContainer[i].ItemOptions[j] To get the Option Names
-                    console.log(this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]]);
+                    Options[this.ItemDataContainer[i].ItemOptions[j]] = [];
+                    //console.log(this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]]);
                     for(let k = 0; k < this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]].length; k++){
                         // this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]][k] to get the Option values
-                        console.log(this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]][k]);
+                        //console.log(this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]][k]);
+                        Options[this.ItemDataContainer[i].ItemOptions[j]].push(this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]][k]);
                     }
                 }
             }
         }
 
-
+        console.log(Options);
         console.log(Params);
     }
 
