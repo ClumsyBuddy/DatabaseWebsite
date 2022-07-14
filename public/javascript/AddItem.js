@@ -15,7 +15,7 @@ export class Add_Item{
     constructor(Items, Brand){
         this.SelectedItemType; //Stores the Itemtype we chose
         this.EnteredSKU;
-        this.ItemDataContainer = []; //Container for all of the itemdata
+        this.BrandContainer = []; //Container for all of the itemdata
         this.Overlay_Content = document.getElementById("OVC");
         this.Overlay_Title = document.getElementById("OVT");
         this.SKU_Brand_Section = document.getElementById("SKUBRAND");
@@ -97,9 +97,33 @@ export class Add_Item{
         }, {CallBack:this.AddOptions.bind(this)}));
     }
     
-    AddOptions(Params){
-        var SelectedBrand = Params;
-        var Options = {};
+    AddOptions(){
+        this.BrandContainer = [];
+
+        for(let n = 0; n < this.Brands.length; n++){
+            this.BrandContainer.push(new Brand(this.Brands[n]));
+            this.BrandContainer[n].AddItemType(new ItemType(this.AddProductObj.ItemType, this.BrandContainer[n]));
+        }
+
+        for(let i = 0; i < this.ItemDataContainer.length; i++){
+            if(this.ItemDataContainer[i].ItemType == this.AddProductObj.ItemType){
+                for(let n = 0; n < this.BrandContainer.length; n++){
+                    
+                    for(let j = 0; j < this.ItemDataContainer[i].ItemOptions.length; j++){
+                        let _option = new Option(this.ItemDataContainer[i].ItemOptions[j], this.BrandContainer[n].Type);
+                        this.BrandContainer[n].Type.Options.push(_option);
+
+                        for(let k = 0; k < this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]].length; k++){
+                            let _value = new Value(this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]][k], _option);
+                            this.BrandContainer[n].Type.Options[j].Values.push(_value);
+                        }  
+                    }
+                }
+            }
+        }
+
+        console.log(this.BrandContainer);
+        /*
         for(let i = 0; i < this.ItemDataContainer.length; i++){
             if(this.ItemDataContainer[i].ItemType == this.AddProductObj.ItemType){
                 for(let j = 0; j < this.ItemDataContainer[i].ItemOptions.length; j++){
@@ -114,9 +138,9 @@ export class Add_Item{
                 }
             }
         }
-
-        console.log(Options);
-        console.log(Params);
+        */
+        //console.log(Options);
+        //console.log(Params);
     }
 
 
@@ -155,7 +179,7 @@ class ElementBuilder{
     SubmitButton(
         {Button_Tag = true,
         A_Tag = false,
-        _class = "" } = {}, {Callback = undefined, CBParam = [], Event = "click"} = {})
+        _class = "" } = {}, {CallBack = undefined, CBParam = [], Event = "click"} = {})
         {
             var s;
             if(Button_Tag){
@@ -170,11 +194,11 @@ class ElementBuilder{
         
             s.setAttribute("class", _class);
         
-            if(Callback == undefined){
+            if(CallBack == undefined){
                 return s;        
             }
             s.addEventListener(Event, () => {
-                Callback(CBParam);
+                CallBack(CBParam);
             });
             return s;        
         }
@@ -277,4 +301,65 @@ class ElementBuilder{
         return MainSelect;
     }
         
+}
+
+
+
+
+
+
+class Brand{
+    constructor(Name){
+        this.BrandName = Name;
+        this.Type;
+    }
+    AddItemType(ItemTypeObject){
+        this.Type = ItemTypeObject;
+    }
+}
+
+class ItemType{
+    constructor(Name, _Parent){
+        this.TypeName = Name;
+        this.Options = [];
+        this.Parent = _Parent;
+    }
+    AddOptions(ListOfOptionObjects){
+        this.Options = ListOfOptionObjects;
+    }
+}
+
+class Option{
+    constructor(Name, _Parent){
+        this.OptionName = Name;
+        this.Values = [];
+        this.Selected = false;
+        this.Parent = _Parent;
+    }
+    AddValues(ListOfValuesObjects){
+        this.Values = ListOfValuesObjects;
+    }
+    
+    IsThisOptionSelected(){
+        var NewSelected = false;
+        for(let i = 0; i < this.Values.length; i++){
+            if(this.Values[i].Selected == true){
+                NewSelected = true;
+            }
+        }
+        if(NewSelected){
+            this.Selected = true;
+            return this.Selected;
+        }
+        this.Selected = false;
+        return this.Selected;
+    }
+}
+
+class Value{
+    constructor(Name, _Parent){
+        this.ValueName = Name;
+        this.Selected = false;
+        this.Parent = _Parent;
+    }
 }
