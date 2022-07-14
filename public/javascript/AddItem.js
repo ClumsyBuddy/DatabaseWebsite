@@ -40,8 +40,6 @@ export class Add_Item{
     }
     
     Init(){
-        this.Testvar = 1010101;
-        console.log(this.Brands);
         RemoveChildNodes(this.Overlay_Content);
         RemoveChildNodes(this.SKU_Brand_Section);
         RemoveChildNodes(this.Options_Section);
@@ -64,11 +62,9 @@ export class Add_Item{
             Ele.appendChild(this.EleBuilder.Button({Button_Tag:false, A_Tag:true, _class:"InfoItem", 
             TextContent:Items[i].ItemType, Data:{"DataName":"data-ItemType", "DataValue":Items[i].ItemType}}, 
             {Callback:function(){
-                console.log("Clicked: " + Items[i].ItemType);
                 if(this.AddProductObj.CurrentState == this.AddProductObj.States.ItemType){
                     this.AddProductObj.ItemType = Items[i].ItemType;
                     this.AddProductObj.CurrentState += 1;
-                    console.log("Itemtype: " + this.AddProductObj.ItemType);
                     this.RemoveOtherItemType(this.AddProductObj.ItemType);
                     this.AddBrands();
                 }
@@ -105,7 +101,6 @@ export class Add_Item{
     AddOptions(SelectedBrand){
         RemoveChildNodes(this.Options_Section);
         this.BrandContainer = [];
-        console.log(SelectedBrand);
         for(let n = 0; n < this.Brands.length; n++){
             this.BrandContainer.push(new Brand(this.Brands[n]));
             this.BrandContainer[n].AddItemType(new ItemType(this.AddProductObj.ItemType, this.BrandContainer[n]));
@@ -201,7 +196,6 @@ export class Add_Item{
                 this.ItemDataContainer[i].ItemOptionsValues.push(this.AllData[i].Options[j]);
             }
         }
-        console.log(this.ItemDataContainer);
         this.StateHandler();
     }
     
