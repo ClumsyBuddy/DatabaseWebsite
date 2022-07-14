@@ -96,6 +96,7 @@ export class Add_Item{
         this.SKU_Brand_Section.appendChild(this.EleBuilder.DropDownMenu({
             Values:this.Brands
         }, {CallBack:this.AddOptions.bind(this)}));
+        this.AddOptions(this.Brands[0]);
     }
     /**
      * 
@@ -125,9 +126,7 @@ export class Add_Item{
                     for(let j = 0; j < this.ItemDataContainer[i].ItemOptions.length; j++){
                         let _option = new Option(this.ItemDataContainer[i].ItemOptions[j], this.BrandContainer[n].Type);
                         this.BrandContainer[n].Type.Options.push(_option);
-                        //Can Problably Add A div with a label here
                         if(this.BrandContainer[n].BrandName == SelectedBrand.replace("_", "")){
-                            //this.BrandContainer[n].Type.Options[j].AddButton(this.Options_Section, this.EleBuilder);
 
                             for(let k = 0; k < this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]].length; k++){
                                 //Add Each Value to the Option Div here
@@ -145,13 +144,9 @@ export class Add_Item{
                                 if(RowIndex % 3 == 1 && j < this.ItemDataContainer[i].ItemOptions.length-1){
                                     ColumnIndex++;
                                     this.BuildColumn(SheetContainer, ColumnId, ColumnIndex);
-                                    
                                 }
                             }
-
                         }
-                        
-                        
                     }
                 }
             }
@@ -341,7 +336,9 @@ class ElementBuilder{
         if(Size > 0){
             MainSelect.setAttribute("Size", Size);
         }
-
+        if(_class != ""){
+            MainSelect.setAttribute("class", _class);
+        }
         if(CallBack == undefined){
             return MainSelect;
         }
@@ -405,8 +402,6 @@ class ElementBuilder{
         if(name != ""){
             i.setAttribute("name", name);
         }
-
-
         if(CallbacK == undefined){
             return i;
         }
@@ -456,9 +451,7 @@ class Option{
     AddValues(ListOfValuesObjects){
         this.Values = ListOfValuesObjects;
     }
-    AddButton(ele, EleBuilder){
-        ele.appendChild(EleBuilder.Button({TextContent:this.OptionName}));
-    }
+   
     IsThisOptionSelected(){
         var NewSelected = false;
         for(let i = 0; i < this.Values.length; i++){
