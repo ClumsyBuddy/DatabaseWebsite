@@ -44,6 +44,7 @@ export class Add_Item{
         console.log(this.Brands);
         RemoveChildNodes(this.Overlay_Content);
         RemoveChildNodes(this.SKU_Brand_Section);
+        RemoveChildNodes(this.Options_Section);
         this.ParseItemData();
     }
 
@@ -96,14 +97,26 @@ export class Add_Item{
             Values:this.Brands
         }, {CallBack:this.AddOptions.bind(this)}));
     }
-    
-    AddOptions(){
+    /**
+     * 
+     * @param {string} SelectedBrand 
+     */
+    AddOptions(SelectedBrand){
+        RemoveChildNodes(this.Options_Section);
         this.BrandContainer = [];
-
+        console.log(SelectedBrand);
         for(let n = 0; n < this.Brands.length; n++){
             this.BrandContainer.push(new Brand(this.Brands[n]));
             this.BrandContainer[n].AddItemType(new ItemType(this.AddProductObj.ItemType, this.BrandContainer[n]));
         }
+
+        var ColumnIndex = 1;
+        var ColumnId = "Column";
+        var RowIndex = 1;
+        var RowId = "Row";
+
+        var SheetContainer = this.EleBuilder.Div({_id:"ColumnContainer", _class:"CContainer"});
+        this.Options_Section.appendChild(SheetContainer);
 
         for(let i = 0; i < this.ItemDataContainer.length; i++){
             if(this.ItemDataContainer[i].ItemType == this.AddProductObj.ItemType){
@@ -112,38 +125,76 @@ export class Add_Item{
                     for(let j = 0; j < this.ItemDataContainer[i].ItemOptions.length; j++){
                         let _option = new Option(this.ItemDataContainer[i].ItemOptions[j], this.BrandContainer[n].Type);
                         this.BrandContainer[n].Type.Options.push(_option);
+                        //Can Problably Add A div with a label here
+                        if(this.BrandContainer[n].BrandName == SelectedBrand.replace("_", "")){
+                            //this.BrandContainer[n].Type.Options[j].AddButton(this.Options_Section, this.EleBuilder);
 
-                        for(let k = 0; k < this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]].length; k++){
-                            let _value = new Value(this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]][k], _option);
-                            this.BrandContainer[n].Type.Options[j].Values.push(_value);
-                        }  
+                            for(let k = 0; k < this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]].length; k++){
+                                //Add Each Value to the Option Div here
+                                let _value = new Value(this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]][k], _option);
+                                this.BrandContainer[n].Type.Options[j].Values.push(_value);
+                            }  
+
+                            if(ColumnIndex == 1 && RowIndex == 1){
+                                this.BuildColumn(SheetContainer, ColumnId, ColumnIndex);
+                                this.BuildRow(ColumnId, ColumnIndex, RowId, RowIndex, _option);
+                                RowIndex++;
+                            }else{
+                                this.BuildRow(ColumnId, ColumnIndex, RowId, RowIndex, _option);
+                                RowIndex++;
+                                if(RowIndex % 3 == 1 && j < this.ItemDataContainer[i].ItemOptions.length-1){
+                                    ColumnIndex++;
+                                    this.BuildColumn(SheetContainer, ColumnId, ColumnIndex);
+                                    
+                                }
+                            }
+
+                        }
+                        
+                        
                     }
                 }
             }
         }
-
         console.log(this.BrandContainer);
-        /*
-        for(let i = 0; i < this.ItemDataContainer.length; i++){
-            if(this.ItemDataContainer[i].ItemType == this.AddProductObj.ItemType){
-                for(let j = 0; j < this.ItemDataContainer[i].ItemOptions.length; j++){
-                    // this.ItemDataContainer[i].ItemOptions[j] To get the Option Names
-                    Options[this.ItemDataContainer[i].ItemOptions[j]] = [];
-                    //console.log(this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]]);
-                    for(let k = 0; k < this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]].length; k++){
-                        // this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]][k] to get the Option values
-                        //console.log(this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]][k]);
-                        Options[this.ItemDataContainer[i].ItemOptions[j]].push(this.ItemDataContainer[i].ItemOptionsValues[j][this.ItemDataContainer[i].ItemOptions[j]][k]);
-                    }
-                }
-            }
-        }
-        */
-        //console.log(Options);
-        //console.log(Params);
     }
 
+    BuildColumn(Ele, ColumnId, ColumnIndex){
+        Ele.appendChild(this.EleBuilder.Div({_id:ColumnId+ColumnIndex, _class:"Column"}))
+    }
+    /**
+     * 
+     * @param {string} ColumnId 
+     * @param {number} ColumnIndex 
+     * @param {string} RowId 
+     * @param {number} RowIndex 
+     * @param {Option} _option 
+     */
+    BuildRow(ColumnId, ColumnIndex, RowId, RowIndex, _option){
+        var Inner = "InnerRow";
+        document.getElementById(ColumnId+ColumnIndex).appendChild(this.EleBuilder.Div({_id:RowId+RowIndex, _class:"Row"}));
+        document.getElementById(RowId+RowIndex).appendChild(this.EleBuilder.Div({_id:RowId+RowIndex+Inner, _class:"InnerRow"}));
+        document.getElementById(RowId+RowIndex).prepend(this.EleBuilder.Label({TextContent:_option.OptionName, colorChange:{A:true, Color:"white"}}));
+        for(let i = 0; i < _option.Values.length; i++){
+            if(_option.GetUIType() == "CheckBox"){
+                document.getElementById(RowId+RowIndex+Inner).appendChild(this.EleBuilder.Label({TextContent:_option.Values[i].ValueName, colorChange:{A:true, Color:"white"}}));
+                document.getElementById(RowId+RowIndex+Inner).appendChild(this.EleBuilder.Input({type:"checkbox", value:_option.Values[i].ValueName, name:_option.OptionName}));
+            }
+            if(_option.GetUIType() == "TextBox"){
+                document.getElementById(RowId+RowIndex+Inner).appendChild(this.EleBuilder.TextBox({col:20, row:2, MaxLength:30}));
+            }
+            if(_option.GetUIType() == "Radial"){
+                var f = 'Field';
+                document.getElementById(RowId+RowIndex+Inner).appendChild(this.EleBuilder.FieldSet({_id:RowId+RowIndex+Inner+f}));
 
+                document.getElementById(RowId+RowIndex+Inner+f).appendChild(this.EleBuilder.Label({TextContent:"True", colorChange:{A:true, Color:"white"}}));
+                document.getElementById(RowId+RowIndex+Inner+f).appendChild(this.EleBuilder.Input({type:"radio", value:true, name:_option.OptionName}));
+                document.getElementById(RowId+RowIndex+Inner+f).appendChild(this.EleBuilder.Label({TextContent:"False", colorChange:{A:true, Color:"white"}}));
+                document.getElementById(RowId+RowIndex+Inner+f).appendChild(this.EleBuilder.Input({type:"radio", value:false, name:_option.OptionName}));
+            }
+        }
+
+    }
 
     ParseItemData(){
         this.ItemDataContainer = [];
@@ -174,7 +225,6 @@ class ElementBuilder{
         }
         return ReturnString;
     }
-
 
     SubmitButton(
         {Button_Tag = true,
@@ -209,7 +259,7 @@ class ElementBuilder{
         ResizeAble = false, 
         col = 10, row =  10, MaxLength = 20,
         defaultText = "",
-        _class = ""  } = {}, {Callback = undefined, CBParam = [], Event="",
+        _class = ""  } = {}, {Callback = undefined, CBParam = [], Event="selectionchange",
                                 Data={A:false, DataName:"", DataValue:""}} = {})
         {
         var t = document.createElement("textarea");
@@ -300,13 +350,80 @@ class ElementBuilder{
         });
         return MainSelect;
     }
-        
+    Div({_class="", width=undefined, height=undefined, _id="", 
+        Data = {A:false, DataName:"", DataValue:""}}={}){
+            var d = document.createElement("div");
+
+            if(_class != ""){
+                d.setAttribute("class", _class);
+            }
+            if(Data.A){
+                d.setAttribute(DataName, DataValue);
+            }
+            if(_id != ""){
+                d.setAttribute("id", _id);
+            }
+            if(width != undefined && height == undefined){
+                d.setAttribute("style", "width:"+width+";");
+            }
+            if(height != undefined && width == undefined){
+                d.setAttribute("style", "height:"+height+";");
+            }
+            if(width != undefined && height != undefined){
+                setAttributes(d, {"style":"width:"+width+";"+"height:"+height+";"});
+            }
+        return d;
+    }
+    Label({_class = "", TextContent="", _id = "", colorChange={A:false, Color:""}} = {}){
+        var  l = document.createElement("label");
+        l.textContent = TextContent;
+        if(_class != ""){
+            l.setAttribute("class", _class);
+        }
+        if(_id != ""){
+            l.setAttribute("id", _id);
+        }
+        if(colorChange.A){
+            l.setAttribute("style", "color:"+colorChange.Color+";");
+        }
+        return l;
+    }
+    Input({_class="", _id="", type="", value="", name=""} = {}, {CallbacK = undefined, CBParam = [], Event="click"} = {}){
+        var  i = document.createElement("input");
+        if(_class != ""){
+            i.setAttribute("class", _class);
+        }
+        if(_id != ""){
+            i.setAttribute("id", _id);
+        }
+        if(type != ""){
+            i.setAttribute("type", type);
+        }
+        if(value != ""){
+            i.setAttribute("value", value);
+        }
+        if(name != ""){
+            i.setAttribute("name", name);
+        }
+
+
+        if(CallbacK == undefined){
+            return i;
+        }
+        i.addEventListener(Event, () => {
+            CallbacK(CBParam);
+        });
+
+        return i;
+    }
+    FieldSet({_id=""} = {}){
+        var f = document.createElement("fieldset");
+        if(_id != ""){
+            f.setAttribute("id", _id);
+        }
+        return f;
+    }
 }
-
-
-
-
-
 
 class Brand{
     constructor(Name){
@@ -339,7 +456,9 @@ class Option{
     AddValues(ListOfValuesObjects){
         this.Values = ListOfValuesObjects;
     }
-    
+    AddButton(ele, EleBuilder){
+        ele.appendChild(EleBuilder.Button({TextContent:this.OptionName}));
+    }
     IsThisOptionSelected(){
         var NewSelected = false;
         for(let i = 0; i < this.Values.length; i++){
@@ -353,6 +472,19 @@ class Option{
         }
         this.Selected = false;
         return this.Selected;
+    }
+    
+    GetUIType(){
+        if(this.Values == []){
+            return undefined;
+        }
+        if(typeof this.Values[0].ValueName == "boolean"){
+            return "Radial";
+        }
+        if(this.Values[0].ValueName === ""){
+            return "TextBox";
+        }
+        return "CheckBox";
     }
 }
 

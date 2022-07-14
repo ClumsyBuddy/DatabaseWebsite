@@ -383,7 +383,7 @@ body::-webkit-scrollbar{
 .Overlay-Content{
     position: relative;
     top: .5em;
-    width: 70%;
+    width: 90%;
     margin: auto;
     text-align: center;
     margin-top: 30px;
@@ -435,3 +435,27 @@ body::-webkit-scrollbar{
     display: none;
 }
 
+
+
+.CContainer{
+    width: 90%;
+}
+
+.Column{
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    font-size: large;
+}
+.Row{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    padding: 20px;
+}
+
+.InnerRow{
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+}
