@@ -5,23 +5,8 @@ import { ResponseHandler } from "../../Response/ResponseHandler";
 
 class IndexResponseHandler extends ResponseHandler{
 
-    private PageData: {
-        Warehouse:number,
-        LoginFailed:boolean,
-        Sable:boolean,
-        Diplomat:boolean,
-        RDI:boolean
-    };
-
     constructor(DbController:DatabaseManager, User:Login, io){
             super(DbController, User, io, {ClassName:"Index", TableName:"Index"});
-            this.PageData = {
-                Warehouse:0,
-                LoginFailed:false,
-                Sable: false,
-                Diplomat: false,
-                RDI: false
-            }
     }
 
 

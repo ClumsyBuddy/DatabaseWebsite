@@ -4,10 +4,6 @@ import { Login } from "../DBClasses/Login/LoginHandler";
 import { ItemData } from "./ItemData";
 const fs = require('fs');
 
-
-
-
-
 //TODO Need to implement responsice error handling so a single bug doesnt bring down the server
 //     Try catch and using base state should be able to keep the server from crashing
 //  https://stackoverflow.com/questions/34834151/how-to-catch-errors-when-rendering-ejs-view-node-js

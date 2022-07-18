@@ -1,12 +1,12 @@
-var express = require('express');
-var ip = require('ip');
-var session = require('express-session');
-var SQLiteStore = require('connect-sqlite3')(session);
-var app = express();
-var http = require('http');
-var server = http.createServer(app);
-var Server = require("socket.io").Server;
-var io = new Server(server);
+let express = require('express');
+let ip = require('ip');
+let session = require('express-session');
+let SQLiteStore = require('connect-sqlite3')(session);
+let app = express();
+let http = require('http');
+let server = http.createServer(app);
+let Server = require("socket.io").Server;
+let io = new Server(server);
 
 app.set('views', "./Server/views");
 app.set('view engine', 'ejs');
@@ -16,7 +16,7 @@ app.use(express.urlencoded({ //Parse POST
     extended:true
 }));
 
-var Public = "./public";
+let Public = "./public";
 app.use(express.static(Public));
 app.use('/uploads', express.static(Public));
 app.use('/javascript', express.static(Public));
