@@ -44,6 +44,7 @@ export class Add_Item{
         RemoveChildNodes(this.Overlay_Content);
         RemoveChildNodes(this.SKU_Brand_Section);
         RemoveChildNodes(this.Options_Section);
+        RemoveChildNodes(document.getElementById("SubmitButton"));
         this.BrandContainer = [];
         this.ParseItemData();
         this.StateHandler();
@@ -95,8 +96,14 @@ export class Add_Item{
         this.SKU_Brand_Section.appendChild(this.EleBuilder.DropDownMenu({
             Values:this.Brands
         }, {CallBack:this.AddOptions.bind(this)}));
+        document.getElementById("SubmitButton").appendChild(this.EleBuilder.SubmitButton({Button_Tag:true, _class:"AddSubmitButton", TextContent:"Submit" }, {CallBack:this.TestCallback.bind(this)}));
         this.AddOptions(this.Brands[0]);
     }
+
+    TestCallback(){
+        console.log("Hello World");
+    }
+
     /**
      * 
      * @param {string} SelectedBrand 
@@ -237,8 +244,7 @@ export class Add_Item{
         }else{
             Value.Value = false;
         }
-        console.log("CheckBox");
-        //_option.Values[0].UpdateValue(Event.target.value);
+        Value.UpdateValue(Event.target.value);
     }
 
 
@@ -283,7 +289,7 @@ class ElementBuilder{
     SubmitButton(
         {Button_Tag = true,
         A_Tag = false,
-        _class = "" } = {}, {CallBack = undefined, CBParam = [], Event = "click"} = {})
+        _class = "", TextContent="" } = {}, {CallBack = undefined, CBParam = [], Event = "click"} = {})
         {
             var s;
             if(Button_Tag){
@@ -297,7 +303,7 @@ class ElementBuilder{
             }
         
             s.setAttribute("class", _class);
-        
+            s.textContent = TextContent;
             if(CallBack == undefined){
                 return s;        
             }

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "build": "npx tsc -t es5 index.ts",
+    "build": "npx tsc -t es5",
     "dev": "concurrently \"npm run build\" \"npm start\""
   },
   "author": "Trevor Winn",

@@ -2,4 +2,5 @@
 *.js
 !public/javascript/*.js
 !views/partials/Javascript/*.js
+!Sockets/*.js
 sessions

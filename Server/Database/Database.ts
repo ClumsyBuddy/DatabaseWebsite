@@ -1,7 +1,7 @@
 const sqlite3 = require('sqlite3')
 
 class Database {
-  db:any;
+  db;
   constructor(dbFilePath: string) {
     this.db = new sqlite3.Database(dbFilePath, (err: any) => {
 

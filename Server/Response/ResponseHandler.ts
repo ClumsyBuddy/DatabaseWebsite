@@ -1,8 +1,6 @@
-import { stringify } from "querystring";
 import { Socket } from "socket.io";
-import { DatabaseManager } from "./DatabaseManager";
-import { Login } from "./LoginHandler";
-import { deepCopy } from "./Utility";
+import { DatabaseManager } from "../Database/DatabaseManager";
+import { Login } from "../DBClasses/Login/LoginHandler";
 import { ItemData } from "./ItemData";
 const fs = require('fs');
 

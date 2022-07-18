@@ -1,6 +1,6 @@
-import { DatabaseManager } from "./DatabaseManager";
-import { Login } from "./LoginHandler";
-import { ResponseHandler } from "./ResponseHandler";
+import { DatabaseManager } from "../../Database/DatabaseManager";
+import { Login } from "../Login/LoginHandler";
+import { ResponseHandler } from "../../Response/ResponseHandler";
 
 
 class IndexResponseHandler extends ResponseHandler{
@@ -34,7 +34,7 @@ class IndexResponseHandler extends ResponseHandler{
     *   use its Reponse Object to update the form
     */
     async Login(req: any, res: any){
-        
+        //console.log("LoginFirst");
         await this.User.LoginAttempt(req, res, req.body.email, req.body.password);
         if(req.session.loggedin){
             req.session.PageState.CurrentRenderTarget = "DataBaseSelection";
@@ -70,7 +70,12 @@ class IndexResponseHandler extends ResponseHandler{
         res.render(BuildRenderTarget, {PageState:PageState, Data:PageData}, function(err, html) {
             if(err){
                 console.log(err);
-                res.sendFile(__dirname + "/public/404.html");
+                try{
+                    res.sendFile(__dirname + "../../../public/404.html");
+                }catch(e){
+                    res.send("ERROR");
+                    console.log(e);
+                }
             }else{
                 res.status(200).send(html)
             }

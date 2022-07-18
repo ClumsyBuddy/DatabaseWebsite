@@ -1,4 +1,4 @@
-import { DatabaseManager } from "./DatabaseManager";
+import { DatabaseManager } from "../../Database/DatabaseManager";
 
 class Login{
 
@@ -33,6 +33,7 @@ class Login{
             if(result !== undefined && result.password == password && result.username == username.toLowerCase()){
                 req.session.loggedin = true; //We are logged in
                 req.session.username = result.username;  //Get the USername
+                //console.log("Hello Login");
                 var PageState = {
                     LoginForm:false,
                     CurrentRenderTarget:"/",
@@ -53,7 +54,6 @@ class Login{
                     Diplomat: result.Diplomat, //Get Whether its diplomat
                     RDI: result.RDI //Get whether its RDI
                 };
-                console.log(result.permission);;
                 req.session.PageState = PageState;
                 req.session.PageData = PageData;
             }else{

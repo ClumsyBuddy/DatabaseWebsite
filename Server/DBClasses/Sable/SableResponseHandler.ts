@@ -1,9 +1,7 @@
-import { randomInt } from "crypto";
-import req from "express/lib/request";
-import { DatabaseManager } from "../DatabaseManager";
-import { Login } from "../LoginHandler";
-import {ResponseHandler} from "../ResponseHandler";
-import { ItemData } from "../ItemData";
+import { DatabaseManager } from "../../Database/DatabaseManager";
+import { Login } from "../Login/LoginHandler";
+import {ResponseHandler} from "../../Response/ResponseHandler";
+import { ItemData } from "../../Response/ItemData";
 
 class SableResponseHandler extends ResponseHandler{
 
@@ -15,7 +13,7 @@ class SableResponseHandler extends ResponseHandler{
         this.Brands = ["CLA", "CLAP", "COM", "COMCOS", "SBN", "EVH", "ASC", "MST", "WDS", "CAM",
                         "ECO", "QUA", "ROD", "SLP"];
         //Get item information from Jsonfile and create a watchfile event 
-        this.ParseJson("./Sable/SableOptions.json", this.UpdateItemInformation.bind(this));
+        this.ParseJson(__dirname + "/SableOptions.json", this.UpdateItemInformation.bind(this));
 
         
     }
