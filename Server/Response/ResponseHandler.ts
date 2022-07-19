@@ -1,8 +1,7 @@
-import { Socket } from "socket.io";
-import { DatabaseManager } from "../Database/DatabaseManager";
-import { Login } from "../DBClasses/Login/LoginHandler";
-import { ItemData } from "./ItemData";
-const fs = require('fs');
+import { ItemData } from "./ItemData.js";
+import {DatabaseManager, Login} from "../../Sockets/ServerGlobals.js";
+//const fs = require('fs');
+import {readFileSync, watchFile} from "fs";
 
 //TODO Need to implement responsice error handling so a single bug doesnt bring down the server
 //     Try catch and using base state should be able to keep the server from crashing
@@ -28,10 +27,10 @@ class  ResponseHandler{
     protected User:Login;
 
 
-    protected io:Socket;
+    protected io:any;
    
     
-    constructor(DBController: DatabaseManager, User:Login, io : Socket, options?:{ClassName?:string, TableName?:string, ClassAutoColumn?:string, CACIndex?:number} ){
+    constructor(DBController: DatabaseManager, User:Login, io : any, options?:{ClassName?:string, TableName?:string, ClassAutoColumn?:string, CACIndex?:number} ){
         this.DBController = DBController;
         this.User = User;
         this.io = io;
@@ -371,21 +370,21 @@ class  ResponseHandler{
     public ParseJson(FilePath:string, callback:Function) : void{
         let ParsedData: any;
         try{
-            let rawdata = fs.readFileSync(FilePath);
-            ParsedData = JSON.parse(rawdata);
+            let rawdata = readFileSync(FilePath);
+            ParsedData = JSON.parse(rawdata.toString());
             this.UpdateItemInformation(ParsedData);
         }catch(e){
             console.log(`Error: ${e} | @${FilePath}`);
             return;
         }
-        fs.watchFile(FilePath, {
+        watchFile(FilePath, {
             bigint: false,
             persistent: true,
             interval: 500,
           },(curr, prev) => { //Watches specfied file
             try{
-                let rawdata = fs.readFileSync(FilePath);
-                let ParsedData = JSON.parse(rawdata);
+                let rawdata = readFileSync(FilePath);
+                let ParsedData = JSON.parse(rawdata.toString());
                 callback(ParsedData); //Callback to handle changes after
             }catch(e){
                 console.log(`Error: ${e} | @${FilePath}`);

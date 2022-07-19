@@ -1,7 +1,4 @@
-const io = require("./ServerGlobals").io;
-const app = require("./ServerGlobals").app;
-const SQLiteStore = require("./ServerGlobals").SQLiteStore;
-const session = require("./ServerGlobals.js").session;
+import {io, app, SQLiteStore, session} from "./ServerGlobals.js";
 var DBClass;
 
 
@@ -24,7 +21,7 @@ function Init(){
 function on_connection(socket){
 
     socket.on("init", async () => {
-        socket.request.session.PageData.ProductList = await DBClass.GetAllProducts("Sable");
+        socket.request.session.PageData.ProductList = await DBClass.GetAllProducts(DBClass.Name);
         socket.request.session.save();
         socket.emit("init", socket.request.session.PageData.ProductList);
     });
@@ -56,21 +53,21 @@ function GetAddItems(socket, msg){
 }
 
 function Delete(socket, msg){
-    if(msg.Target.replace(" ", "") == "Sable"){
-        const EmitMsg = async () => {
-            try{
-                io.emit("Delete", {Response:true, Value:msg.Value});
-                socket.emit("UPL");
-                return true;
-            }
-            catch(e){
-                console.log(e);
-                return false;
-            }
+    const EmitMsg = async () => {
+        try{
+            //DBClass.DeleteItem(msg.Value);
+            //socket.request.session.PageData.ProductList = await DBClass.GetAllProducts(DBClass.Name);
+            io.emit("Delete", {Response:true, Value:msg.Value});
+            socket.emit("UPL");
+            return true;
         }
-        if(!EmitMsg()){
-            console.log("Coudln't Emit Message: " + JSON.stringify(msg));
+        catch(e){
+            console.log(e);
+            return false;
         }
+    }
+    if(!EmitMsg()){
+        console.log("Coudln't Emit Message: " + JSON.stringify(msg));
     }
 }
 
@@ -82,4 +79,4 @@ function ChangeClass(newClass){
 
 
 
-module.exports = {Init, ChangeClass};
+export {Init, ChangeClass};

@@ -1,4 +1,4 @@
-import { DatabaseManager } from "../../Database/DatabaseManager";
+import {DatabaseManager} from "../../Database/DatabaseManager";
 
 class Login{
 

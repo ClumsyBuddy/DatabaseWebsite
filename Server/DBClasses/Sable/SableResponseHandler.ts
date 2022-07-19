@@ -1,13 +1,21 @@
-import { DatabaseManager } from "../../Database/DatabaseManager";
-import { Login } from "../Login/LoginHandler";
-import {ResponseHandler} from "../../Response/ResponseHandler";
+import {DatabaseManager, Login} from "../../../Sockets/ServerGlobals.js";
+import { ResponseHandler } from "../../Response/ResponseHandler.js";
 import { ItemData } from "../../Response/ItemData";
 
-class SableResponseHandler extends ResponseHandler{
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+
+
+export class SableResponseHandler extends ResponseHandler{
 
     Name:string;
     Brands:Array<string>;
-    constructor(DBController:DatabaseManager, User:Login, name:string = "Sable", io){
+    constructor(DBController:typeof DatabaseManager, User:typeof Login, name:string = "Sable", io){
         super(DBController, User, io, {ClassName:name, TableName:name, ClassAutoColumn:"sku TEXT, brand TEXT, itemtype TEXT, image TEXT", CACIndex:3});
         this.Name = name;
         this.Brands = ["CLA", "CLAP", "COM", "COMCOS", "SBN", "EVH", "ASC", "MST", "WDS", "CAM",
@@ -17,7 +25,6 @@ class SableResponseHandler extends ResponseHandler{
 
         
     }
-
     
     public get ItemData() : Array<ItemData> {
         return this.ItemDataArray;
@@ -29,7 +36,6 @@ class SableResponseHandler extends ResponseHandler{
             await this.DBController.create("Sable", "sku, brand, itemtype, Color, Size", "?, ?, ?, ?, ?", ["SML" + i, "CLA", "Uniform", "NA", "XL"]);
         }
     }
-
 
     async Start(req, res){
         //await this.GetAllProducts(this.Name, req);
@@ -54,7 +60,3 @@ class SableResponseHandler extends ResponseHandler{
 
 
 }
-
-
-
-export {SableResponseHandler};

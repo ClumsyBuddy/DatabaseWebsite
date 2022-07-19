@@ -1,6 +1,6 @@
-const sqlite3 = require('sqlite3')
+import sqlite3 from "sqlite3";
 
-class Database {
+export class Database {
   db;
   constructor(dbFilePath: string) {
     this.db = new sqlite3.Database(dbFilePath, (err: any) => {
@@ -65,5 +65,3 @@ class Database {
     })
   }
 }
-
-export {Database};

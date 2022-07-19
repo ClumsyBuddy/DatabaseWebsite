@@ -1,9 +1,8 @@
-const app = require("./ServerGlobals.js").app;
-const Classes = require("./ServerGlobals.js").Classes;
-const Socket = require("../Sockets/ServerSocketHandler");
+import {app, Classes, io} from "./ServerGlobals.js";
+import {ChangeClass} from "./ServerSocketHandler.js"
 
 
-module.exports = function(){
+function RoutesInit(){
     app.use(function(req, res, next) {
         /*
         *   If we are not at the index page or logging in check if we have the logged in cookie
@@ -49,7 +48,7 @@ module.exports = function(){
     
     app.route('/Sable')
         .get(function(req, res){
-            Socket.ChangeClass(Classes.Sable);
+            ChangeClass(Classes.Sable);
             Classes.Sable.Start(req, res);
         });
     
@@ -65,3 +64,7 @@ module.exports = function(){
         Classes.Index._Get(req, res);
     });
 }
+
+
+
+export {RoutesInit};

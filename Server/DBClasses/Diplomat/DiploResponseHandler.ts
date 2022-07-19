@@ -1,7 +1,6 @@
-import { DatabaseManager } from "../../Database/DatabaseManager";
-import { Login } from "../Login/LoginHandler";
-import { ResponseHandler } from "../../Response/ResponseHandler";
-
+import { ResponseHandler } from "../../Response/ResponseHandler.js";
+import {DatabaseManager} from "../../Database/DatabaseManager";
+import {Login} from "../Login/LoginHandler";
 
 class DiploResponseHandler extends ResponseHandler{
 

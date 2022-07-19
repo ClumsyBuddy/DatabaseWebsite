@@ -1,7 +1,5 @@
-import { DatabaseManager } from "../../Database/DatabaseManager";
-import { Login } from "../Login/LoginHandler";
-import { ResponseHandler } from "../../Response/ResponseHandler";
-
+import { ResponseHandler } from "../../Response/ResponseHandler.js";
+import {Login, DatabaseManager} from "../../../Sockets/ServerGlobals.js";
 
 class IndexResponseHandler extends ResponseHandler{
 

@@ -101,7 +101,7 @@ export class Add_Item{
     }
 
     TestCallback(){
-        console.log("Hello World");
+        console.log(this.BrandContainer);
     }
 
     /**
@@ -118,7 +118,7 @@ export class Add_Item{
         }else{
             NewOptions = true;
         }
-        console.log("NewOption: " + NewOptions);
+        //console.log("NewOption: " + NewOptions);
         if(NewOptions == true){
             for(let n = 0; n < this.Brands.length; n++){
                 this.BrandContainer.push(new Brand(this.Brands[n]));
@@ -157,11 +157,11 @@ export class Add_Item{
                             //console.log(RowIndex, ColumnIndex);
                             if(ColumnIndex == 1 && RowIndex == 1){
                                 this.BuildColumn(SheetContainer, ColumnId, ColumnIndex);
-                                console.log(_option);
-                                this.BuildRow(ColumnId, ColumnIndex, RowId, RowIndex, this.BrandContainer[n], _option);
+                                //console.log(_option);
+                                this.BuildRow(ColumnId, ColumnIndex, RowId, RowIndex, this.BrandContainer[n], this.BrandContainer[n].Type.Options[j]);
                                 RowIndex++;
                             }else{
-                                this.BuildRow(ColumnId, ColumnIndex, RowId, RowIndex, this.BrandContainer[n], _option);
+                                this.BuildRow(ColumnId, ColumnIndex, RowId, RowIndex, this.BrandContainer[n], this.BrandContainer[n].Type.Options[j]);
                                 RowIndex++;
                                 if(RowIndex % 3 == 1 && j < this.ItemDataContainer[i].ItemOptions.length-1){
                                     ColumnIndex++;
@@ -244,18 +244,9 @@ export class Add_Item{
         }else{
             Value.Value = false;
         }
-        Value.UpdateValue(Event.target.value);
+        Value.IsSelected();
+        _brand.IsThisOptionSelected();
     }
-
-
-
-    Test(Params){
-        console.log("Test");
-        console.log(Params.Params[0], Params.Params[1]);
-        Params.Params[0].Values[0].UpdateValue(Params.e.target.value);
-        console.log(Params.Params[0].Selected);
-    }
-
 
     ParseItemData(){
         this.ItemDataContainer = [];
@@ -500,6 +491,24 @@ class Brand{
     AddItemType(ItemTypeObject){
         this.Type = ItemTypeObject;
     }
+    IsThisOptionSelected(){
+        var NewSelected = false;
+        for(let i = 0; i < this.Type.Options.length; i++){
+            if(this.Type.Options[i].IsThisOptionSelected() == true){
+                NewSelected = true;
+                console.log("Option Selected");
+            }
+        }
+        if(NewSelected){
+            this.Selected = true;
+            return this.Selected;
+        }
+        this.Selected = false;
+        return this.Selected;
+    }
+
+
+
 }
 
 class ItemType{
@@ -565,10 +574,10 @@ class Value{
         this.Selected = false;
         this.Parent = _Parent;
     }
-    UpdateValue(val){
-        this.Value = val;
-        this.Selected = true;
-        this.Parent.IsThisOptionSelected();
+    IsSelected(){
+        if(this.Value === true || this.Value === false){
+            this.Selected = this.Value;
+        }
+        return this.Selected;
     }
-
 }
