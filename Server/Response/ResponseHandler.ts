@@ -215,6 +215,13 @@ class  ResponseHandler{
             }
         });
     }
+
+
+    public get ItemData() : Array<ItemData> {
+        return this.ItemDataArray;
+    }
+
+
     /*
     *   Basic Get and Post functions. Ment to be overriden with childerens specfic get and post
     */

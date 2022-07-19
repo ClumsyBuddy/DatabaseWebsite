@@ -1,9 +1,7 @@
-import {DatabaseManager, Login, io} from "../../../Sockets/ServerGlobals.js";
+import {DatabaseManager, Login} from "../../../Sockets/ServerGlobals.js";
 import { ResponseHandler } from "../../Response/ResponseHandler.js";
 import { ItemData } from "../../Response/ItemData";
 
-
-import {readFileSync, watchFile} from "fs";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -23,22 +21,6 @@ class SableResponseHandler extends ResponseHandler{
         //Get item information from Jsonfile and create a watchfile event 
         this.ParseJson(__dirname + "/SableOptions.json", this.UpdateItemInformation.bind(this));
 
-    }
-    
-    private GetBrands(ParsedData){
-        this.Brands = ParsedData.brands;
-           
-    }
-
-
-    public get ItemData() : Array<ItemData> {
-        return this.ItemDataArray;
-    }
-    
-    async MakeTestData(){
-        for(let i = 0; i < 5056; i++){
-            await this.DBController.create("Sable", "sku, brand, itemtype, Color, Size", "?, ?, ?, ?, ?", ["SML" + i, "CLA", "Uniform", "NA", "XL"]);
-        }
     }
 
     async Start(req, res){
