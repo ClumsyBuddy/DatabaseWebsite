@@ -1,7 +1,4 @@
-//const server = require("./Sockets/ServerGlobals.js").server;
-//const ip = require("./Sockets/ServerGlobals.js").ip;
-//const Socket = require("./Sockets/ServerSocketHandler");
-import {io, ip, server} from "./Sockets/ServerGlobals.js";
+import {ip, server} from "./Sockets/ServerGlobals.js";
 import {Init} from  "./Sockets/ServerSocketHandler.js";
 import {RoutesInit} from "./Sockets/Routes.js"
 

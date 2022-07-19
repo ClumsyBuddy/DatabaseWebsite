@@ -1,4 +1,4 @@
-import {app, Classes, io} from "./ServerGlobals.js";
+import {app, Classes} from "./ServerGlobals.js";
 import {ChangeClass} from "./ServerSocketHandler.js"
 
 
@@ -9,9 +9,6 @@ function RoutesInit(){
         *   If we do not then Reset the CurrentRenderTarget Back to index and then Get Index
         *   Else we are logged in and we can go to what we were doing
         */
-        if(req.url == "/null"){
-            next();
-        }
         if(req.url != "/Login" && req.url != "/" && !LoginCheck(req, res)){
                 req.session.PageData.CurrentRenderTarget = "/";
         }else{

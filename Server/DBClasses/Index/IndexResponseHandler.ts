@@ -7,17 +7,7 @@ class IndexResponseHandler extends ResponseHandler{
             super(DbController, User, io, {ClassName:"Index", TableName:"Index"});
     }
 
-
-    /*
-    *   This is the general layout for all Button Interactions
-    *   Get the current state of the menu
-    *   Set cancel button to the menu
-    *   Render page
-    *   What this does it allow the menu to be controller by a single Variable and allow cancel button to 
-    *   use its Reponse Object to update the form
-    */
     async Login(req: any, res: any){
-        //console.log("LoginFirst");
         await this.User.LoginAttempt(req, res, req.body.email, req.body.password);
         if(req.session.loggedin){
             req.session.PageState.CurrentRenderTarget = "DataBaseSelection";
@@ -29,8 +19,6 @@ class IndexResponseHandler extends ResponseHandler{
     }
     async Logout(req, res){
         req.session.destroy();
-        //req.session.loggedin = false;
-        //req.session.PageState.CurrentRenderTarget = "/";
         this.RenderLogin(req, res);
     }
 
@@ -64,7 +52,6 @@ class IndexResponseHandler extends ResponseHandler{
             }
         });
     }
-
 
     // Override for _Get. This uses PageData from the class
     async _Get(req: any, res: any) {

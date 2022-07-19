@@ -372,7 +372,7 @@ class  ResponseHandler{
         try{
             let rawdata = readFileSync(FilePath);
             ParsedData = JSON.parse(rawdata.toString());
-            this.UpdateItemInformation(ParsedData);
+            callback(ParsedData);
         }catch(e){
             console.log(`Error: ${e} | @${FilePath}`);
             return;

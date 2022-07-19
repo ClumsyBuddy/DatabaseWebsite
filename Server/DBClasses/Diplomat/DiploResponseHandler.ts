@@ -12,7 +12,6 @@ class DiploResponseHandler extends ResponseHandler{
 
         //this.DBController.createTable("Diplomat", "Diplomat", "id TEXT, itemtype TEXT"); //Create Diplomat Table
 
-        
     }
 
     async _Get(req: any, res: any) {
@@ -23,11 +22,6 @@ class DiploResponseHandler extends ResponseHandler{
         this.RenderPage(req, res);
     }
 
-
 }
-
-
-
-
 
 export {DiploResponseHandler};

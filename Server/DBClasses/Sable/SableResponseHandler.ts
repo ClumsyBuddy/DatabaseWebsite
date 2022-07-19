@@ -1,36 +1,40 @@
-import {DatabaseManager, Login} from "../../../Sockets/ServerGlobals.js";
+import {DatabaseManager, Login, io} from "../../../Sockets/ServerGlobals.js";
 import { ResponseHandler } from "../../Response/ResponseHandler.js";
 import { ItemData } from "../../Response/ItemData";
 
 
+import {readFileSync, watchFile} from "fs";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+// ^^^ Used to get __dirname for parsejson. Need to look into a possibly more widespread solution
 
-
-
-export class SableResponseHandler extends ResponseHandler{
+class SableResponseHandler extends ResponseHandler{
 
     Name:string;
     Brands:Array<string>;
     constructor(DBController:typeof DatabaseManager, User:typeof Login, name:string = "Sable", io){
         super(DBController, User, io, {ClassName:name, TableName:name, ClassAutoColumn:"sku TEXT, brand TEXT, itemtype TEXT, image TEXT", CACIndex:3});
         this.Name = name;
-        this.Brands = ["CLA", "CLAP", "COM", "COMCOS", "SBN", "EVH", "ASC", "MST", "WDS", "CAM",
-                        "ECO", "QUA", "ROD", "SLP"];
+        let getBrands = function(ParsedData){this.Brands = ParsedData.brands;}
+        this.ParseJson(__dirname + "/SableBrands.json", getBrands.bind(this));
         //Get item information from Jsonfile and create a watchfile event 
         this.ParseJson(__dirname + "/SableOptions.json", this.UpdateItemInformation.bind(this));
 
-        
     }
     
+    private GetBrands(ParsedData){
+        this.Brands = ParsedData.brands;
+           
+    }
+
+
     public get ItemData() : Array<ItemData> {
         return this.ItemDataArray;
     }
     
-
     async MakeTestData(){
         for(let i = 0; i < 5056; i++){
             await this.DBController.create("Sable", "sku, brand, itemtype, Color, Size", "?, ?, ?, ?, ?", ["SML" + i, "CLA", "Uniform", "NA", "XL"]);
@@ -38,7 +42,6 @@ export class SableResponseHandler extends ResponseHandler{
     }
 
     async Start(req, res){
-        //await this.GetAllProducts(this.Name, req);
         this._Get(req, res);
     }
 
@@ -56,7 +59,6 @@ export class SableResponseHandler extends ResponseHandler{
         this.RenderPage(req, res); //This is normally called at the end
     }
 
-
-
-
 }
+
+export {SableResponseHandler};

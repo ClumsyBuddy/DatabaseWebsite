@@ -3,7 +3,6 @@ var DBClass;
 
 
 function Init(){
-    
     var Week = 7 * 24 * 60 * 60 * 1000; //How long session token will remain
     const SessionMiddleWare = session({ //Create session middleware
         store: new SQLiteStore,
@@ -27,7 +26,7 @@ function on_connection(socket){
     });
     
     socket.on('UpdatePList', async () => {
-        socket.request.session.PageData.ProductList = await DBClass.GetAllProducts("Sable");
+        socket.request.session.PageData.ProductList = await DBClass.GetAllProducts(DBClass.Name);
         socket.request.session.save();
     });
 
@@ -36,12 +35,9 @@ function on_connection(socket){
     socket.on('Delete', (msg) => {Delete(socket, msg)});
 }
 
-
-
 function GetAddItems(socket, msg){
     if(msg.Target == "Sable"){
         const EmitAddGet = async () =>{
-            console.log("Sending Item Data");
             socket.emit("AddItemData", {ItemData:DBClass.ItemData, Brands:DBClass.Brands});
         }
         try{
@@ -71,12 +67,8 @@ function Delete(socket, msg){
     }
 }
 
-
-
 function ChangeClass(newClass){
     DBClass = newClass;
 }
-
-
 
 export {Init, ChangeClass};
