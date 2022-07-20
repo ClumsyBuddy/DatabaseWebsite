@@ -1,6 +1,5 @@
 import {DatabaseManager, Login} from "../../../Sockets/ServerGlobals.js";
 import { ResponseHandler } from "../../Response/ResponseHandler.js";
-import { ItemData } from "../../Response/ItemData";
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -21,10 +20,6 @@ class SableResponseHandler extends ResponseHandler{
         //Get item information from Jsonfile and create a watchfile event 
         this.ParseJson(__dirname + "/SableOptions.json", this.UpdateItemInformation.bind(this));
 
-    }
-
-    async Start(req, res){
-        this._Get(req, res);
     }
 
     async _Get(req, res, cb : Function = ()=>{return;}){

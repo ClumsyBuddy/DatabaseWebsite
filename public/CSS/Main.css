@@ -461,3 +461,27 @@ body::-webkit-scrollbar{
     flex-direction: row;
     margin: auto;
 }
+
+
+
+.AddSubmitButton{
+    width: 5vw;
+    height: 3vh;
+    margin: auto;
+    background-color: #F65E00;
+    border-color: white;
+    border-radius: 5px;
+    margin-top: 1.5vh;
+    font-size: medium;
+    color:azure;
+    font-weight: bold;
+}
+
+.AddSubmitButton:hover{
+    background-color: #2a4175;
+    color:#F65E00;
+}
+
+.AddSubmitButton:active{
+    background-color: #818181;
+}

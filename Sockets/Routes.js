@@ -9,8 +9,8 @@ function RoutesInit(){
         *   If we do not then Reset the CurrentRenderTarget Back to index and then Get Index
         *   Else we are logged in and we can go to what we were doing
         */
-        if(req.url != "/Login" && req.url != "/" && !LoginCheck(req, res)){
-                req.session.PageData.CurrentRenderTarget = "/";
+        if(req.url != "/Login" && req.url != "/" && !req.session.loggedin){
+            res.redirect("/");             
         }else{
             next();
         }
@@ -20,15 +20,9 @@ function RoutesInit(){
         // continue doing what we were doing and go to the route
     });
     
-    var LoginCheck = (req, res) => {
-        if(req.session.loggedin == true){
-            return true;
-        }
-        return false;
-    }
-    
     app.post("/Logout", (req, res) => {
         Classes.Index.Logout(req, res);
+        res.redirect("/");
     });
     
     app.route('/Login')
@@ -46,7 +40,7 @@ function RoutesInit(){
     app.route('/Sable')
         .get(function(req, res){
             ChangeClass(Classes.Sable);
-            Classes.Sable.Start(req, res);
+            Classes.Sable._Get(req, res);
         });
     
     app.route('/Diplomat')

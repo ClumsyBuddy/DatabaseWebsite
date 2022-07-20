@@ -1,4 +1,4 @@
-import {setAttributes, RemoveChildNodes} from "./Utility.js";
+import {setAttributes} from "./Utility.js";
 
 
 /*

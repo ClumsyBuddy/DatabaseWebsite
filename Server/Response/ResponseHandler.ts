@@ -9,8 +9,6 @@ import {readFileSync, watchFile} from "fs";
 // Possibly a good method of error handling
 class  ResponseHandler{
     DBController: DatabaseManager;
-
-    //TODO Need to make sure every Button is as variable as CancelButton
     
     protected ItemInformation: any;
     private Items: any[];

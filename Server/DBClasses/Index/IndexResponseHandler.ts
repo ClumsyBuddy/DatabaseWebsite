@@ -1,6 +1,12 @@
 import { ResponseHandler } from "../../Response/ResponseHandler.js";
 import {Login, DatabaseManager} from "../../../Sockets/ServerGlobals.js";
 
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 class IndexResponseHandler extends ResponseHandler{
 
     constructor(DbController:DatabaseManager, User:Login, io){
@@ -13,16 +19,18 @@ class IndexResponseHandler extends ResponseHandler{
             req.session.PageState.CurrentRenderTarget = "DataBaseSelection";
             this._Get(req, res);
         }else{
-            this.RenderLogin(req, res);
+            this.RenderLogin(req, res, true);
         }
         
     }
-    async Logout(req, res){
-        req.session.destroy();
-        this.RenderLogin(req, res);
+    Logout(req, res){
+        req.session.loggedin = false;
+        req.session.save();
+        //req.session.destroy();
+        //this.RenderLogin(req, res);
     }
 
-    async RenderLogin(req, res){
+    RenderLogin(req, res, LoginFailed=false){
         var BuildRenderTarget = `pages/index`;
         var PageState = {
             CurrentRenderTarget:"index",
@@ -36,7 +44,8 @@ class IndexResponseHandler extends ResponseHandler{
                 Update:false,
                 Create:false,
                 ViewLogs:false
-            }
+            },
+            LoginFailed:LoginFailed
         };
         res.render(BuildRenderTarget, {PageState:PageState, Data:PageData}, function(err, html) {
             if(err){
