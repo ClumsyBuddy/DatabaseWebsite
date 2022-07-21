@@ -2,7 +2,7 @@ import {io, app, SQLiteStore, session} from "./ServerGlobals.js";
 var DBClass;
 
 
-function Init(){
+export function Init(){
     var Week = 7 * 24 * 60 * 60 * 1000; //How long session token will remain
     const SessionMiddleWare = session({ //Create session middleware
         store: new SQLiteStore,
@@ -13,12 +13,10 @@ function Init(){
     });
     io.use(function(socket, next){SessionMiddleWare(socket.request, {}, next);});
     app.use(SessionMiddleWare); //Use middleware
-
-    io.on('connection', on_connection); //Create socket connections
+    io.on('connection', on_connection); //Create socket connections\
 }
 
 function on_connection(socket){
-
     socket.on("init", async () => {
         socket.request.session.PageData.ProductList = await DBClass.GetAllProducts(DBClass.Name);
         socket.request.session.save();
@@ -67,8 +65,6 @@ function Delete(socket, msg){
     }
 }
 
-function ChangeClass(newClass){
+export function ChangeClass(newClass){
     DBClass = newClass;
 }
-
-export {Init, ChangeClass};

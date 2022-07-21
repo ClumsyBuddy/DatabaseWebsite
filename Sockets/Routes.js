@@ -54,6 +54,15 @@ function RoutesInit(){
     .get(function(req, res){
         Classes.Index._Get(req, res);
     });
+
+
+    app.route("/*").get(function(req, res){
+        res.sendFile(process.cwd() + '/public/404.html');
+    }).post(function(req, res){
+        res.sendFile(process.cwd() + '/public/404.html');
+    });
+
+
 }
 
 

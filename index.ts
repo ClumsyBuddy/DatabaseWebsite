@@ -3,7 +3,7 @@ import {Init} from  "./Sockets/ServerSocketHandler.js";
 import {RoutesInit} from "./Sockets/Routes.js"
 
 const hostname = ip.address();
-const port = 8000;
+const port = 8080;
 Init(); //Initalize Sockets
 RoutesInit();
 server.listen(port, function(){

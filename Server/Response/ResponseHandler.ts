@@ -207,7 +207,7 @@ class  ResponseHandler{
         res.render(BuildRenderTarget, {PageState:req.session.PageState, Data:req.session.PageData}, function(err, html) {
             if(err){
                 console.log(err);
-                res.sendFile(__dirname + "/public/404.html");
+                res.sendFile(process.cwd() + "/public/404.html");
             }else{
                 res.send(html)
             }

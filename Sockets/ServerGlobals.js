@@ -2,15 +2,17 @@ import express from "express";
 import ip from "ip";
 import session from "express-session";
 import {default as SQLiteStoreSession} from "connect-sqlite3";
-let SQLiteStore = SQLiteStoreSession(session);
+import {createServer} from "http";
 let app = express();
-import http from "http";
-let server = http.createServer(app);
-import * as Server from "socket.io";
-let io = new Server.Server(server);
-import sqlite3 from "sqlite3";
+let server = createServer(app);
+import {Server} from "socket.io";
+const io = new Server(server, {
 
+});
+import sqlite3 from "sqlite3";
+let SQLiteStore = SQLiteStoreSession(session);
 app.set('views', "./Server/views");
+
 app.set('view engine', 'ejs');
 //Setup Json and URL parsing
 app.use(express.json()); // Helps Parse Json files
@@ -53,7 +55,6 @@ var Classes = {
 
 export {
     app,
-    http,
     server,
     io,
     SQLiteStore,

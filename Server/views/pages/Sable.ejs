@@ -15,10 +15,10 @@
 
 
         <script src="/socket.io/socket.io.js"></script>
-        <script>
-            var mySocket = io();
+        <script >
+            var mySocket = io.connect();
             mySocket.emit("init");
-        </script>
+          </script>
         <script src="javascript/Globals.js"></script>
         <script type="module" src="javascript/SocketHandler.js"></script>
     </body>

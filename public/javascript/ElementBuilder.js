@@ -48,11 +48,12 @@ export class ElementBuilder{
         {
         var t = document.createElement("textarea");
         var Style = [];
-        t.setAttribute("cols", col);
-        t.setAttribute("rows", row);
+        t.cols = col;
+        t.rows = row;
         t.setAttribute('maxlength', MaxLength);
         t.setAttribute("placeholder", defaultText);
         t.setAttribute("class", _class);
+        
         if(VerticalResize && !Horizontalresize){
             Style.push("resize:vertical");
         }else
@@ -90,7 +91,8 @@ export class ElementBuilder{
             }else
             if(A_Tag){
                 s = document.createElement("a");
-                s.setAttribute("href", href);
+                //s.setAttribute("href", href);
+                s.href = href;
             }else
             if(Button_Tag && A_Tag | !Button_Tag, !A_Tag){
                 throw console.error("No Button Option Selected: Function - SubmitButton | "+"ButtonTag: "+Button_Tag +" A_Tag: "+A_Tag);
@@ -105,7 +107,8 @@ export class ElementBuilder{
             }
             s.addEventListener(Event, () => {
                 if(colorChange.A == true){
-                    s.setAttribute("style", "background-color:" + colorChange.Color);
+                    //s.setAttribute("style", "background-color:" + colorChange.Color);
+                    s.style["background-color"] = colorChange.Color;
                 }
                 Callback(CBParam);
             });

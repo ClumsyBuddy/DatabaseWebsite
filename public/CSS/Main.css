@@ -462,8 +462,24 @@ body::-webkit-scrollbar{
     margin: auto;
 }
 
-
-
+.LogoutButtonForm{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+}
+.LogoutButton{
+    background-color: #F65E00;
+    color: azure;
+    border-color: azure;
+    border-radius: 5px;
+}
+.LogoutButton:hover{
+    background-color: #1E2E54;
+    color: azure;
+}
+.LogoutButton:active{
+    background-color: #818181;
+}
 .AddSubmitButton{
     width: 5vw;
     height: 3vh;

@@ -1,4 +1,4 @@
-import { RemoveChildNodes } from "./Utility.js";
+import { RemoveChildNodes, setAttributes } from "./Utility.js";
 import {ElementBuilder} from "./ElementBuilder.js";
 import {Brand, ItemType, Option, Value} from "./ItemInfo.js";
 
@@ -86,6 +86,7 @@ export class Add_Item{
         if(this.Overlay_Content.children.length > 1){
             this.RemoveOtherItemType(Chosen);
         }
+        this.Overlay_Content.children[0].style["pointer-events"] = "none";;
     }
 
     AddBrands(){

@@ -26,5 +26,6 @@ mySocket.on("Add", function(msg){
 
 
 mySocket.on("init", function(msg){
+    console.log("emit2");
     shake.InitializeProductList(msg);
 });
