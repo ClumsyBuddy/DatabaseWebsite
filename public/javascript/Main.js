@@ -8,7 +8,10 @@ import { CreateProductContainer, Produce, CloseNav} from "./HtmlBuilder.js";
 export function BuildProductArray(msg, StartIndex, FinishIndex){
     for(let j = StartIndex; j < FinishIndex; j++) //Build the elements
     {
-        Produce(ProductList[j], msg[j].key, msg[j].sku, msg[j].brand, msg[j].Color);
+        if(ProductList[j] === undefined){
+            break;
+        }
+            Produce(ProductList[j], msg[j].key, msg[j].sku, msg[j].brand, msg[j].Color);
     }
     //console.log("Finished: " + StartIndex + " - " + FinishIndex);
 }
@@ -38,6 +41,8 @@ export function BuildFactory(msg, Length, Max){
 *   Appends the First 100 children and then Starts the button listeners
 */
 export function FirstBuild(msg){
+    BaseContainer.scrollTop = 0;
+    ProductList = [];
     if(msg.length > 0){
         var Node = CreateProductContainer();
         for(let j = 0; j < msg.length; j++){
@@ -45,10 +50,16 @@ export function FirstBuild(msg){
         }
     }
     BuildProductArray(msg, 0, ContainerLength);
-    BuildFactory(msg, ProductList.length, ContainerLength);        
-
-    RemoveChildNodes(BaseContainer);
+    if(ProductList.length > ContainerLength){
+        BuildFactory(msg, ProductList.length, ContainerLength);
+    }
+    if(BaseContainer.children.length > 0){
+        RemoveChildNodes(BaseContainer);
+    }
     for(let items = 0; items < ContainerLength; items++){
+        if(ProductList[items] === undefined){
+            break;
+        }
         BaseContainer.appendChild(ProductList[items]);
     }
     AddButtonEventListeners();
@@ -219,4 +230,10 @@ export function AddButtonEventListeners(){
     document.getElementById('CloseButton').addEventListener('click', (e) =>{
         CloseNav();
     });
+    document.getElementById("Search").addEventListener("click", (e) =>{
+        let Bar = document.getElementById("SearchBar");
+        mySocket.emit("Search", Bar.value);
+    })
+
+
 }

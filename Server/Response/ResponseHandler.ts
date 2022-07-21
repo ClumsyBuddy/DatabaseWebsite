@@ -45,19 +45,18 @@ class  ResponseHandler{
     public SetCurrentRenderTarget(req, res, name:string){
         req.session.PageState.CurrentRenderTarget = name;
     }
-    async ReturnSearchResults(req, res, _Query : string = "", PageData, CurrProductList = []){
-        var Returned = await this.DBController.getAll(this.TableName).then((result) => {
-            if(CurrProductList.length > 0){ //Should possibly save a backup of the result and use it if errors occur
-                result = CurrProductList;
-            }
-            PageData.ProductList = _Query === "" ? result : []; //If we have no query then we can just get all results
-            if(PageData.ProductList.length == 0){ //This section checks any products options matches the Query
+    async ReturnSearchResults(_Query : string = ""){
+        return await this.DBController.getAll(this.TableName).then((result) => {
+            let ProductList = _Query === "" ? result : []; //If we have no query then we can just get all results
+            if(ProductList.length == 0){ //This section checks any products options matches the Query
                 var FoundItemArray : any[] = [];
                 var Query : string[] = _Query.split(" ");
-                for(var queries in Query){
-                    for(var item in result){
+
+                for(var item in result){
+                    var Match = 0;
+                    for(var queries in Query){
                         if(result[item].sku.toLowerCase().includes(Query[queries].toLowerCase()) || result[item].brand.toLowerCase().includes(Query[queries].toLowerCase())){
-                            FoundItemArray.push(result[item]);
+                            Match++;
                             continue;
                         }
                         for(var Data in this.ItemDataArray){
@@ -70,7 +69,7 @@ class  ResponseHandler{
                                         }
                                         var ResultString : string = result[item][i].toLowerCase();
                                         if(ResultString.includes(Query[queries].toLowerCase())){
-                                            FoundItemArray.push(result[item]);
+                                            Match++;
                                         }
                                     }
                                 }else{
@@ -78,80 +77,30 @@ class  ResponseHandler{
                                         continue;
                                     }
                                     if(result[item][Options[O]].toLowerCase().includes(Query[queries].toLowerCase())){
-                                        FoundItemArray.push(result[item]);
+                                        Match++;
                                     }
                                 }
                                 
                             }
                         }
                     }
-                }
-                if(Query.length > 1){ //This section checks to see if any of the first results match the Query if the Query is multipart and then filters duplicate results
-                    for(var item in FoundItemArray){
-                        if(PageData.ProductList.length > 0){
-                            for(var i in PageData.ProductList){
-                                if(PageData.ProductList[i].key == FoundItemArray[item].key){
-                                    continue;
-                                }
-                            }
+                    if(Match == Query.length){
+                        FoundItemArray.push(result[item]);
+                    }
+                }                    
+                for(let i = 0; i < FoundItemArray.length; i++){
+                    for(let j = 0; j < FoundItemArray.length; j++){
+                        if(i == j){
+                            continue;
                         }
-                        var QueryCount : boolean[] = [];
-                        for(let i = 0; i < Query.length; i++){
-                            QueryCount.push(false);
-                        }
-                        
-                        for(let q = 0; q < Query.length; q++){
-                            var Options : any[] = Object.keys(FoundItemArray[item]);
-                            for(let j  in Options){
-                                var ItemString : string;
-                                if(typeof FoundItemArray[item][Options[j]] == 'number' || FoundItemArray[item][Options[j]] == null){
-                                    continue;
-                                }else{
-                                    ItemString = FoundItemArray[item][Options[j]];
-                                }
-                                var lowerItemString : string = ItemString.toLowerCase();
-                                if(lowerItemString.includes(Query[q].toLowerCase())){
-                                    QueryCount[q] = true;
-                                }    
-                            }
-                            if(q == Query.length - 1){
-                                var Check = true;
-                                for(var C in QueryCount){
-                                    if(QueryCount[C] == false){
-                                        Check = false;
-                                    }
-                                }
-                                if(Check == true){
-                                    if(PageData.ProductList.length > 0){
-                                        for(var i in PageData.ProductList){
-                                            var Dup = false;
-                                            if(PageData.ProductList[i].key == FoundItemArray[item].key){
-                                                Dup = true;
-                                            }
-                                            if(PageData.ProductList[PageData.ProductList.length-1] == i && Dup == false){
-                                                PageData.ProductList.push(FoundItemArray[item]);
-                                            }
-                                        }
-                                    }else{
-                                        req.session.PageData.ProductList.push(FoundItemArray[item]);
-                                    }
-                                }
-                            }
+                        if(FoundItemArray[i].key == FoundItemArray[j].key){
+                            FoundItemArray.splice(j, 1);
                         }
                     }
-                }else{ //If its not a multipart query then we can just set the found items to the Productlist
-                    req.session.PageData.ProductList = FoundItemArray;
                 }
-            }else{
-                return false;
+                return FoundItemArray;
             }
-            return true;
         });
-        if(Returned){
-            this.RenderPage(req, res);
-        }else{
-            res.redirect("/" + this.ClassName);
-        }
     }
 
     

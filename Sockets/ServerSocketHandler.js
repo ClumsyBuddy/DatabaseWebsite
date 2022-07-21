@@ -17,11 +17,7 @@ export function Init(){
 }
 
 function on_connection(socket){
-    socket.on("init", async () => {
-        socket.request.session.PageData.ProductList = await DBClass.GetAllProducts(DBClass.Name);
-        socket.request.session.save();
-        socket.emit("init", socket.request.session.PageData.ProductList);
-    });
+    socket.on("init", ()=>{InitCall(socket)});
     
     socket.on('UpdatePList', async () => {
         socket.request.session.PageData.ProductList = await DBClass.GetAllProducts(DBClass.Name);
@@ -31,7 +27,24 @@ function on_connection(socket){
     socket.on('GetAdd', (msg) => {GetAddItems(socket, msg)});
 
     socket.on('Delete', (msg) => {Delete(socket, msg)});
+
+
+    socket.on("Search", async (msg) => {
+        let pList = await DBClass.ReturnSearchResults(msg);
+        if(pList.length > 0){
+            socket.emit("init", pList);
+        }else{
+            InitCall(socket);
+        }
+    });
 }
+
+async function InitCall(socket){
+    socket.request.session.PageData.ProductList = await DBClass.GetAllProducts(DBClass.Name);
+    socket.request.session.save();
+    socket.emit("init", socket.request.session.PageData.ProductList);
+}
+
 
 function GetAddItems(socket, msg){
     if(msg.Target == "Sable"){
