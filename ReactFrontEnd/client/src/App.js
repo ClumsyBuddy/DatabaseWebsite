@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Login } from "./Login/LoginPage";
 import { Header } from './Header/Header';
 
-import logo from './logo.svg';
+
 import './App.css';
 
 
@@ -27,7 +27,6 @@ function App() {
       <header className='App-Header'>
         <Header />
       </header>
-      <img src={logo} className="App-logo" alt="logo" />
       <Login />
       <p>Database Uptime: {!data ? "Loading..." : data + " Seconds"}</p>
     </div>

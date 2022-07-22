@@ -38,9 +38,9 @@ function Login() {
       <h2 className="login-header">Log in</h2>
       {renderErrorMesssage("Incorrect")}
       <form className="login-container" id='LoginForm' onSubmit={handleSubmit}>
-          <input type="text" placeholder="Username" name="uname" required></input>
-          <input type="password" placeholder="Password" name="pass" required></input>
-          <input type="submit"></input>
+          <input type="text" placeholder="Username" name="uname" required className='LoginInput'></input>
+          <input type="password" placeholder="Password" name="pass" required className='LoginInput'></input>
+          <input type="submit" className='LoginInput'></input>
       </form>
     </div>
   );
