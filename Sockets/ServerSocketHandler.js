@@ -1,4 +1,4 @@
-import {io, app, SQLiteStore, session} from "./ServerGlobals.js";
+import {io, app, SQLiteStore, session, Classes} from "./ServerGlobals.js";
 var DBClass;
 
 
@@ -17,10 +17,12 @@ export function Init(){
 }
 
 function on_connection(socket){
-    socket.on("init", ()=>{InitCall(socket)});
+    console.log("Connection");
+    
+    socket.on("init", ()=>{InitCall(socket);});
     
     socket.on('UpdatePList', async () => {
-        socket.request.session.PageData.ProductList = await DBClass.GetAllProducts(DBClass.Name);
+        socket.request.session.PageData.ProductList = await Classes[socket.request.session.DataBaseClass].GetAllProducts(Classes[socket.request.session.DataBaseClass].Name);
         socket.request.session.save();
     });
 
@@ -30,7 +32,7 @@ function on_connection(socket){
 
 
     socket.on("Search", async (msg) => {
-        let pList = await DBClass.ReturnSearchResults(msg);
+        let pList = await Classes[socket.request.session.DataBaseClass].ReturnSearchResults(msg);
         if(pList.length > 0){
             socket.emit("init", pList);
         }else{
@@ -40,7 +42,8 @@ function on_connection(socket){
 }
 
 async function InitCall(socket){
-    socket.request.session.PageData.ProductList = await DBClass.GetAllProducts(DBClass.Name);
+    console.log("InitCall");
+    socket.request.session.PageData.ProductList = await Classes[socket.request.session.DataBaseClass].GetAllProducts(Classes[socket.request.session.DataBaseClass].Name);
     socket.request.session.save();
     socket.emit("init", socket.request.session.PageData.ProductList);
 }
@@ -49,7 +52,7 @@ async function InitCall(socket){
 function GetAddItems(socket, msg){
     if(msg.Target == "Sable"){
         const EmitAddGet = async () =>{
-            socket.emit("AddItemData", {ItemData:DBClass.ItemData, Brands:DBClass.Brands});
+            socket.emit("AddItemData", {ItemData:Classes[socket.request.session.DataBaseClass].ItemData, Brands:Classes[socket.request.session.DataBaseClass].Brands});
         }
         try{
             EmitAddGet();
@@ -78,6 +81,7 @@ function Delete(socket, msg){
     }
 }
 
-export function ChangeClass(newClass){
-    DBClass = newClass;
+export function ChangeClass(req, res, newClass){
+    req.session.DataBaseClass = newClass;
+    req.session.save();
 }

@@ -43,7 +43,8 @@ export class ElementBuilder{
         ResizeAble = false, 
         col = 10, row =  10, MaxLength = 20,
         defaultText = "",
-        _class = ""  } = {}, {Callback = undefined, CBParam = [], Event="input",
+        _class = "",
+        _id = ""  } = {}, {Callback = undefined, CBParam = [], Event="input",
                                 Data={A:false, DataName:"", DataValue:""}} = {})
         {
         var t = document.createElement("textarea");
@@ -53,7 +54,7 @@ export class ElementBuilder{
         t.setAttribute('maxlength', MaxLength);
         t.setAttribute("placeholder", defaultText);
         t.setAttribute("class", _class);
-        
+        t.id = _id;
         if(VerticalResize && !Horizontalresize){
             Style.push("resize:vertical");
         }else
@@ -180,7 +181,7 @@ export class ElementBuilder{
         }
         return l;
     }
-    Input({_class="", _id="", type="", value="", name="", checked=false} = {}, {CallbacK = undefined, CBParam = [], Event="click"} = {}){
+    Input({_class="", _id="", type="", value="", name="", checked=false, ActLikeRadio = false} = {}, {CallbacK = undefined, CBParam = [], Event="click"} = {}){
         var  i = document.createElement("input");
         if(_class != ""){
             i.setAttribute("class", _class);
@@ -198,11 +199,16 @@ export class ElementBuilder{
             i.setAttribute("name", name);
         }
         i.checked = checked;
-
         if(CallbacK == undefined){
             return i;
         }
         i.addEventListener(Event, (e) => {
+            if(ActLikeRadio){
+                var checkboxes = document.getElementsByName(name);
+                checkboxes.forEach((item) => {
+                    if (item !== i) item.checked = false
+                });
+            }
             var Params = CBParam;
             CallbacK({Params, e});
         });

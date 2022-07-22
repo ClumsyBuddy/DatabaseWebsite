@@ -3,6 +3,7 @@ import { ResponseHandler } from "../../Response/ResponseHandler.js";
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { randomInt } from "crypto";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -12,7 +13,8 @@ class SableResponseHandler extends ResponseHandler{
 
     Name:string;
     Brands:Array<string>;
-    constructor(DBController:typeof DatabaseManager, User:typeof Login, name:string = "Sable", io){
+  
+    constructor(DBController:DatabaseManager, User:typeof Login, name:string = "Sable", io){
         super(DBController, User, io, {ClassName:name, TableName:name, ClassAutoColumn:"sku TEXT, brand TEXT, itemtype TEXT, image TEXT", CACIndex:3});
         this.Name = name;
         let getBrands = function(ParsedData){this.Brands = ParsedData.brands;}
@@ -20,6 +22,12 @@ class SableResponseHandler extends ResponseHandler{
         //Get item information from Jsonfile and create a watchfile event 
         this.ParseJson(__dirname + "/SableOptions.json", this.UpdateItemInformation.bind(this));
 
+    }
+
+    async MakeTestData(){
+        for(let i = 0; i < 1000; i++){
+            //this.DBController.create(this.Name, "sku, brand, itemtype", "?, ?, ?", [`SML${i}`, this.Brands[randomInt(this.Brands.length)], "Uniform"]);
+        }
     }
 
     async _Get(req, res, cb : Function = ()=>{return;}){

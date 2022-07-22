@@ -39,7 +39,7 @@ function RoutesInit(){
     
     app.route('/Sable')
         .get(function(req, res){
-            ChangeClass(Classes.Sable);
+            ChangeClass(req, res, Classes.Sable.Name);
             Classes.Sable._Get(req, res);
         });
     

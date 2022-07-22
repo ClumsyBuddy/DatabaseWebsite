@@ -1,11 +1,19 @@
 import * as shake from "./HandShake.js";
 
-/*
-*   This File is where all Sockets are to be recieved from the Server
-*/
 
+export var mySocket = io.connect();
+mySocket.emit("init");
+
+
+
+
+mySocket.on("init", function(msg){
+    console.log("Get Server Init");
+    shake.InitializeProductList(msg);
+});
 
 mySocket.on("AddItemData", (msg) => {
+    console.log("AddItem");
     shake.AddItemData(msg);
 });
 
@@ -25,7 +33,12 @@ mySocket.on("Add", function(msg){
 });
 
 
-mySocket.on("init", function(msg){
-    console.log("emit2");
-    shake.InitializeProductList(msg);
+
+
+mySocket.on("connet_error", (err) => {
+    console.log(err);
+});
+
+mySocket.on('connect_timeout', function(err) {
+    console.log("client connect_timeout: ", err);
 });

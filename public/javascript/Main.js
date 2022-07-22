@@ -1,6 +1,7 @@
 import "./Globals.js"
 import { isScrolledIntoView, RemoveChildNodes } from "./Utility.js"
 import { CreateProductContainer, Produce, CloseNav} from "./HtmlBuilder.js";
+import { mySocket } from "./SocketHandler.js";
 
 /*
 *   BuildProductArray Builds up the Elements by producing them AKA add each attribute to the element until its finished.

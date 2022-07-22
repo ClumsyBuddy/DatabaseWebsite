@@ -90,6 +90,15 @@ class Value{
         }
         return this.Selected;
     }
+    RadioBoolFlip(){
+        for(let index in this.Parent.Values){
+            if(this.Parent.Values[index] == this){
+                continue;
+            }
+            this.Parent.Values[index].Selected = false;
+            this.Parent.Values[index].Value = false;
+        }
+    }
 }
 
 

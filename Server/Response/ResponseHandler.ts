@@ -27,7 +27,13 @@ class  ResponseHandler{
 
     protected io:any;
    
-    
+    /**
+     * 
+     * @param {DataBaseManager}DBController 
+     * @param User 
+     * @param io 
+     * @param options 
+     */
     constructor(DBController: DatabaseManager, User:Login, io : any, options?:{ClassName?:string, TableName?:string, ClassAutoColumn?:string, CACIndex?:number} ){
         this.DBController = DBController;
         this.User = User;
@@ -99,6 +105,8 @@ class  ResponseHandler{
                     }
                 }
                 return FoundItemArray;
+            }else{
+                return result;
             }
         });
     }

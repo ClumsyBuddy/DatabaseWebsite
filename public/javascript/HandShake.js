@@ -7,6 +7,7 @@ import * as Add from "./AddItem.js";
 */
 
 export function InitializeProductList(ProductList){
+    console.log("Init HandShake");
     lib.FirstBuild(ProductList);
 }
 
