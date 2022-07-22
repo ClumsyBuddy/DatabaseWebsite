@@ -1,7 +1,7 @@
-import { server } from "./Sockets/ServerGlobals.js";
+import { ip, server } from "./Sockets/ServerGlobals.js";
 import { Init } from "./Sockets/ServerSocketHandler.js";
 import { RoutesInit } from "./Sockets/Routes.js";
-const hostname = "localhost"; //ip.address();
+const hostname = ip.address();
 const port = 8000;
 Init(); //Initalize Sockets
 RoutesInit();

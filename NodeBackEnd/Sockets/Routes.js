@@ -1,4 +1,4 @@
-import {app, Classes} from "./ServerGlobals.js";
+import {app, Classes, io} from "./ServerGlobals.js";
 import {ChangeClass} from "./ServerSocketHandler.js"
 
 
@@ -21,11 +21,14 @@ function RoutesInit(){
         next();
     });
     var Counter = 0;
-
+    setInterval(() => {
+        console.log(Counter);
+        Counter++;
+        io.emit("Counter", Counter);
+    }, 1000);
     app.get("/api", (req, res) => {
         console.log("API");
-        Counter++;
-        res.json({ message: Counter });
+        res.json({ message: "Seconds Since Server Start: " + Counter });
     });
 
     app.post("/Logout", (req, res) => {

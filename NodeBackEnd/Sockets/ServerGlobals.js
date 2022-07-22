@@ -7,7 +7,11 @@ import {createServer} from "http";
 let app = express();
 let server = createServer(app);
 import {Server} from "socket.io";
-const io = new Server(server);
+const io = new Server(server, {
+    cors: {
+        origin: '*'
+    }
+});
 import sqlite3 from "sqlite3";
 app.set('views', "./Server/views");
 
