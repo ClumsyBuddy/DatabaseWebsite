@@ -1,6 +1,7 @@
 import express from "express";
 import ip from "ip";
 import session from "express-session";
+import cors from "cors";
 import {default as SQLiteStoreSession} from "connect-sqlite3";
 let SQLiteStore = SQLiteStoreSession(session);
 import {createServer} from "http";
@@ -13,9 +14,12 @@ const io = new Server(server, {
     }
 });
 import sqlite3 from "sqlite3";
+
+
 app.set('views', "./Server/views");
 
 app.set('view engine', 'ejs');
+app.use(cors());
 //Setup Json and URL parsing
 app.use(express.json()); // Helps Parse Json files
 app.use(express.urlencoded({ //Parse POST 
@@ -64,5 +68,6 @@ export {
     ip,
     express,
     Classes,
-    sqlite3
+    sqlite3,
+    cors
 };

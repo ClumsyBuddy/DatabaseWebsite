@@ -19,23 +19,12 @@ class Login {
             High: 3
         };
     }
-    /*  Attempt to login using a async function that awaits the results
-    *   Check if the email exists in the database. Then check if the email and password match what we found
-    *   Then set all of the variables to their correct values found in the database
-    */
     LoginAttempt(req, res, username, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.c_DbController.getByColumn(this.db_Name, "username", username.toLowerCase()).then((result) => {
+            return yield this.c_DbController.getByColumn(this.db_Name, "username", username.toLowerCase()).then((result) => __awaiter(this, void 0, void 0, function* () {
                 if (result !== undefined && result.password == password && result.username == username.toLowerCase()) {
                     req.session.loggedin = true; //We are logged in
                     req.session.username = result.username; //Get the USername
-                    //console.log("Hello Login");
-                    var PageState = {
-                        LoginForm: false,
-                        CurrentRenderTarget: "/",
-                        Title: "Database",
-                        _Action: "/",
-                    };
                     var PageData = {
                         ProductList: [],
                         AllowedActions: {
@@ -50,14 +39,14 @@ class Login {
                         Diplomat: result.Diplomat,
                         RDI: result.RDI //Get whether its RDI
                     };
-                    req.session.PageState = PageState;
                     req.session.PageData = PageData;
+                    yield req.session.save();
+                    return true;
                 }
-                else {
-                    req.session.loggedin = false;
-                }
-                req.session.save();
-            });
+                req.session.loggedin = false;
+                yield req.session.save();
+                return false;
+            }));
         });
     }
     PermissionLevel(req, Required, currLevel) {

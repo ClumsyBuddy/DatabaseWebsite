@@ -1,4 +1,4 @@
-import {app, Classes, io} from "./ServerGlobals.js";
+import {app, Classes, io, cors} from "./ServerGlobals.js";
 import {ChangeClass} from "./ServerSocketHandler.js"
 
 
@@ -22,9 +22,8 @@ function RoutesInit(){
     });
     var Counter = 0;
     setInterval(() => {
-        console.log(Counter);
+        //console.log(Counter);
         Counter++;
-        io.emit("Counter", Counter);
     }, 1000);
     app.get("/api", (req, res) => {
         console.log("API");
@@ -35,11 +34,17 @@ function RoutesInit(){
         Classes.Index.Logout(req, res);
         res.redirect("/");
     });
-    
+    app.get("/Session", (req, res) => {
+        res.status(200).json({token:req.session});
+    });
     app.route('/Login')
-        .get((req, res) =>{
-        }).post((req, res) => {
-            Classes.Index.Login(req, res);
+        .get(async (req, res) =>{
+        }).post(async (req, res) => {
+            console.log(req.session.id);
+            let isLogin = await Classes.UserLogin.LoginAttempt(req, res, req.body.name, req.body.password);
+            console.log("Is password and username correct: " + isLogin);
+            console.log(req.session);
+            res.status(200).json(isLogin);
         });
     
     //Router for getting all get and post request on '/' which is index

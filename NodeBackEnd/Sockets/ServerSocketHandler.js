@@ -7,7 +7,7 @@ export function Init(){
     const SessionMiddleWare = session({ //Create session middleware
         store: new SQLiteStore,
         secret: 'DBSession',
-        resave: true,
+        resave: false,
         saveUninitialized:true,
         cookie: { maxAge: Week } // 1 week
     });
