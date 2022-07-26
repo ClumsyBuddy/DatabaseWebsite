@@ -1,54 +1,38 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import { faker } from '@faker-js/faker';
-import InfiniteScroll from "react-infinite-scroll-component";
 import "./ProdustList.css";
-
-
+import {Grid} from "react-virtualized"
 
 function ProductList(){
+    const MaxColumn = 5;
 
     const data = new Array(1000).fill().map((value, id) => (({
         id: id,
         title: faker.lorem.words(1),
-        body: faker.lorem.words(4)
+        body: faker.lorem.words(3)
       })))
-    
-      const [count, setCount] = useState({
-        prev: 0,
-        next: 20
-      })
-      const [hasMore, setHasMore] = useState(true);
-      const [current, setCurrent] = useState(data.slice(count.prev, count.next))
-      const getMoreData = () => {
-        if (current.length === data.length) {
-          setHasMore(false);
-          return;
-        }
-        setTimeout(() => {
-          setCurrent(current.concat(data.slice(count.prev + 10, count.next + 10)))
-        }, 100)
-        setCount((prevState) => ({ prev: prevState.prev + 10, next: prevState.next + 10 }))
-      }
-    
-      return (
-        <InfiniteScroll className="ListContainer"
-          dataLength={current.length}
-          next={getMoreData}
-          hasMore={hasMore}
-          loader={<h4>Loading...</h4>}
-          height={600}
-        >
-          <div className="InnerContainer">
-            {current && current.map(((item, index) => (
-              <div key={index} className="Item" onClick={(e) => {console.log(e.currentTarget)}}>
-                <h3>{`${item.title}-${item.id}`}</h3>
-                <p>{item.body}</p>
-              </div>
-            )))
-            }
-          </div>
-        </InfiniteScroll>
+      
+      const renderRow = ({columnIndex, key, rowIndex, style}) => (
+        <div style={{...style, marginLeft:`10px`, marginRight:`10px`}} className="InnerContainer">
+            <div key={key} className="Item">
+                <p>{rowIndex * MaxColumn + columnIndex}</p>
+            </div>
+        </div>
       );
+      return (
+        <div className="ListContainer">
+            <Grid style={{display:`flex`, justifyContent:`center`}}
+            cellRenderer={renderRow}
+            columnCount={MaxColumn}
+            columnWidth={300}
+            height={600}
+            rowCount={data.length}
+            rowHeight={300}
+            width={1500}
+        />
+      </div>
+      );
+   
 }
 
 
