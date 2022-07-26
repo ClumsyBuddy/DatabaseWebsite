@@ -2,7 +2,8 @@ var canvas;
 var ctx;
 var width;
 var height;
-var step;
+var step = -6;
+var Animation;
 export function Init(Canvas){
     canvas = Canvas
     ctx = canvas.getContext("2d");
@@ -10,15 +11,18 @@ export function Init(Canvas){
     height = ctx.canvas.height;
     step = -6;
 }
-export function start(Canvas) {
-  window.requestAnimationFrame(start);
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+export function start() {
+    if(Animation !== undefined){
+        window.cancelAnimationFrame(Animation);
+    }
+    Animation = window.requestAnimationFrame(start);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    drawWave(450,"sin"); 
+    drawWave(220,"cos");
+    drawWave(75,"sin");
   
-  drawWave(550,"sin");
-  drawWave(220,"cos");
-  drawWave(75,"sin");
-  
-  step += .60; 
+  step += .40; 
 }
 function drawWave(amplitude,trig){
   // trig is the trigonometric function to be used: sin or cos

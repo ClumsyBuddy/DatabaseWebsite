@@ -9,13 +9,12 @@ import { Init, start } from "./SineWave";
 const LinkPage = () => {
 
     const canvasref = useRef(null);
-    
 
     useEffect(() => {
 
         const canvas = canvasref.current;
         Init(canvas);
-        start();
+        start(canvas);
     }, []);
 
 
