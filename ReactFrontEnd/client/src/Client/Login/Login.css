@@ -118,9 +118,11 @@
 
 @keyframes loginGrow{
   from {
+    backface-visibility: hidden;
     transform: scale(1);
   }
   to {
+    backface-visibility: hidden;
     transform: scale(.98);
   }
 }

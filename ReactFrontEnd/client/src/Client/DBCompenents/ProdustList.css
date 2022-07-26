@@ -1,0 +1,46 @@
+.ListContainer{
+    color: white;
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    width: 90vw;
+    flex-flow: wrap;
+    overflow-y: scroll;
+    height: 55vh;
+    margin: auto;
+    justify-content: center;
+    border-color: white;
+    border-style: solid;
+    flex-basis: 0;
+}
+.ListContainer::-webkit-scrollbar{
+}
+
+
+.InnerContainer{
+    display: flex;
+    flex-flow: wrap;
+    justify-content: center;
+}
+
+.Item{
+    background-color: darkgrey;
+    color: black;
+    text-align: center;
+    border-radius: 5px;
+    width: 15%;
+    height: 20%;
+    margin-left: .5%;
+    margin-right: .5%;
+    margin-top: .5%;
+    margin-bottom: .5%;
+    border-color: white;
+    border-style: solid;
+    justify-content: center;
+    align-items: center;
+}
+
+.Item:hover{
+    transition: transform 1s;
+    transform: scale(1.1);
+}

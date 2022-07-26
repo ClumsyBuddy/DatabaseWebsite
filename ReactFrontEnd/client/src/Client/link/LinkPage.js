@@ -2,11 +2,15 @@
 import React, {useEffect, useRef} from "react";
 import { Link } from "react-router-dom"
 
+import useAuth from "../../hooks/useAuth";
+
 import "./LinkPage.css";
 import { Init, start } from "./SineWave";
 
 
 const LinkPage = () => {
+
+    const {setAuth, auth} = useAuth();
 
     const canvasref = useRef(null);
 
@@ -17,11 +21,15 @@ const LinkPage = () => {
         start(canvas);
     }, []);
 
+    const ClearAuth = async () => {
+        
+        setAuth({});
+    }
 
     return (
         <section className="BaseContainer">
             <canvas id="sineWaveCanvas" className="SineWaveCanvas" ref={canvasref} width={"1920px"} height={"1080px"} ></canvas>
-            <Link className="LoginButton" to="/Login">Login</Link>
+            {!auth?.login ? <Link className="LoginButton" to="/Login">Login</Link> : <button onClick={ClearAuth} className="LogoutButton">Logout</button>}
             <h1 className="DataBaseHeader">Databases</h1>
             <div className="dbContainer">
                 <Link className="dbLink" to="/Sable">Sable</Link>
