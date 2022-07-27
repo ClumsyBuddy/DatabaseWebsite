@@ -1,0 +1,22 @@
+.ListContainer{
+    color: black;
+    border-color: white;
+    border-style: solid;
+}
+.ListContainer::-webkit-scrollbar{
+    display: none;
+}
+
+.Item{
+    background-color: darkgrey;
+    color: black;
+    text-align: center;
+    border-radius: 5px;
+    border-color: white;
+    border-style: solid;
+}
+
+.Item:hover{
+    transition: transform 1s;
+    transform: scale(1.07);
+}

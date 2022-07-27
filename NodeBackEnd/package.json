@@ -2,9 +2,9 @@
   "name": "databasewebsite",
   "version": "1.0.1",
   "description": "Database Website for RDI",
-  "main": "index.js",
+  "main": "./server.js",
   "scripts": {
-    "start": "node index.js",
+    "start:server": "node server.js",
     "build": "npx tsc -t es6"
   },
   "author": "Trevor Winn",

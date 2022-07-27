@@ -43,7 +43,7 @@ function RoutesInit(){
             console.log(req.session.id);
             let isLogin = await Classes.UserLogin.LoginAttempt(req, res, req.body.name, req.body.password);
             console.log("Is password and username correct: " + isLogin);
-            console.log(req.session);
+            //console.log(req.session);
             res.status(200).json(isLogin);
         });
     
@@ -71,7 +71,15 @@ function RoutesInit(){
         Classes.Index._Get(req, res);
     });
 
+    app.get("/GetProducts", (req, res) => {
+        console.log("Gettting Products");
+        res.json({ProductList:"Hello World"});
+    });
 
+    app.get("/Test", async (req, res) => {
+        const ProductList = Classes.Sable.GetAllProducts("Sable");
+        res.json({ProductList});
+    }); 
     app.route("/*").get(function(req, res){
         res.sendFile(process.cwd() + '/public/404.html');
     }).post(function(req, res){
