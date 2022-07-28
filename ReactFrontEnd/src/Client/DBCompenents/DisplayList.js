@@ -147,7 +147,7 @@ const ProductList = ({...props}) =>{
             :
                 <div style={{color:"white", textAlign:"center"}}>Loading...</div>
             }
-             {isOpen ? <EditModal flipOpen={flipOpen} isOpen={isOpen} /> : <></>}
+             {isOpen ? <EditModal flipOpen={flipOpen} /> : <></>}
       </div>
       );
    
