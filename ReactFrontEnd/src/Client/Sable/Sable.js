@@ -1,28 +1,21 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import {useNavigate} from "react-router-dom"
 import "./Sable.css";
 
-const ProductList = React.lazy(() => import('../DBCompenents/ProductList'));
+const DisplayList = React.lazy(() => import('../DBCompenents/DisplayList'));
 
 function Sable(){
     const navigate = useNavigate();
     const returnToSender = () => {
         navigate("/", {replace:true});
     }
-
-    const TestCheck = async () =>{
-        console.log("SendTest");
-        const result = await fetch("/Test", {
-            method:"GET",
-            headers: {"Content-Type": "application/JSON"},
-          })
-          .then(response =>{
-            console.log(response);
-            return response.json();
-          });
-          console.log(result);
+    const [Query, setQuery] = useState("");
+    
+    const UpdateQuery = (value) =>{
+        setQuery(value);
     }
-
+    
+    
     return (
         <div className='SableBaseContainer'>
            
@@ -31,14 +24,14 @@ function Sable(){
             <h1 className='TitleHeader'>Sable</h1>
           
             <div className='MenuNav'>
-                <button className='AddButton Marg MenuButton' onClick={TestCheck}>Add</button>
-                <textarea className='SearchBar Marg' placeholder='Enter Sku' cols={25} rows={1} onChange={(e)=>{}}></textarea>
-                <button className='SearchButton Marg MenuButton'>Search</button>
+                <button className='AddButton Marg MenuButton'>Add</button>
+                <textarea id="SearchBar" className='SearchBar Marg' placeholder='Enter Sku' cols={25} rows={1} onChange={(e)=>{UpdateQuery(e.currentTarget.value);}}></textarea>
+                <button type='submit' className='SearchButton Marg MenuButton' onClick={(e)=>{document.getElementById("SearchBar").value = ""; UpdateQuery("");}}>Clear</button>
             </div>
 
             <div className='SableProductListContainer'>
                 <Suspense fallback={<div>Loading...</div>}>
-                    <ProductList/>
+                    <DisplayList Query={Query} />
                 </Suspense>
             </div>
 
