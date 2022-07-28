@@ -30,7 +30,7 @@ function Sable(){
             </div>
 
             <div className='SableProductListContainer'>
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense fallback={<div style={{color:"white"}}>Loading...</div>}>
                     <DisplayList Query={Query} />
                 </Suspense>
             </div>

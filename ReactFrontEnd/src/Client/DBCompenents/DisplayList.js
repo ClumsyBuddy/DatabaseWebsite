@@ -1,8 +1,8 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {createContext, useEffect, useRef, useState} from "react";
 import "./DisplayList.css";
 import {Grid} from "react-virtualized"
 import 'react-virtualized/styles.css';
-
+import EditModal from "./EditModal/EditModal";
 
 
 const ProductList = ({...props}) =>{
@@ -22,7 +22,7 @@ const ProductList = ({...props}) =>{
     const WindowInterval = useRef(true);
     const [GridWidth, setGridWidth] = useState(window.innerWidth * 0.897);
 
-    
+    const [isOpen, setIsOpen] = useState(false);
 
     const fetchData = () =>{
         fetch("/Test", {
@@ -86,7 +86,9 @@ const ProductList = ({...props}) =>{
         DisplayList = ProductList;
     }
 
-
+    const flipOpen = (bool) =>{
+        setIsOpen(bool);
+    }
 
     useEffect(() => {      
         if(WindowInterval.current){
@@ -122,7 +124,7 @@ const ProductList = ({...props}) =>{
     }} 
         className="">
         <div className="Item" style={{height:RowHeight*0.80}}>
-            <button>Edit</button>
+            <button onClick={(e)=>{flipOpen(true); console.log("isOpen: " + isOpen)}}>Edit</button>
             <button value={DisplayList[rowIndex*MaxColumn+columnIndex].key} onClick={(e)=>{DeleteItem(e.currentTarget.value);}}>Delete</button>
             <p>{DisplayList[rowIndex*MaxColumn+columnIndex].sku}<br></br>{DisplayList[rowIndex*MaxColumn+columnIndex].brand}</p>
         </div>
@@ -143,8 +145,9 @@ const ProductList = ({...props}) =>{
                 rowHeight={RowHeight}
                 width={GridWidth} />
             :
-                <div>Loading...</div>
+                <div style={{color:"white", textAlign:"center"}}>Loading...</div>
             }
+             {isOpen ? <EditModal flipOpen={flipOpen} isOpen={isOpen} /> : <></>}
       </div>
       );
    
