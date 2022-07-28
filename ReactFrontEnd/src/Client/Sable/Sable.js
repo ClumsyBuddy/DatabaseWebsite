@@ -1,16 +1,11 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense } from 'react';
 import {useNavigate} from "react-router-dom"
-import useAuth from '../../hooks/useAuth';
 import "./Sable.css";
 
 const ProductList = React.lazy(() => import('../DBCompenents/ProductList'));
 
 function Sable(){
-    const {auth} = useAuth();
     const navigate = useNavigate();
-
-    const [search, setSearch] = useState("");
-
     const returnToSender = () => {
         navigate("/", {replace:true});
     }
@@ -37,7 +32,7 @@ function Sable(){
           
             <div className='MenuNav'>
                 <button className='AddButton Marg MenuButton' onClick={TestCheck}>Add</button>
-                <textarea className='SearchBar Marg' placeholder='Enter Sku' cols={25} rows={1} onChange={(e)=>{setSearch(e.target.value);}}></textarea>
+                <textarea className='SearchBar Marg' placeholder='Enter Sku' cols={25} rows={1} onChange={(e)=>{}}></textarea>
                 <button className='SearchButton Marg MenuButton'>Search</button>
             </div>
 

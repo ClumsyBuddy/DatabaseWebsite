@@ -77,8 +77,8 @@ function RoutesInit(){
     });
 
     app.get("/Test", async (req, res) => {
-        const ProductList = Classes.Sable.GetAllProducts("Sable");
-        res.json({ProductList});
+        const ProductList = await Classes.Sable.GetAllProducts("Sable");
+        res.json(ProductList);
     }); 
     app.route("/*").get(function(req, res){
         res.sendFile(process.cwd() + '/public/404.html');

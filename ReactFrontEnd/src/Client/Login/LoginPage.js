@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState } from 'react';
-import { Navigate, Location, useNavigate, useLocation } from 'react-router-dom';
+import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 
 import useAuth from '../../hooks/useAuth';
 
@@ -15,18 +15,15 @@ function Login() {
   const from = location.state?.from?.pathname || "/";
 
   const userRef = useRef();
-  const errRef = useRef();
 
   const [user, setUser] = useState('');
   const [pwd, setPwd] = useState('');
-  const [errMsg, setErrMsg] = useState("");
 
 
   useEffect(() => {
     userRef.current.focus();
   }, [])
   useEffect(() => {
-    setErrMsg('');
   }, [user, pwd]);
 
   const [failedLogin, setFailedLogin] = useState(false);
