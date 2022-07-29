@@ -146,8 +146,8 @@ const ProductList = ({...props}) =>{
         className="">
         <div className="Item" style={{height:RowHeight*0.80}}>
             <div className="EditAddContainer">
-                <button onClick={(e)=>{flipOpen(true); console.log("isOpen: " + isOpen)}} className="EditButton">Edit</button>
-                <button value={DisplayList[rowIndex*MaxColumn+columnIndex].key} onClick={(e)=>{DeleteItem(e.currentTarget.value);}} className="DeleteButton">Delete</button>
+                <button onClick={(e)=>{flipOpen(true); console.log("isOpen: " + isOpen)}} className="EditButton ButtonHoverEffect">Edit</button>
+                <button value={DisplayList[rowIndex*MaxColumn+columnIndex].key} onClick={(e)=>{DeleteItem(e.currentTarget.value);}} className="DeleteButton ButtonHoverEffect">Delete</button>
             </div>
             <div className="InfoContainer">
                 <p className="InfoDisplay">SKU: {DisplayList[rowIndex*MaxColumn+columnIndex].sku}</p>

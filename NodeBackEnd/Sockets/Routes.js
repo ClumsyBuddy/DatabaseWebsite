@@ -75,7 +75,9 @@ function RoutesInit(){
         console.log("Gettting Products");
         res.json({ProductList:"Hello World"});
     });
-
+    app.get("/ItemData", async (req, res) => {
+        res.json(Classes.Sable.ItemData);
+    });
     app.get("/Test", async (req, res) => {
         const ProductList = await Classes.Sable.GetAllProducts("Sable");
         res.json(ProductList);

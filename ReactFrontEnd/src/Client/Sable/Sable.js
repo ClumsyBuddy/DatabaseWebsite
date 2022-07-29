@@ -30,9 +30,9 @@ function Sable(){
             <h1 className='TitleHeader'>Sable</h1>
           
             <div className='MenuNav'>
-                <button className='AddButton Marg MenuButton' onClick={(e) => {setIsOpen(true);}}>Add</button>
-                <textarea id="SearchBar" className='SearchBar Marg' placeholder='Enter Sku' cols={25} rows={1} onChange={(e)=>{UpdateQuery(e.currentTarget.value);}}></textarea>
-                <button type='submit' className='SearchButton Marg MenuButton ClearButton' onClick={(e)=>{document.getElementById("SearchBar").value = ""; UpdateQuery("");}}>Clear</button>
+                <button className='AddButton Marg MenuButton ButtonHoverEffect' onClick={(e) => {setIsOpen(true);}}>Add</button>
+                <textarea id="SearchBar" className='SearchBar Marg ' placeholder='Enter Sku' cols={25} rows={1} onChange={(e)=>{UpdateQuery(e.currentTarget.value);}}></textarea>
+                <button type='submit' className='SearchButton Marg MenuButton ClearButton ButtonHoverEffect' onClick={(e)=>{document.getElementById("SearchBar").value = ""; UpdateQuery("");}}>Clear</button>
             </div>
 
             <div className='SableProductListContainer'>

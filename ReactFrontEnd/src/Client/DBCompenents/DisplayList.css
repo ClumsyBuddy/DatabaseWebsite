@@ -68,12 +68,8 @@ button, .EditButton, .DeleteButton{
     transform: translate(0px,0px);
 }
 
-.EditButton:hover, .DeleteButton:hover, .AddButton:hover, .ClearButton:hover{
-    transition: transform .5s;
-    transform: scale(1.1);
-    transform: translate(0, -2px);
-    box-shadow: 1px 5px 2px rgba(0,0,0, 0.3);
-    backface-visibility: hidden;
+button:hover, .EditButton:hover, .DeleteButton:hover, .AddButton:hover, .ClearButton:hover{
+    
 }
 
 .DeleteButton{

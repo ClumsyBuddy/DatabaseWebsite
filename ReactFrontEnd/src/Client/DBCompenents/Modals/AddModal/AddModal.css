@@ -1,0 +1,17 @@
+.ItemTypeButton{
+    margin-right: 10px;
+    margin-bottom: 10px;   
+}
+
+.SubmitButton{
+    
+}
+
+
+.OptionsContainer{
+    display: flex;
+    justify-content: center;
+    flex-flow: wrap;
+    flex-basis: 0;
+    flex-grow: 1;
+}
