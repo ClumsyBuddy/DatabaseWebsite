@@ -68,12 +68,7 @@
     font-weight: 600;
     backface-visibility: hidden;
 }
-.MenuButton:hover{
-    animation: smallGrow 1s;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-    
-}
+
 .MenuButton:active{
     color: white;
 }

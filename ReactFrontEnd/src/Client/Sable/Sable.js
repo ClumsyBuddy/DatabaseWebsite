@@ -32,7 +32,7 @@ function Sable(){
             <div className='MenuNav'>
                 <button className='AddButton Marg MenuButton' onClick={(e) => {setIsOpen(true);}}>Add</button>
                 <textarea id="SearchBar" className='SearchBar Marg' placeholder='Enter Sku' cols={25} rows={1} onChange={(e)=>{UpdateQuery(e.currentTarget.value);}}></textarea>
-                <button type='submit' className='SearchButton Marg MenuButton' onClick={(e)=>{document.getElementById("SearchBar").value = ""; UpdateQuery("");}}>Clear</button>
+                <button type='submit' className='SearchButton Marg MenuButton ClearButton' onClick={(e)=>{document.getElementById("SearchBar").value = ""; UpdateQuery("");}}>Clear</button>
             </div>
 
             <div className='SableProductListContainer'>
