@@ -16,9 +16,7 @@ const io = new Server(server, {
 import sqlite3 from "sqlite3";
 
 
-app.set('views', "./Server/views");
 
-app.set('view engine', 'ejs');
 app.use(cors());
 //Setup Json and URL parsing
 app.use(express.json()); // Helps Parse Json files
@@ -26,11 +24,6 @@ app.use(express.urlencoded({ //Parse POST
     extended:true
 }));
 
-const Public = "./public";
-app.use(express.static(Public));
-app.use('/uploads', express.static(Public));
-app.use('/javascript', express.static(Public));
-app.use('/CSS', express.static(Public));
 
 import {Database} from "../Server/Database/Database.js";
 import {DatabaseManager} from "../Server/Database/DatabaseManager.js";

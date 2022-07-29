@@ -23,4 +23,16 @@ body > #root > div {
 
 
 }
-
+.TextStroke{
+    --stroke-offset:1.5px;
+    --stroke-offset-negative:-1.5px;
+    text-shadow :
+    var(--stroke-offset-negative) var(--stroke-offset-negative) 0 #000,
+     0   var(--stroke-offset-negative) 0 #000,
+     var(--stroke-offset) var(--stroke-offset-negative) 0 #000,
+     var(--stroke-offset)  0   0 #000,
+     var(--stroke-offset)  var(--stroke-offset) 0 #000,
+     0    var(--stroke-offset) 0 #000,
+    var(--stroke-offset-negative)  var(--stroke-offset) 0 #000,
+    var(--stroke-offset-negative)  0   0 #000;
+}

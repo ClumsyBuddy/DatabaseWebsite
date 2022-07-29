@@ -1,6 +1,8 @@
 
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { Link } from "react-router-dom"
+import { io } from "socket.io-client";
+
 
 import useAuth from "../../hooks/useAuth";
 
@@ -8,9 +10,13 @@ import "./LinkPage.css";
 import { Init, start } from "./SineWave";
 
 
+const socket = io("http://192.168.1.123:8000/");
+
 const LinkPage = () => {
 
     const {setAuth, auth} = useAuth();
+
+    const [counter, setCounter] = useState("");
 
     const canvasref = useRef(null);
 
@@ -19,6 +25,12 @@ const LinkPage = () => {
         const canvas = canvasref.current;
         Init(canvas);
         start(canvas);
+        
+        socket.on("Counter", (msg) =>{setCounter(msg);})
+
+        return () =>{
+            socket.off("Counter");
+        }
     }, []);
 
     const ClearAuth = async () => {
@@ -35,8 +47,8 @@ const LinkPage = () => {
                 <Link className="dbLink" to="/Sable">Sable</Link>
                 <Link className="dbLink" to="/Diplomat">Diplomat</Link>
                 <Link className="dbLink" to="/RDI">RDI</Link>
-                <script src="./SineWave.js"></script>
             </div>
+            <p style={{color:"white", zIndex:1}} className="Counter">{!counter ? "Loading..." : counter}</p>
         </section>
     )
 }
