@@ -38,11 +38,11 @@ const AddModal = ({...props}) => {
     }, []);
 
     
-    const RenderType = ItemData.map((item) => <button className='ButtonHoverEffect ItemTypeButton' onClick={(e)=>{setChosenType(item.ItemType);}}>{item.ItemType.replace("_", " ")}</button>);          
+    const RenderType = ItemData.map((item) => <button className='ButtonHoverEffect ItemTypeButton' onClick={(e)=>{setChosenType(item.ItemType);}}>{item.ItemType.replace(/_/g, " ")}</button>);          
     const RenderOptions = ItemData.map((item) => {
         if(item.ItemType === ChosenType){
             console.log(item.Options);
-            return item.Options.map((option) => <button className='ButtonHoverEffect ItemTypeButton'>{Object.keys(option)}</button>);
+            return item.Options.length !== 0 ? item.Options.map((option) => <button className='ButtonHoverEffect ItemTypeButton'>{Object.keys(option)[0].replace(/_/g, " ")}</button>) : <p>Item Has No Options</p>;
         }
         return (<></>);
     })

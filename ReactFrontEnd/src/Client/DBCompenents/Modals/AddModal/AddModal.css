@@ -2,11 +2,9 @@
     margin-right: 10px;
     margin-bottom: 10px;   
 }
-
-.SubmitButton{
-    
+.ItemTypeButton:active{
+    background-color: lightcoral;
 }
-
 
 .OptionsContainer{
     display: flex;

@@ -62,16 +62,6 @@ button, .EditButton, .DeleteButton{
     margin-left: 5px;
 }
 
-.EditButton, .DeleteButton, .AddButton, .ClearButton{
-    transition: transform 1s;
-    transform: scale(1);
-    transform: translate(0px,0px);
-}
-
-button:hover, .EditButton:hover, .DeleteButton:hover, .AddButton:hover, .ClearButton:hover{
-    
-}
-
 .DeleteButton{
     margin-top: 5px;
     margin-right: 5px;

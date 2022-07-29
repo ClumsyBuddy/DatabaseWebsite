@@ -42,12 +42,7 @@
     align-items: center;
     justify-content: center;
 }
-.AddButton{
 
-}
-.SearchButton{
-
-}
 .SearchBar{
     resize: none;
     border-color: black;
@@ -66,7 +61,6 @@
     border-radius: 4px;
     border-style: solid;
     font-weight: 600;
-    backface-visibility: hidden;
 }
 
 .MenuButton:active{
@@ -93,3 +87,7 @@
   .SableProductListContainer{
     height: 100vh;
   }
+
+
+
+  
