@@ -1,11 +1,18 @@
-import React, {createContext, useEffect, useRef, useState} from "react";
-import "./DisplayList.css";
+import React, {useEffect, useRef, useState, useCallback} from "react";
 import {Grid} from "react-virtualized"
 import 'react-virtualized/styles.css';
-import EditModal from "./EditModal/EditModal";
 
+import {io} from "socket.io-client";
+
+import EditModal from "./Modals/EditModal/EditModal";
+import "./DisplayList.css";
+
+
+const socket = io("http://192.168.1.123:8000/");
 
 const ProductList = ({...props}) =>{
+
+    const [isConnected, setIsConnected] = useState(socket.connected);
 
     const ColumnWidth = 250;
     const RowHeight = 200;
@@ -38,8 +45,11 @@ const ProductList = ({...props}) =>{
           })
     }
 
-    const DeleteItem = (key) => {
+    const DeleteItem = useCallback((key, socketResonse=false) => {
         const RemoveAtIndex = (index) =>{
+            if(!socketResonse){
+                socket.emit("delete_item_server", {key});
+            }
             const newArray = [...ProductList];
             newArray.splice(index, 1);
             setProductList(newArray);
@@ -52,14 +62,13 @@ const ProductList = ({...props}) =>{
                 }
             } 
         )
-    }
+    }, [ProductList]);
 
-
+    
     if(!mounted.current){ //All pre render task go here
         fetchData();
-        
     }
-
+    //Search function, gets search query and returns displaylist with results based on query
     if(props.Query){
         DisplayList = [];
         let _Query = props.Query.replace("+", " ").replace(",", " ").split((' '));
@@ -86,10 +95,10 @@ const ProductList = ({...props}) =>{
         DisplayList = ProductList;
     }
 
-    const flipOpen = (bool) =>{
+    const flipOpen = (bool) =>{ //Function To slip SetIsOpen. Used to send to children components
         setIsOpen(bool);
     }
-
+    //Setups window resize listener to resize columns on window resize
     useEffect(() => {      
         if(WindowInterval.current){
             window.addEventListener('resize', () => {
@@ -103,14 +112,26 @@ const ProductList = ({...props}) =>{
             WindowInterval.current = false;
         }
     }, [MaxColumn, prevWindowWidth, WindowInterval]);
+    
 
+    //Mounts and setups sockets
     useEffect(() => {
-        mounted.current = true;
-    }, []);
+        mounted.current = true; //Sets Mount to True after first run
+        socket.on("connect", () => {setIsConnected(true)});
+        socket.on("disconnect", () => {setIsConnected(false)});
+        socket.on("delete_item_client", (msg)=>{DeleteItem(msg.key, true);});
+
+        return () => {
+            socket.off("connect");
+            socket.off("disconnect");
+            socket.off("delete_item_client");
+        }
+    }, [DeleteItem]);
 
     const renderRow = ({columnIndex, key, rowIndex, style}) => {
+    //If we have no valid Items in DisplayList Array then return empty element
     if(!DisplayList[rowIndex*MaxColumn+columnIndex]){
-        return (<div></div>);
+        return (<></>);
     }
     return (
     <div key={key} style={
@@ -134,7 +155,7 @@ const ProductList = ({...props}) =>{
       return (
         <div className="ListContainer">
             {   
-            DisplayList.length !== 0 ? 
+            DisplayList.length !== 0 || !isConnected ? 
             
                 <Grid style={{display:`flex`, flexDirection:`row`, flexFlow:`wrap`, justifyContent:`center`}}
                 cellRenderer={renderRow}

@@ -28,6 +28,11 @@ function on_connection(socket){
 
     socket.on('GetAdd', (msg) => {GetAddItems(socket, msg)});
 
+    socket.on("delete_item_server", (msg) => {
+        console.log(msg);
+        socket.broadcast.emit("delete_item_client", msg);
+    });
+
     socket.on('Delete', (msg) => {Delete(socket, msg)});
 
 
