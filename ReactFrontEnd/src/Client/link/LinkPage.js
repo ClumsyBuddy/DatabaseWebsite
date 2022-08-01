@@ -1,18 +1,19 @@
 
 import React, {useEffect, useRef, useState} from "react";
 import { Link } from "react-router-dom"
-import { io } from "socket.io-client";
 
 
+import useSocket from "../../hooks/useSocket";
 import useAuth from "../../hooks/useAuth";
 
 import "./LinkPage.css";
 import { Init, start } from "./SineWave";
 
 
-const socket = io("http://192.168.1.123:8000/");
 
 const LinkPage = () => {
+
+    const socket = useSocket();
 
     const {setAuth, auth} = useAuth();
 
@@ -20,17 +21,35 @@ const LinkPage = () => {
 
     const canvasref = useRef(null);
 
-    useEffect(() => {
+    const [mounted, setMounted] = useState(false);
 
+
+    const [isConnected, setIsConnected] = useState(socket.connected);
+
+    if(!mounted){
+        console.log("Not mounted");
+        if(isConnected){
+            socket.emit("is_login", (response) =>{
+                console.log(response);
+            });
+        }
+    }
+
+    useEffect(() => {
+        setMounted(true);
         const canvas = canvasref.current;
         Init(canvas);
         start(canvas);
-        
+        socket.on("connect", ()=>{setIsConnected(true);})
+        socket.on("disconnect", ()=>{setIsConnected(false);})
         socket.on("Counter", (msg) =>{setCounter(msg);})
 
         return () =>{
+            socket.off("connect");
+            socket.off("disconnect");
             socket.off("Counter");
         }
+        //eslint-disable-next-line
     }, []);
 
     const ClearAuth = async () => {

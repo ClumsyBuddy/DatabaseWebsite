@@ -117,66 +117,8 @@ class ResponseHandler {
             return ProductList;
         });
     }
-    CheckForLogin(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (req.session.loggedin != undefined) {
-                if (!req.session.loggedin) {
-                    res.render("pages/index", { PageState: req.session.PageState, Data: req.session.PageData }, function (err, html) {
-                        if (err) {
-                            console.log(err);
-                            res.sendFile(__dirname + "/public/404.html");
-                        }
-                        else {
-                            res.send(html);
-                        }
-                    });
-                    return false;
-                }
-                return true;
-            }
-        });
-    }
-    GetProductList(Type) {
-        return __awaiter(this, void 0, void 0, function* () {
-            var ProductList = [];
-            yield this.DBController.getAll(this.ClassName).then((result) => {
-                ProductList = result;
-            });
-            return ProductList;
-        });
-    }
-    /*
-    *   Basic Render Page function that Gives PageData from the child and PageState to handle Templating of the page
-    */
-    RenderPage(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            var BuildRenderTarget = `pages/${req.session.PageState.CurrentRenderTarget}`;
-            res.render(BuildRenderTarget, { PageState: req.session.PageState, Data: req.session.PageData }, function (err, html) {
-                if (err) {
-                    console.log(err);
-                    res.sendFile(process.cwd() + "/public/404.html");
-                }
-                else {
-                    res.send(html);
-                }
-            });
-        });
-    }
     get ItemData() {
         return this.ItemDataArray;
-    }
-    /*
-    *   Basic Get and Post functions. Ment to be overriden with childerens specfic get and post
-    */
-    _Get(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.RenderPage(req, res);
-        });
-    }
-    _Post(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.RenderPage(req, res);
-        });
     }
     /*
     *   This Function Does a few things

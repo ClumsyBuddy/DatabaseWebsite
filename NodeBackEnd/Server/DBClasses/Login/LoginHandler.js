@@ -23,7 +23,6 @@ class Login {
         return __awaiter(this, void 0, void 0, function* () {
             return yield this.c_DbController.getByColumn(this.db_Name, "username", username.toLowerCase()).then((result) => __awaiter(this, void 0, void 0, function* () {
                 if (result !== undefined && result.password == password && result.username == username.toLowerCase()) {
-                    req.session.loggedin = true; //We are logged in
                     req.session.username = result.username; //Get the USername
                     var PageData = {
                         ProductList: [],
@@ -40,11 +39,8 @@ class Login {
                         RDI: result.RDI //Get whether its RDI
                     };
                     req.session.PageData = PageData;
-                    yield req.session.save();
                     return true;
                 }
-                req.session.loggedin = false;
-                yield req.session.save();
                 return false;
             }));
         });

@@ -2,15 +2,16 @@ import React, {useEffect, useRef, useState, useCallback} from "react";
 import {Grid} from "react-virtualized"
 import 'react-virtualized/styles.css';
 
-import {io} from "socket.io-client";
+import useSocket from "../../hooks/useSocket";
 
 import EditModal from "./Modals/EditModal/EditModal";
 import "./DisplayList.css";
 
 
-const socket = io("http://192.168.1.123:8000/");
 
 const ProductList = ({...props}) =>{
+
+    const socket = useSocket();
 
     const [isConnected, setIsConnected] = useState(socket.connected);
 
@@ -67,6 +68,7 @@ const ProductList = ({...props}) =>{
                 }
             } 
         )
+        //eslint-disable-next-line
     }, [ProductList]);
 
     
@@ -131,6 +133,7 @@ const ProductList = ({...props}) =>{
             socket.off("disconnect");
             socket.off("delete_item_client");
         }
+        //eslint-disable-next-line
     }, [DeleteItem]);
 
     const renderRow = ({columnIndex, key, rowIndex, style}) => {

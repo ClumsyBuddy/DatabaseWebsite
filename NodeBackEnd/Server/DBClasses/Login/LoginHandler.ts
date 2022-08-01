@@ -42,10 +42,8 @@ class Login{
                     RDI: result.RDI //Get whether its RDI
                 };
                 req.session.PageData = PageData;
-                await req.session.save();
                 return true;
             }
-            await req.session.save();
             return false;
         })
     }

@@ -14,14 +14,6 @@ class DiploResponseHandler extends ResponseHandler{
 
     }
 
-    async _Get(req: any, res: any) {
-        req.session.CurrentRenderTarget = "Diplomat";
-        this.RenderPage(req, res);
-    }
-    async _Post(req: any, res: any) {
-        this.RenderPage(req, res);
-    }
-
 }
 
 export {DiploResponseHandler};

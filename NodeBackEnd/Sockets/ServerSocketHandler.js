@@ -1,6 +1,4 @@
-import {io, app, SQLiteStore, session, Classes} from "./ServerGlobals.js";
-var DBClass;
-
+import {io} from "./ServerGlobals.js";
 
 export function Init(){
     
@@ -8,7 +6,7 @@ export function Init(){
 }
 
 function on_connection(socket){
-    console.log("Connection");
+    const session = socket.request.session;
 
     socket.on("delete_item_server", (msg, callback) => {
         console.log(msg);
@@ -18,12 +16,15 @@ function on_connection(socket){
         socket.broadcast.emit("delete_item_client", msg);
     });
 
+    socket.on("is_login", (fn) => {
+        let Login = false;
+        if(session.isLogin !== undefined){
+            Login = session.isLogin;
+        }
+        fn({
+            status:"ok",
+            IsLogin:Login
+        })
+    })
 
-
-}
-
-
-export function ChangeClass(req, res, newClass){
-    req.session.DataBaseClass = newClass;
-    req.session.save();
 }

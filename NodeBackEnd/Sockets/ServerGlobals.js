@@ -25,31 +25,45 @@ import {Server} from "socket.io";
 
 const io = new Server(server, {
     cors: {
-        origin: '*'
-    }
-});
+      origin: "*",
+      methods: ["GET", "POST"],
+    },
+  });
 
-import sqlite3 from "sqlite3";
+
+
 
 
 var Week = 7 * 24 * 60 * 60 * 1000; //How long session token will remain
 const SessionMiddleWare = session({ //Create session middleware
     store: new SQLiteStore,
     secret: 'DBSession',
-    resave: false,
-    saveUninitialized:true,
-    cookie: { maxAge: Week } // 1 week
+    resave: true,
+    saveUninitialized:false,
+    cookie: { maxAge: Week, secure:false } // 1 week
 });
-io.use(function(socket, next){SessionMiddleWare(socket.request, {}, next);});
-app.use(SessionMiddleWare); //Use middleware
+
+app.use(SessionMiddleWare);
 
 
-app.use(cors());
+const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
+
+io.use(wrap(SessionMiddleWare));
+
+
+const corsOptions = {
+origin: "*",
+optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 //Setup Json and URL parsing
 app.use(express.json()); // Helps Parse Json files
 app.use(express.urlencoded({ //Parse POST 
     extended:true
 }));
+
+import sqlite3 from "sqlite3";
 
 import {Database} from "../Server/Database/Database.js";
 import {DatabaseManager} from "../Server/Database/DatabaseManager.js";
@@ -85,5 +99,4 @@ export {
     express,
     Classes,
     sqlite3,
-    cors
 };

@@ -25,13 +25,11 @@ function RoutesInit(){
     app.post("/Logout", (req, res) => {
 
     });
-
     app.route('/Login')
         .get(async (req, res) =>{
         }).post(async (req, res) => {
             let isLogin = await Classes.UserLogin.LoginAttempt(req, res, req.body.name, req.body.password);
             req.session.isLogin = isLogin;
-            req.session.save();
             req.sessionStore.all((err, _session) => {
                 _session.forEach((item) => {
                     if(item.sid !== req.sessionID){
@@ -41,7 +39,6 @@ function RoutesInit(){
                     }
                 })
             });
-            console.log("Is password and username correct: " + isLogin);
             res.status(200).json(isLogin);
         });
     
@@ -52,6 +49,7 @@ function RoutesInit(){
 
     app.get("/ProductList", async (req, res) => {
         const ProductList = await Classes.Sable.GetAllProducts("Sable");
+        console.log(req.session.isLogin);
         res.json(ProductList);
     }); 
     
