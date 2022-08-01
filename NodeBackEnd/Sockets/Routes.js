@@ -1,14 +1,13 @@
 import {app, Classes, io} from "./ServerGlobals.js";
-import {ChangeClass} from "./ServerSocketHandler.js"
 
 
 function RoutesInit(){
     app.use(function(req, res, next) {
 
         // log each request to the console
-        //var Message = `Method: ${req.method} || At: ${req.url} || IP: ${req.ip.split("ffff:").pop()}`
-        //console.log(Message);
-        // continue doing what we were doing and go to the route
+        var Message = `Method: ${req.method} || At: ${req.url} || IP: ${req.ip.split("ffff:").pop()}`
+        console.log(Message);
+        
         next();
     });
 
@@ -18,10 +17,11 @@ function RoutesInit(){
         Counter++;
         io.emit("Counter", "Time Since Server Restart: " + Counter);
     }, 1000);
+
     app.post("/Logout", (req, res) => {
-        Classes.Index.Logout(req, res);
-        res.redirect("/");
+
     });
+
     app.route('/Login')
         .get(async (req, res) =>{
         }).post(async (req, res) => {
@@ -36,17 +36,17 @@ function RoutesInit(){
     app.get("/ItemData", async (req, res) => {
         res.json(Classes.Sable.ItemData);
     });
+
     app.get("/Test", async (req, res) => {
         const ProductList = await Classes.Sable.GetAllProducts("Sable");
         res.json(ProductList);
     }); 
+    
     app.route("/*").get(function(req, res){
-        res.sendFile(process.cwd() + '/public/404.html');
+        res.status(404).json("GET Route Not Found");
     }).post(function(req, res){
-        res.sendFile(process.cwd() + '/public/404.html');
+        res.status(404).json("POST Route Not Found");
     });
-
-
 }
 
 

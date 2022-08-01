@@ -129,63 +129,11 @@ class  ResponseHandler{
         return ProductList;
     }
 
-    async CheckForLogin(req, res){
-        if(req.session.loggedin != undefined){
-            if(!req.session.loggedin){
-                res.render("pages/index", {PageState:req.session.PageState, Data:req.session.PageData}, function(err, html) {
-                    if(err){
-                        console.log(err);
-                        res.sendFile(__dirname + "/public/404.html");
-                    }else{
-                        res.send(html);
-                    }
-                });
-                return false;
-            }
-            return true;
-        }
-    }
-
-
-    async GetProductList(Type:string){
-        var ProductList = [];
-        await this.DBController.getAll(this.ClassName).then((result) => {
-            ProductList = result;
-        });    
-        return ProductList;
-    }
-
-
-    /*
-    *   Basic Render Page function that Gives PageData from the child and PageState to handle Templating of the page
-    */
-    async RenderPage(req, res){
-        var BuildRenderTarget = `pages/${req.session.PageState.CurrentRenderTarget}`;
-        res.render(BuildRenderTarget, {PageState:req.session.PageState, Data:req.session.PageData}, function(err, html) {
-            if(err){
-                console.log(err);
-                res.sendFile(process.cwd() + "/public/404.html");
-            }else{
-                res.send(html)
-            }
-        });
-    }
-
-
     public get ItemData() : Array<ItemData> {
         return this.ItemDataArray;
     }
 
 
-    /*
-    *   Basic Get and Post functions. Ment to be overriden with childerens specfic get and post
-    */
-    async _Get(req, res){
-        this.RenderPage(req, res);
-    }
-    async _Post(req, res){
-        this.RenderPage(req, res)
-    }
     /*
     *   This Function Does a few things
     *   1. This function gets the different item types and Options

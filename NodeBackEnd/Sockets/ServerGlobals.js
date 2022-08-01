@@ -7,12 +7,15 @@ let SQLiteStore = SQLiteStoreSession(session);
 import {createServer} from "http";
 let app = express();
 let server = createServer(app);
+
 import {Server} from "socket.io";
+
 const io = new Server(server, {
     cors: {
         origin: '*'
     }
 });
+
 import sqlite3 from "sqlite3";
 
 
@@ -30,7 +33,6 @@ import {DatabaseManager} from "../Server/Database/DatabaseManager.js";
 import { SableResponseHandler } from "../Server/DBClasses/Sable/SableResponseHandler.js";
 import {DiploResponseHandler} from "../Server/DBClasses/Diplomat/DiploResponseHandler.js";
 import {Login} from "../Server/DBClasses/Login/LoginHandler.js";
-import {IndexResponseHandler} from "../Server/DBClasses/Index/IndexResponseHandler.js";
 
 //Create variables for exported Classes
 const db = new Database("./Main.db");
@@ -39,7 +41,6 @@ const MainDB = new DatabaseManager(db);
 //Login Manager
 const UserLogin = new Login(MainDB);
 
-const Index = new IndexResponseHandler(MainDB, UserLogin, io);
 const Sable = new SableResponseHandler(MainDB, UserLogin, "Sable", io);
 const Diplo = new DiploResponseHandler(MainDB, UserLogin, io);
 
@@ -47,7 +48,6 @@ var Classes = {
     db:db,
     MainDB:MainDB,
     UserLogin:UserLogin,
-    Index:Index,
     Sable:Sable,
     Diplo:Diplo
 }

@@ -30,20 +30,6 @@ class SableResponseHandler extends ResponseHandler{
         }
     }
 
-    async _Get(req, res, cb : Function = ()=>{return;}){
-        req.session.PageState.CurrentRenderTarget = "Sable";
-        if(cb){
-            await cb(req, res); //You need to bind Sable to the callback to use "this"
-        }
-        this.RenderPage(req, res); //This is normally called at the end
-    }
-    async _Post(req, res, cb : Function = ()=>{return;}){
-        if(cb){
-            await cb(); //You need to bind Sable to the callback to use "this"
-        }
-        this.RenderPage(req, res); //This is normally called at the end
-    }
-
 }
 
 export {SableResponseHandler};
