@@ -48,7 +48,7 @@ const LinkPage = () => {
                 <Link className="dbLink" to="/Diplomat">Diplomat</Link>
                 <Link className="dbLink" to="/RDI">RDI</Link>
             </div>
-            <p style={{color:"white", zIndex:1}} className="Counter">{!counter ? "Loading..." : counter}</p>
+            <p style={{color:"white", zIndex:1}} className="Counter TextStroke">{!counter ? "Loading..." : counter}</p>
         </section>
     )
 }
