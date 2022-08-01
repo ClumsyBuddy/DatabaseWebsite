@@ -32,7 +32,7 @@ const ProductList = ({...props}) =>{
     const [isOpen, setIsOpen] = useState(false);
 
     const fetchData = () =>{
-        fetch("/Test", {
+        fetch("/ProductList", {
             method:"GET",
             headers: {"Content-Type": "application/JSON"},
           })
@@ -48,11 +48,16 @@ const ProductList = ({...props}) =>{
     const DeleteItem = useCallback((key, socketResonse=false) => {
         const RemoveAtIndex = (index) =>{
             if(!socketResonse){
-                socket.emit("delete_item_server", {key});
+                socket.emit("delete_item_server", {key}, (response)=>{
+                    if(response.status === "ok"){
+                        const newArray = [...ProductList];
+                        newArray.splice(index, 1);
+                        setProductList(newArray);
+                    }else{
+                        console.log("Socket Failed to recieve response");
+                    }
+                });
             }
-            const newArray = [...ProductList];
-            newArray.splice(index, 1);
-            setProductList(newArray);
         }
         ProductList.forEach(
             (product, index) => {
