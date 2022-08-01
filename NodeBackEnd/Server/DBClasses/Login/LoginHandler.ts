@@ -26,7 +26,6 @@ class Login{
         return await this.c_DbController.getByColumn(this.db_Name, "username", username.toLowerCase()).then(async (result:any) => {
 
             if(result !== undefined && result.password == password && result.username == username.toLowerCase()){
-                req.session.loggedin = true; //We are logged in
                 req.session.username = result.username;  //Get the USername
                 var PageData = {
                     ProductList: [],
@@ -46,7 +45,6 @@ class Login{
                 await req.session.save();
                 return true;
             }
-            req.session.loggedin = false;
             await req.session.save();
             return false;
         })
