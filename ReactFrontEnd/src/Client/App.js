@@ -9,6 +9,7 @@ import LinkPage from './link/LinkPage';
 import { SocketContext, socket } from "./context/socket";
 
 import './App.css';
+import { ErrorPage } from "./404/404";
 
 
 function App() {
@@ -17,11 +18,12 @@ function App() {
       <SocketContext.Provider value={socket}>
         <Routes>
         <Route path='/' element={<Layout/>}>
-            <Route element={<RequireAuth login={true} />}>
+          <Route element={<RequireAuth login={true} />}>
             <Route path='Sable' element={<Sable/>} exact />
-            </Route>
-            <Route path="/" element={<LinkPage />} />
-            <Route path="/Login" element={<Login/>} />
+          </Route>
+          <Route path="/" element={<LinkPage />} />
+          <Route path="/Login" element={<Login/>} />
+          <Route path="*" element={<ErrorPage/>} />
         </Route>
       </Routes>
     </SocketContext.Provider>

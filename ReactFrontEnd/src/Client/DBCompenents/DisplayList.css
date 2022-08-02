@@ -19,8 +19,10 @@
 }
 
 .Item:hover{
+    will-change: transform;
     transition: transform 1s;
-    transform: scale(1.07);
+    transform: scale(1.05) translateZ(0);
+    backface-visibility: hidden;
 }
 
 

@@ -20,6 +20,7 @@ const ProductList = ({...props}) =>{
     const ColumnMargin = 10;
     const RowMargin = 10;
     const BorderPercent = 0.90;
+    const RowItemHeight = 0.80;
     
     const [ProductList, setProductList] = useState([]);
     var DisplayList = [];
@@ -28,7 +29,7 @@ const ProductList = ({...props}) =>{
     const [MaxColumn, setColumn] = useState(Math.floor((window.innerWidth * BorderPercent) / (ColumnWidth+ColumnMargin)));
     const prevWindowWidth = useRef(window.innerWidth);
     const WindowInterval = useRef(true);
-    const [GridWidth, setGridWidth] = useState(window.innerWidth * 0.897);
+    const [GridWidth, setGridWidth] = useState(window.innerWidth * 0.897); //I found that the width times this value lines scrollbar up with side of container nicely
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -150,9 +151,8 @@ const ProductList = ({...props}) =>{
         marginLeft:ColumnMargin, 
         marginTop:RowMargin*2,
         marginBottom:RowMargin*2
-    }} 
-        className="">
-        <div className="Item" style={{height:RowHeight*0.80}}>
+    }}  className="">
+        <div className="Item" style={{height:RowHeight*RowItemHeight}}>
             <div className="EditAddContainer">
                 <button onClick={(e)=>{flipOpen(true); console.log("isOpen: " + isOpen)}} className="EditButton ButtonHoverEffect">Edit</button>
                 <button value={DisplayList[rowIndex*MaxColumn+columnIndex].key} onClick={(e)=>{DeleteItem(e.currentTarget.value);}} className="DeleteButton ButtonHoverEffect">Delete</button>

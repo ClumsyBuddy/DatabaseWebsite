@@ -36,7 +36,7 @@ function on_connection(socket){
         }
         fn({
             status:"ok",
-            IsLogin:Login
+            isLogin:Login
         })
     })
 
