@@ -26,15 +26,6 @@ const LinkPage = () => {
 
     const [isConnected, setIsConnected] = useState(socket.connected);
 
-    if(!mounted){
-        console.log("Not mounted");
-        if(isConnected){
-            socket.emit("is_login", (response) =>{
-                console.log(response);
-            });
-        }
-    }
-
     useEffect(() => {
         setMounted(true);
         const canvas = canvasref.current;
@@ -43,6 +34,11 @@ const LinkPage = () => {
         socket.on("connect", ()=>{setIsConnected(true);})
         socket.on("disconnect", ()=>{setIsConnected(false);})
         socket.on("Counter", (msg) =>{setCounter(msg);})
+
+
+        socket.emit("is_login", (response) =>{
+            console.log("Response: " + response);
+        });
 
         return () =>{
             socket.off("connect");
@@ -67,7 +63,7 @@ const LinkPage = () => {
                 <Link className="dbLink" to="/Diplomat">Diplomat</Link>
                 <Link className="dbLink" to="/RDI">RDI</Link>
             </div>
-            <p style={{color:"white", zIndex:1}} className="Counter TextStroke">{!counter ? "Loading..." : counter}</p>
+            <p style={{color:"white", zIndex:1}} className="Counter TextStroke">{!counter ? "Loading..." : counter + " seconds"}</p>
         </section>
     )
 }

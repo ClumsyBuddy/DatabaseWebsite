@@ -24,7 +24,7 @@ class Login {
             return yield this.c_DbController.getByColumn(this.db_Name, "username", username.toLowerCase()).then((result) => __awaiter(this, void 0, void 0, function* () {
                 if (result !== undefined && result.password == password && result.username == username.toLowerCase()) {
                     req.session.username = result.username; //Get the USername
-                    var PageData = {
+                    var UserData = {
                         ProductList: [],
                         AllowedActions: {
                             Delete: this.PermissionLevel(req, this.Permission.High, result.permission),
@@ -33,14 +33,16 @@ class Login {
                             ViewLogs: this.PermissionLevel(req, this.Permission.Low, result.permission)
                         },
                         UserPermission: result.permission,
-                        WareHouse: result.Warehouse,
                         Sable: result.Sable,
                         Diplomat: result.Diplomat,
                         RDI: result.RDI //Get whether its RDI
                     };
-                    req.session.PageData = PageData;
+                    req.session.UserData = UserData;
+                    req.session.isLogin = true;
+                    req.session.save();
                     return true;
                 }
+                req.session.isLogin = false;
                 return false;
             }));
         });

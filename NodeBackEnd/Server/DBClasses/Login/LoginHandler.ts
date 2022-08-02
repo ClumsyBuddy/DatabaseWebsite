@@ -1,3 +1,4 @@
+import { runInNewContext } from "vm";
 import {DatabaseManager} from "../../Database/DatabaseManager";
 
 class Login{
@@ -27,7 +28,7 @@ class Login{
 
             if(result !== undefined && result.password == password && result.username == username.toLowerCase()){
                 req.session.username = result.username;  //Get the USername
-                var PageData = {
+                var UserData = {
                     ProductList: [],
                     AllowedActions:{
                         Delete:this.PermissionLevel(req, this.Permission.High, result.permission),
@@ -36,14 +37,16 @@ class Login{
                         ViewLogs:this.PermissionLevel(req, this.Permission.Low, result.permission)
                     },
                     UserPermission: result.permission,
-                    WareHouse: result.Warehouse, //Get whether its warehouse
                     Sable: result.Sable, //get Whether its Sable
                     Diplomat: result.Diplomat, //Get Whether its diplomat
                     RDI: result.RDI //Get whether its RDI
                 };
-                req.session.PageData = PageData;
+                req.session.UserData = UserData;
+                req.session.isLogin = true;
+                req.session.save();
                 return true;
             }
+            req.session.isLogin = false;
             return false;
         })
     }

@@ -23,32 +23,53 @@ let server = createServer(app);
 
 import {Server} from "socket.io";
 
-const io = new Server(server, {
-    cors: {
-      origin: "*",
-      methods: ["GET", "POST"],
-    },
-  });
-
-
-
-
-
 var Week = 7 * 24 * 60 * 60 * 1000; //How long session token will remain
 const SessionMiddleWare = session({ //Create session middleware
     store: new SQLiteStore,
     secret: 'DBSession',
-    resave: true,
-    saveUninitialized:false,
+    resave: false,
+    saveUninitialized:true,
     cookie: { maxAge: Week, secure:false } // 1 week
 });
 
+const io = new Server(server, {
+    allowRequest: (req, callback) => {
+      // with HTTP long-polling, we have access to the HTTP response here, but this is not
+      // the case with WebSocket, so we provide a dummy response object
+      const fakeRes = {
+        getHeader() {
+          return [];
+        },
+        setHeader(key, values) {
+          req.cookieHolder = values[0];
+        },
+        writeHead() {},
+      };
+      SessionMiddleWare(req, fakeRes, () => {
+        if (req.session) {
+          // trigger the setHeader() above
+          fakeRes.writeHead();
+          // manually save the session (normally triggered by res.end())
+          req.session.save();
+        }
+        callback(null, true);
+      });
+    },
+});
+
+io.engine.on("initial_headers", (headers, req) => {
+if (req.cookieHolder) {
+    headers["set-cookie"] = req.cookieHolder;
+    delete req.cookieHolder;
+}
+});
+
+
 app.use(SessionMiddleWare);
 
+// const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
 
-const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
-
-io.use(wrap(SessionMiddleWare));
+// io.use(wrap(SessionMiddleWare));
 
 
 const corsOptions = {

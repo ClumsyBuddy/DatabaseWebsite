@@ -1,13 +1,26 @@
 import {io} from "./ServerGlobals.js";
 
+import { Socket } from "socket.io";
+
 export function Init(){
     
     io.on('connection', on_connection); //Create socket connections\
 }
-
+/**
+ * 
+ * @param {Socket} socket 
+ */
 function on_connection(socket){
-    const session = socket.request.session;
-
+    const req = socket.request;
+    socket.use((___, next) => {
+        req.session.reload((err)=> {
+            if(err){
+                socket.disconnect();
+            }else{
+                next();
+            }
+        })
+    })
     socket.on("delete_item_server", (msg, callback) => {
         console.log(msg);
         callback({
@@ -18,8 +31,8 @@ function on_connection(socket){
 
     socket.on("is_login", (fn) => {
         let Login = false;
-        if(session.isLogin !== undefined){
-            Login = session.isLogin;
+        if(req.session.isLogin !== undefined){
+            Login = req.session.isLogin;
         }
         fn({
             status:"ok",
