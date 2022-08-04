@@ -10,6 +10,8 @@ const AddModal = ({...props}) => {
     const [ItemData, setItemData] = useState([]);
     const [ChosenType, setChosenType] = useState("");
 
+    const [selected, setSelected] = useState([]);
+
     const mounted = useRef(false);
 
     useEffect(()=>{
@@ -36,9 +38,16 @@ const AddModal = ({...props}) => {
     const RenderOptions = ItemData.map((item) => {
         if(item.ItemType === ChosenType){
             console.log(item.Options);
-            return (<div className='OList' style={{width:"50vw", height:"55vh", overflow:"scroll"}}><label>{ChosenType.replace(/_/g, " ")}</label><div style={{width:"100%", height:"auto", display:"flex", 
-                                                            flexDirection:"row", justifyContent:"center", 
-                                                            flexFlow:"wrap", overflow:"hidden"}}>{
+            return (<div className='OList' style={{width:"50vw", height:"55vh", overflow:"scroll"}}>
+                <label>{ChosenType.replace(/_/g, " ")}</label>
+                <textarea placeholder='Enter SKU' style={{resize:"none"}} cols={20} rows={1}></textarea>
+                <select>
+                    <option>Hello</option>
+                    <option>Hello1</option>
+                </select>
+                <div style={{width:"100%", height:"auto", display:"flex", 
+                            flexDirection:"row", justifyContent:"center", 
+                            flexFlow:"wrap", overflow:"hidden"}}>{
                 item.Options.length !== 0 ? item.Options.map((option) => {
                     let optionName = Object.keys(option)[0];
                     return (<div style={{width:"20%", borderStyle:"solid", borderColor:"black", margin:"1%", borderRadius:"10px", padding:"10px", 
