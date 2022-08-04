@@ -22,6 +22,16 @@ function RoutesInit(){
     });
 
 
+    app.route("/is_login")
+    .post((req, res)=>{
+        if(req.session.username !== undefined && req.session.isLogin !== undefined){
+            console.log(req.session.username, req.session.isLogin);
+            res.status(200).json({user:req.session.username, login:req.session.isLogin});
+        }else{
+            res.status(200).json({user:"", login:false});
+        }
+    });
+
     app.post("/Logout", (req, res) => {
 
     });
@@ -30,7 +40,7 @@ function RoutesInit(){
         }).post(async (req, res) => {
             let isLogin = await Classes.UserLogin.LoginAttempt(req, res, req.body.name, req.body.password);
             req.session.save(function(){});
-           /* req.sessionStore.all((err, _session) => {
+            req.sessionStore.all((err, _session) => {
                 _session.forEach((item) => {
                     if(item.sid !== req.sessionID){
                         if(item.sess.username === req.session.username){
@@ -38,7 +48,7 @@ function RoutesInit(){
                         }
                     }
                 })
-            }); */
+            });
             res.status(200).json(isLogin);
         });
     

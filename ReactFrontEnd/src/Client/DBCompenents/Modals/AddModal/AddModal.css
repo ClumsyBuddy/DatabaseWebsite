@@ -13,3 +13,12 @@
     flex-basis: 0;
     flex-grow: 1;
 }
+
+
+.OptionsContainer::-webkit-scrollbar{
+    display: none;
+}
+
+.OList::-webkit-scrollbar{
+    display: none;
+}

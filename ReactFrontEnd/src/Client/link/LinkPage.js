@@ -49,7 +49,6 @@ const LinkPage = () => {
     }, []);
 
     const ClearAuth = async () => {
-        
         setAuth({});
     }
 

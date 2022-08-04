@@ -6,7 +6,7 @@ import RequireAuth from "./Util/RequiredAuth";
 import Login from "./Login/LoginPage";
 import Sable from "./Sable/Sable";
 import LinkPage from './link/LinkPage';
-import { SocketContext, socket } from "./context/socket";
+import { SocketContext, socket } from "./context/SocketProvider";
 
 import './App.css';
 import { ErrorPage } from "./404/404";
