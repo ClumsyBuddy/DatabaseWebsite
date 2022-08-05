@@ -2,18 +2,14 @@ import {app, Classes, io} from "./ServerGlobals.js";
 
 
 var Counter = 0;
-    setInterval(() => {
-        Counter++;
-        io.emit("Counter", "Time Since Server Restart: " + Counter);
-    }, 1000);
+setInterval(() => {
+    Counter++;
+    io.emit("Counter", "Time Since Server Restart: " + Counter);
+}, 1000);
 
     
-
-
-
 function RoutesInit(){
     app.use(function(req, res, next) {
-
         // log each request to the console
         var Message = `Method: ${req.method} || At: ${req.url} || IP: ${req.ip.split("ffff:").pop()} || Server Timer: ${Counter}`
         console.log(Message);
@@ -55,6 +51,9 @@ function RoutesInit(){
     //Router for getting all get and post request on '/' which is index
     app.get("/ItemData", (req, res) => {
         res.json(Classes.Sable.ItemData);
+    });
+    app.get("/Brands", (req, res) => {
+        res.json(Classes.Sable.Brands);
     });
 
     app.get("/ProductList", async (req, res) => {

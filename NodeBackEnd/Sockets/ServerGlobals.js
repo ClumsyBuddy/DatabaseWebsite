@@ -83,7 +83,7 @@ app.use(express.json()); // Helps Parse Json files
 app.use(express.urlencoded({ //Parse POST 
     extended:true
 }));
-
+app.set("trust proxy", true);
 import sqlite3 from "sqlite3";
 
 import {Database} from "../Server/Database/Database.js";

@@ -9,8 +9,8 @@ const AddModal = ({...props}) => {
 
     const [ItemData, setItemData] = useState([]);
     const [ChosenType, setChosenType] = useState("");
-
-    const [selected, setSelected] = useState([]);
+    const [Brands, setBrands] = useState([]);
+    const [selected, setSelected] = useState({});
 
     const mounted = useRef(false);
 
@@ -27,8 +27,22 @@ const AddModal = ({...props}) => {
                 setItemData(data);
               });
         }
+        const FetchBrands = () => {
+            fetch("/Brands", {
+                method:"GET",
+                headers: {"Content-Type": "application/JSON"},
+              })
+              .then(res => {
+                return res.json();
+              })
+              .then(data => {
+                setBrands(data);
+              });
+        }
+
         if(!mounted.current){
             FetchItemData();
+            FetchBrands();
         }
         mounted.current = true;
     }, []);
@@ -37,13 +51,11 @@ const AddModal = ({...props}) => {
     const RenderType = ItemData.map((item) => <button className='ButtonHoverEffect ItemTypeButton' onClick={(e)=>{setChosenType(item.ItemType);}}>{item.ItemType.replace(/_/g, " ")}</button>);          
     const RenderOptions = ItemData.map((item) => {
         if(item.ItemType === ChosenType){
-            console.log(item.Options);
             return (<div className='OList' style={{width:"50vw", height:"55vh", overflow:"scroll"}}>
                 <label>{ChosenType.replace(/_/g, " ")}</label>
-                <textarea placeholder='Enter SKU' style={{resize:"none"}} cols={20} rows={1}></textarea>
-                <select>
-                    <option>Hello</option>
-                    <option>Hello1</option>
+                <textarea placeholder='Enter SKU' style={{resize:"none"}} cols={20} rows={1} onChange={(e)=>{let _new = selected; _new.SKU = e.currentTarget.value; setSelected(_new);}}></textarea>
+                <select onChange={(e)=>{let _new = selected; _new.Brand = e.currentTarget.value; setSelected(_new);}}>
+                    {Brands.map((brand, i) => {return(<option>{brand}</option>)})}
                 </select>
                 <div style={{width:"100%", height:"auto", display:"flex", 
                             flexDirection:"row", justifyContent:"center", 
@@ -55,24 +67,45 @@ const AddModal = ({...props}) => {
                         <label>{Object.keys(option)[0].replace(/_/g, " ")}: </label>
                         {
                             option[optionName].map((element, i) => {
-                                console.log(element)
-                                if(element === ""){
-                                    return (<> <label style={{textDecoration:"underline"}}>textbox</label> <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton'></input> </>);
+                                if(element === "" || element === true || element === false){
+                                    return (<> {element === "" ? <label style={{textDecoration:"underline"}}>textbox</label> : <></>}
+                                    <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e) => {let _new = selected; _new[optionName] = e.currentTarget.checked; setSelected(_new); console.log(selected); }}></input> </>
+                                    );
                                 }
+                                /*
                                 if(element === true || element === false){
                                     return (
                                     <>
                                         <br/>
                                         <label>{"True"}</label>
-                                        <input type={"radio"} radioGroup={optionName} name={optionName} value={true} className='ButtonHoverEffect ItemTypeButton'></input>
+                                        <input type={"radio"} radioGroup={optionName} name={optionName} value={true} className='ButtonHoverEffect ItemTypeButton'
+                                            onChange={(e)=>{let _new = selected; _new[optionName] = e.currentTarget.value}}></input>
                                         <label>{"False"}</label>
-                                        <input type={"radio"} radioGroup={optionName} name={optionName} value={false} className='ButtonHoverEffect ItemTypeButton'></input>
+                                        <input type={"radio"} radioGroup={optionName} name={optionName} value={false} className='ButtonHoverEffect ItemTypeButton'
+                                            onChange={(e)=>{let _new = selected; _new[optionName] = e.currentTarget.value}}></input>
                                     </>
                                     );
                                 }
+                                */
                                 return ( <>
                                     <label>{element}</label>
-                                    <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton'></input> 
+                                    <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e)=>{
+                                        let _new = selected; 
+                                        if(e.currentTarget.checked === false){
+                                            let toReplace = element + ",";
+                                            console.log(toReplace);
+                                            _new[optionName] = _new[optionName].replace(toReplace, "");
+                                        }else{
+                                            console.log(element);
+                                            if(_new[optionName] === undefined){
+                                                _new[optionName] = element + ",";
+                                            }else{
+                                                _new[optionName] += element + ',';
+                                            }
+                                        }
+                                        console.log(_new);
+                                        setSelected(_new);
+                                        }}></input> 
                                 </>);
                             })
                         }
@@ -95,13 +128,13 @@ const AddModal = ({...props}) => {
     return (
         <React.Fragment>
             <div id='Overlay' className='Overlay'>
-                <button className='CloseButton' onClick={(e)=>{props.setIsOpen(false)}}>&times;</button>
+                <button className='CloseButton' onClick={(e)=>{props.setIsOpen(false); setSelected({});}}>&times;</button>
                 <div id='Container' className='Container'>
                     <h1>Add Modal</h1>
                     <div className='OptionsContainer' style={{overflow:"scroll"}}>
                         {ReturnRender()}
                     </div>
-                    <button className='ButtonHoverEffect SubmitButton'>Submit</button>
+                    <button className='ButtonHoverEffect SubmitButton' onClick={(e)=>{console.log("Submit: " + JSON.stringify(selected));}}>Submit</button>
                 </div>
             </div>
         </React.Fragment>
