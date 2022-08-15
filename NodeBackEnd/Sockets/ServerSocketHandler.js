@@ -1,4 +1,4 @@
-import {io} from "./ServerGlobals.js";
+import {Classes, io} from "./ServerGlobals.js";
 
 import { Socket } from "socket.io";
 
@@ -39,5 +39,28 @@ function on_connection(socket){
             isLogin:Login
         })
     })
+    socket.on("add_Item", (new_item, fn)=>{
+        console.log(new_item);
+        if(!new_item || !new_item.SKU || !new_item.Brand){
+            fn({
+                status:"ok",
+                msg:"Missing Information"
+            });
+            return;
+        }
+        //Need to parse the item data into useable bits for the database, then add it a return the new item and send  it to the clients to update the productlist
+        let all_Keys = Object.keys(new_item);
+        let new_Item_Object = {};
+
+        all_Keys.forEach((value, i) =>{
+            if(new_item[value] !== false){
+                new_Item_Object[value] = new_item[value];
+            }
+        })
+
+        console.log(new_Item_Object);
+        Classes.Sable.AddItem(new_Item_Object);
+        io.emit("new_Item_Added", "Hello World!");
+    });
 
 }

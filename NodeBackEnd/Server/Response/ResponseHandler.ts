@@ -111,7 +111,60 @@ class  ResponseHandler{
         });
     }
 
-    
+
+    async AddItem(ItemObject: {[k:string]: any}={}, name?:string){
+        if(Object.length === 0){
+            console.log("Empty Object");
+            return;
+        }if(!ItemObject.SKU){
+            console.log("not SKU Given");
+            return;
+        }if(!ItemObject.Brand){
+            console.log("No Brand Given");
+            return;
+        }
+         let ItemAlreadyExist = await this.DBController.getAll("Sable").then((result) => {
+           for(let i = 0; i < result.length; i++){
+                if(result[i].SKU === ItemObject.SKU && result[i].Brand === ItemObject.Brand){
+                    ItemAlreadyExist = true;
+                    return true;
+                }
+           }
+           return false;
+        });
+        if(ItemAlreadyExist === true){
+            return {ItemAlreadyExist: ItemAlreadyExist};
+        }
+        console.log("Can finally add the item");
+
+        const keys = Object.keys(ItemObject);
+        let QuestionMarkString = "";
+        for(let i = 0; i < keys.length; i++ ){
+            if(i === keys.length-1){
+                QuestionMarkString += "?";
+            }else{
+                QuestionMarkString += "?,";
+            }
+        }
+        let Columns = "";
+        let Col_Values = [];
+        keys.forEach((value, i) => {
+            if(typeof ItemObject[value] === "string"){
+                Columns += value;
+                Col_Values.push(ItemObject[value].replace(",", "").replace(" ", ""));
+            }else{
+                Columns += value.toString();
+                Col_Values.push(ItemObject[value]);
+            }
+            if(i !== keys.length){
+                Columns += ",";
+            }
+        });
+        console.log("Columns: " + Columns);
+        console.log("Column Values: " , Col_Values);
+
+
+    }
 
     async DeleteItem(key:number){
         await this.DBController.delete(this.TableName, key);

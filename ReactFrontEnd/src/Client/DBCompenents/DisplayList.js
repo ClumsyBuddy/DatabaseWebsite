@@ -128,11 +128,14 @@ const ProductList = ({...props}) =>{
         socket.on("connect", () => {setIsConnected(true)});
         socket.on("disconnect", () => {setIsConnected(false)});
         socket.on("delete_item_client", (msg)=>{DeleteItem(msg.key, true);});
+        socket.on("new_Item_Added", (item) => {console.log(item);})
+
 
         return () => {
             socket.off("connect");
             socket.off("disconnect");
             socket.off("delete_item_client");
+            socket.off("new_Item_Added");
         }
         //eslint-disable-next-line
     }, [DeleteItem]);

@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
+import useSocket from "../../../../hooks/useSocket";
 
 import "../Modal.css";
 import "./AddModal.css";
 
-
-
 const AddModal = ({...props}) => {
+
+    const socket = useSocket();
+
 
     const [ItemData, setItemData] = useState([]);
     const [ChosenType, setChosenType] = useState("");
@@ -47,7 +49,8 @@ const AddModal = ({...props}) => {
         mounted.current = true;
     }, []);
 
-    
+    //TODO Should Probably break up this unreadable blob of code. This does way to much
+    // I should also initialize all of the Options and  values to false on startup.
     const RenderType = ItemData.map((item) => <button className='ButtonHoverEffect ItemTypeButton' onClick={(e)=>{setChosenType(item.ItemType);}}>{item.ItemType.replace(/_/g, " ")}</button>);          
     const RenderOptions = ItemData.map((item) => {
         if(item.ItemType === ChosenType){
@@ -72,21 +75,6 @@ const AddModal = ({...props}) => {
                                     <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e) => {let _new = selected; _new[optionName] = e.currentTarget.checked; setSelected(_new); console.log(selected); }}></input> </>
                                     );
                                 }
-                                /*
-                                if(element === true || element === false){
-                                    return (
-                                    <>
-                                        <br/>
-                                        <label>{"True"}</label>
-                                        <input type={"radio"} radioGroup={optionName} name={optionName} value={true} className='ButtonHoverEffect ItemTypeButton'
-                                            onChange={(e)=>{let _new = selected; _new[optionName] = e.currentTarget.value}}></input>
-                                        <label>{"False"}</label>
-                                        <input type={"radio"} radioGroup={optionName} name={optionName} value={false} className='ButtonHoverEffect ItemTypeButton'
-                                            onChange={(e)=>{let _new = selected; _new[optionName] = e.currentTarget.value}}></input>
-                                    </>
-                                    );
-                                }
-                                */
                                 return ( <>
                                     <label>{element}</label>
                                     <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e)=>{
@@ -125,6 +113,14 @@ const AddModal = ({...props}) => {
         }
     }
 
+    const SendSelected = () => {
+        if(!selected.Brand || !selected.SKU){
+            console.log("Missing SKU or Brand");
+            return false;
+        }
+        socket.emit("add_Item", selected);
+    }
+
     return (
         <React.Fragment>
             <div id='Overlay' className='Overlay'>
@@ -134,7 +130,7 @@ const AddModal = ({...props}) => {
                     <div className='OptionsContainer' style={{overflow:"scroll"}}>
                         {ReturnRender()}
                     </div>
-                    <button className='ButtonHoverEffect SubmitButton' onClick={(e)=>{console.log("Submit: " + JSON.stringify(selected));}}>Submit</button>
+                    <button className='ButtonHoverEffect SubmitButton' onClick={(e)=>{SendSelected()}}>Submit</button>
                 </div>
             </div>
         </React.Fragment>
@@ -142,29 +138,6 @@ const AddModal = ({...props}) => {
 
 
 }
-
-
-
-
-
-const OptionDisplay = (...props) => {
-
-
-    return(
-        <>
-
-        
-        
-        
-        
-        
-        </>
-    );
-}
-
-
-
-
 
 
 export default AddModal;

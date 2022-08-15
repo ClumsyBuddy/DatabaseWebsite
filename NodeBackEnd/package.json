@@ -2,10 +2,10 @@
   "name": "databasewebsite",
   "version": "1.0.1",
   "description": "Database Website for RDI",
-  "main": "./server.js",
+  "main": "./index.ts",
   "scripts": {
-    "start:server": "node server.js",
-    "build": "npx tsc -t es6"
+    "compile": "tsc && node index.js",
+    "dev": "nodemon -e ts  --exec \"npm run compile\""
   },
   "author": "Trevor Winn",
   "license": "ISC",
@@ -24,6 +24,8 @@
   },
   "devDependencies": {
     "@types/node": "^17.0.38",
+    "nodemon": "^2.0.19",
+    "ts-node": "^10.9.1",
     "typescript": "^4.7.3"
   },
   "type": "module"
