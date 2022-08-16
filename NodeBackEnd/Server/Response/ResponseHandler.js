@@ -105,18 +105,18 @@ class ResponseHandler {
                 console.log("Empty Object");
                 return;
             }
-            if (!ItemObject.SKU) {
+            if (!ItemObject.sku) {
                 console.log("not SKU Given");
                 return;
             }
-            if (!ItemObject.Brand) {
+            if (!ItemObject.brand) {
                 console.log("No Brand Given");
                 return;
             }
             let ItemAlreadyExist = yield this.DBController.getAll("Sable").then((result) => {
                 for (let i = 0; i < result.length; i++) {
-                    if (result[i].SKU === ItemObject.SKU && result[i].Brand === ItemObject.Brand) {
-                        ItemAlreadyExist = true;
+                    if (result[i].sku === ItemObject.sku && result[i].brand === ItemObject.brand) {
+                        console.log("This already Exist");
                         return true;
                     }
                 }
@@ -125,7 +125,6 @@ class ResponseHandler {
             if (ItemAlreadyExist === true) {
                 return { ItemAlreadyExist: ItemAlreadyExist };
             }
-            console.log("Can finally add the item");
             const keys = Object.keys(ItemObject);
             let QuestionMarkString = "";
             for (let i = 0; i < keys.length; i++) {
@@ -145,14 +144,15 @@ class ResponseHandler {
                 }
                 else {
                     Columns += value.toString();
-                    Col_Values.push(ItemObject[value]);
+                    Col_Values.push(ItemObject[value].toString());
                 }
-                if (i !== keys.length) {
+                if (i !== keys.length - 1) {
                     Columns += ",";
                 }
             });
             console.log("Columns: " + Columns);
             console.log("Column Values: ", Col_Values);
+            this.DBController.create("Sable", Columns, QuestionMarkString, Col_Values);
         });
     }
     DeleteItem(key) {

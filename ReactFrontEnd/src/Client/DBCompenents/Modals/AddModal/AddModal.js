@@ -56,8 +56,8 @@ const AddModal = ({...props}) => {
         if(item.ItemType === ChosenType){
             return (<div className='OList' style={{width:"50vw", height:"55vh", overflow:"scroll"}}>
                 <label>{ChosenType.replace(/_/g, " ")}</label>
-                <textarea placeholder='Enter SKU' style={{resize:"none"}} cols={20} rows={1} onChange={(e)=>{let _new = selected; _new.SKU = e.currentTarget.value; setSelected(_new);}}></textarea>
-                <select onChange={(e)=>{let _new = selected; _new.Brand = e.currentTarget.value; setSelected(_new);}}>
+                <textarea placeholder='Enter SKU' style={{resize:"none"}} cols={20} rows={1} onChange={(e)=>{let _new = selected; _new.sku = e.currentTarget.value; setSelected(_new);}}></textarea>
+                <select onChange={(e)=>{let _new = selected; _new.brand = e.currentTarget.value; setSelected(_new);}}>
                     {Brands.map((brand, i) => {return(<option>{brand}</option>)})}
                 </select>
                 <div style={{width:"100%", height:"auto", display:"flex", 
@@ -114,7 +114,7 @@ const AddModal = ({...props}) => {
     }
 
     const SendSelected = () => {
-        if(!selected.Brand || !selected.SKU){
+        if(!selected.brand || !selected.sku){
             console.log("Missing SKU or Brand");
             return false;
         }

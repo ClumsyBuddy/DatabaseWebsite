@@ -40,12 +40,13 @@ function on_connection(socket){
         })
     })
     socket.on("add_Item", (new_item, fn)=>{
-        console.log(new_item);
-        if(!new_item || !new_item.SKU || !new_item.Brand){
+        
+        if(!new_item || !new_item.sku || !new_item.brand){
             fn({
                 status:"ok",
                 msg:"Missing Information"
             });
+            console.log("Missing SKU or Brand");
             return;
         }
         //Need to parse the item data into useable bits for the database, then add it a return the new item and send  it to the clients to update the productlist
@@ -57,8 +58,6 @@ function on_connection(socket){
                 new_Item_Object[value] = new_item[value];
             }
         })
-
-        console.log(new_Item_Object);
         Classes.Sable.AddItem(new_Item_Object);
         io.emit("new_Item_Added", "Hello World!");
     });
