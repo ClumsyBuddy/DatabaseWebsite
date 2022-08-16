@@ -1,0 +1,24 @@
+.ItemTypeButton{
+    margin-right: 10px;
+    margin-bottom: 10px;   
+}
+.ItemTypeButton:active{
+    background-color: lightcoral;
+}
+
+.OptionsContainer{
+    display: flex;
+    justify-content: center;
+    flex-flow: wrap;
+    flex-basis: 0;
+    flex-grow: 1;
+}
+
+
+.OptionsContainer::-webkit-scrollbar{
+    display: none;
+}
+
+.OList::-webkit-scrollbar{
+    display: none;
+}

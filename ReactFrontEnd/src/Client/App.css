@@ -1,0 +1,44 @@
+body > #root > div {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.CC{
+  color:black;
+}
+
+.BaseContainer{
+  background-color: #282C34;
+}
+
+.ButtonHoverEffect{
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  transform: none;
+}
+.ButtonHoverEffect:hover{
+  transform: translate(0, -2px);
+  box-shadow: 1px 3px 4px rgba(255,255,255, 0.3);
+  -webkit-transition : transform ease-in-out 0.5s, box-shadow ease-in-out .4s;
+  transition: transform ease-in-out 0.5s, box-shadow ease-in-out .4s;
+
+
+}
+
+:root{
+    --stroke-offset:1.5px;
+    --stroke-offset-negative:-1.5px;
+    --stroke-color: black;
+}
+
+
+.TextStroke{
+    text-shadow :
+    var(--stroke-offset-negative) var(--stroke-offset-negative) 0 var(--stroke-color),
+     0   var(--stroke-offset-negative) 0 var(--stroke-color),
+     var(--stroke-offset) var(--stroke-offset-negative) 0 var(--stroke-color),
+     var(--stroke-offset)  0   0 var(--stroke-color),
+     var(--stroke-offset)  var(--stroke-offset) 0 var(--stroke-color),
+     0    var(--stroke-offset) 0 var(--stroke-color),
+    var(--stroke-offset-negative)  var(--stroke-offset) 0 var(--stroke-color),
+    var(--stroke-offset-negative)  0   0 var(--stroke-color);
+}

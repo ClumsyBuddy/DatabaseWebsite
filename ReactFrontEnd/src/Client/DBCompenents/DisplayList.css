@@ -1,0 +1,70 @@
+.ListContainer{
+    color: black;
+    border-color: white;
+    border-style: solid;
+}
+.ListContainer::-webkit-scrollbar{
+    display: none;
+}
+
+.Item{
+    background-color: #1E2E54;
+    color: white;
+    text-align: center;
+    border-radius: 10px;
+    border-color: white;
+    border-style: solid;
+    transition: transform 1.2s;
+    transform: scale(1);
+}
+
+.Item:hover{
+    will-change: transform;
+    transition: transform 1s;
+    transform: scale(1.05) translateZ(0);
+    backface-visibility: hidden;
+}
+
+
+
+.InfoContainer{
+    display: flex;
+    flex-direction:column;
+    
+    
+}
+
+.InfoDisplay{
+    font-size: medium;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
+.EditAddContainer{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+
+button, .EditButton, .DeleteButton{
+    background-color: #F65E00;
+    color: black;
+    font-weight: 700;
+    font-size: medium;
+    border-color: white;
+    border-style: solid;
+    border-radius: 5px;
+
+}
+
+.EditButton{
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.DeleteButton{
+    margin-top: 5px;
+    margin-right: 5px;
+}

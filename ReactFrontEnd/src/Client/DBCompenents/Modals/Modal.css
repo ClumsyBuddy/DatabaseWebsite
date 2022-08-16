@@ -1,0 +1,25 @@
+.Overlay{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0%;
+    left: 0%;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+
+.CloseButton{
+    position: absolute;
+    left: 90%;
+    font-size: 100px;
+    background-color: transparent;
+    color: white;
+    border: none;
+}
+.CloseButton:hover{
+    color: grey;
+}
