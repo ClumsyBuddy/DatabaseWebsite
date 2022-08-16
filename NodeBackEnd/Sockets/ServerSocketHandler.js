@@ -21,10 +21,18 @@ function on_connection(socket){
             }
         })
     })
-    socket.on("delete_item_server", (msg, callback) => {
-        console.log(msg);
+    socket.on("delete_item_server", async (msg, callback) => {
+        let status = await Classes.Sable.DeleteItem("Sable", Number(msg.key))
+        if(!status){
+            callback({
+                status: "failed",
+                msg:"Could not delete item"
+            });
+            return;
+        }
         callback({
-            status: "ok"
+            status: "ok",
+            msg:"Deleted item successfully"
         });
         socket.broadcast.emit("delete_item_client", msg);
     });

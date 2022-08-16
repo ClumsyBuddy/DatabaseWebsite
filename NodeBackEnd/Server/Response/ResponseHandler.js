@@ -161,10 +161,13 @@ class ResponseHandler {
             return yield this.DBController.getById(DB, id);
         });
     }
-    DeleteItem(key) {
+    DeleteItem(name, key) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.DBController.delete(this.TableName, key);
-            return this.GetAllProducts(this.TableName);
+            yield this.DBController.delete(name, key);
+            if ((yield this.DBController.getById(name, key)) === undefined) {
+                return true;
+            }
+            return false;
         });
     }
     GetAllProducts(name, req) {

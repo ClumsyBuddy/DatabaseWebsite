@@ -1,7 +1,7 @@
 import { ItemData } from "./ItemData.js";
 import {DatabaseManager, Login} from "../../Sockets/ServerGlobals.js";
 //const fs = require('fs');
-import {readFileSync, watchFile} from "fs";
+import {readFileSync, stat, watchFile} from "fs";
 
 //TODO Need to implement responsice error handling so a single bug doesnt bring down the server
 //     Try catch and using base state should be able to keep the server from crashing
@@ -164,13 +164,16 @@ class  ResponseHandler{
         return {id:id.id, ItemAlreadyExist:false}; //return the id and that the item didnt exist
     }
 
-    async GetItemById(DB, id){
+    async GetItemById(DB:string, id:number){
         return await this.DBController.getById(DB, id);
     }
 
-    async DeleteItem(key:number){
-        await this.DBController.delete(this.TableName, key);
-        return this.GetAllProducts(this.TableName);
+    async DeleteItem(name:string, key:number){
+        await this.DBController.delete(name, key)
+        if(await this.DBController.getById(name, key) === undefined){
+            return true;
+        }
+        return false;
     }
 
     async GetAllProducts(name:string, req?:any){
