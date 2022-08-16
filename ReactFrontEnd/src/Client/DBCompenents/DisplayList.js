@@ -32,6 +32,8 @@ const ProductList = ({...props}) =>{
     const [GridWidth, setGridWidth] = useState(window.innerWidth * 0.897); //I found that the width times this value lines scrollbar up with side of container nicely
 
     const [isOpen, setIsOpen] = useState(false);
+    const [editProductSelect, editProductSet] = useState(NaN);
+
 
     const fetchData = () =>{
         fetch("/ProductList", {
@@ -168,7 +170,7 @@ const ProductList = ({...props}) =>{
     }}  className="">
         <div className="Item" style={{height:RowHeight*RowItemHeight}}>
             <div className="EditAddContainer">
-                <button onClick={(e)=>{flipOpen(true); console.log("isOpen: " + isOpen)}} className="EditButton ButtonHoverEffect">Edit</button>
+                <button onClick={(e)=>{flipOpen(true); editProductSet(DisplayList[rowIndex*MaxColumn+columnIndex]);}} className="EditButton ButtonHoverEffect">Edit</button>
                 <button value={DisplayList[rowIndex*MaxColumn+columnIndex].key} onClick={(e)=>{DeleteItem(e.currentTarget.value);}} className="DeleteButton ButtonHoverEffect">Delete</button>
             </div>
             <div className="InfoContainer">
@@ -195,7 +197,7 @@ const ProductList = ({...props}) =>{
             :
                 <div style={{color:"white", textAlign:"center"}}>Loading...</div>
             }
-             {isOpen ? <EditModal flipOpen={flipOpen} /> : <></>}
+             {isOpen ? <EditModal flipOpen={flipOpen} editProduct={editProductSelect} /> : <></>}
       </div>
       );
    
