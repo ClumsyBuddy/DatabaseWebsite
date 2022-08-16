@@ -22,3 +22,8 @@
 .OList::-webkit-scrollbar{
     display: none;
 }
+
+
+.SubmitButton:active{
+    background-color: white;
+}

@@ -39,8 +39,9 @@ function RoutesInit(){
             req.sessionStore.all((err, _session) => {
                 _session.forEach((item) => {
                     if(item.sid !== req.sessionID){
-                        if(item.sess.username === req.session.username){
-                            req.sessionStore.destroy(item.sid, ()=>{console.log("Destroying: " + item.sid);})
+                        if(item.sess.username === req.session.username){ //TODO need to rethink how I approach the sessions and remembering login
+                            //req.sessionStore.destroy(item.sid, ()=>{console.log("Destroying: " + item.sid);})
+                            //isLogin = false;
                         }
                     }
                 })

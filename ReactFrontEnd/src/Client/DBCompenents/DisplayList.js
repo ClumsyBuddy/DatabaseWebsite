@@ -49,16 +49,22 @@ const ProductList = ({...props}) =>{
 
     const DeleteItem = useCallback((key, socketResonse=false) => {
         const RemoveAtIndex = (index) =>{
+            const deleteItem = ()=>{
+                const newArray = [...ProductList];
+                newArray.splice(index, 1);
+                setProductList(newArray);
+            }
             if(!socketResonse){
                 socket.emit("delete_item_server", {key}, (response)=>{
                     if(response.status === "ok"){
-                        const newArray = [...ProductList];
-                        newArray.splice(index, 1);
-                        setProductList(newArray);
+                        deleteItem();
                     }else{
                         console.log("Socket Failed to recieve response");
                     }
                 });
+            }
+            if(socketResonse){
+                deleteItem();
             }
         }
         ProductList.forEach(
@@ -71,6 +77,9 @@ const ProductList = ({...props}) =>{
         )
         //eslint-disable-next-line
     }, [ProductList]);
+
+
+
     const AddItem = useCallback((item) => {
         ProductList.push(item);
     }, [ProductList]);
@@ -129,7 +138,7 @@ const ProductList = ({...props}) =>{
         mounted.current = true; //Sets Mount to True after first run
         socket.on("connect", () => {setIsConnected(true)});
         socket.on("disconnect", () => {setIsConnected(false)});
-        socket.on("delete_item_client", (msg)=>{DeleteItem(msg.key, true);});
+        socket.on("delete_item_client", (msg)=>{DeleteItem(Number(msg.key), true);});
         socket.on("new_Item_Added", (item) => {AddItem(item)})
 
 
