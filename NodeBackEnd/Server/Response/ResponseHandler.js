@@ -102,7 +102,7 @@ class ResponseHandler {
     AddItem(ItemObject = {}, name) {
         return __awaiter(this, void 0, void 0, function* () {
             if (Object.length === 0) {
-                console.log("Empty Object");
+                console.log("Empty Object"); //Double checking for any errors
                 return;
             }
             if (!ItemObject.sku) {
@@ -122,11 +122,11 @@ class ResponseHandler {
                 }
                 return false;
             });
-            if (ItemAlreadyExist === true) {
+            if (ItemAlreadyExist === true) { //If the item already exist return
                 return { ItemAlreadyExist: ItemAlreadyExist };
             }
-            const keys = Object.keys(ItemObject);
-            let QuestionMarkString = "";
+            const keys = Object.keys(ItemObject); //Get all keys
+            let QuestionMarkString = ""; //We need the question marks for the SQL query ei. (SELECT * FROM Sable WHERE id = ?)[parameters]
             for (let i = 0; i < keys.length; i++) {
                 if (i === keys.length - 1) {
                     QuestionMarkString += "?";
@@ -147,12 +147,18 @@ class ResponseHandler {
                     Col_Values.push(ItemObject[value].toString());
                 }
                 if (i !== keys.length - 1) {
-                    Columns += ",";
+                    Columns += ","; //If we are not at the end add a comma between each column
                 }
             });
             console.log("Columns: " + Columns);
             console.log("Column Values: ", Col_Values);
-            this.DBController.create("Sable", Columns, QuestionMarkString, Col_Values);
+            let id = yield this.DBController.create("Sable", Columns, QuestionMarkString, Col_Values); //Create the item and return the id (aka the key)
+            return { id: id.id, ItemAlreadyExist: false }; //return the id and that the item didnt exist
+        });
+    }
+    GetItemById(DB, id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.DBController.getById(DB, id);
         });
     }
     DeleteItem(key) {

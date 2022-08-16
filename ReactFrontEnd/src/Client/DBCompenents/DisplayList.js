@@ -71,7 +71,9 @@ const ProductList = ({...props}) =>{
         )
         //eslint-disable-next-line
     }, [ProductList]);
-
+    const AddItem = useCallback((item) => {
+        ProductList.push(item);
+    }, [ProductList]);
     
     if(!mounted.current){ //All pre render task go here
         fetchData();
@@ -128,7 +130,7 @@ const ProductList = ({...props}) =>{
         socket.on("connect", () => {setIsConnected(true)});
         socket.on("disconnect", () => {setIsConnected(false)});
         socket.on("delete_item_client", (msg)=>{DeleteItem(msg.key, true);});
-        socket.on("new_Item_Added", (item) => {console.log(item);})
+        socket.on("new_Item_Added", (item) => {AddItem(item)})
 
 
         return () => {
@@ -138,7 +140,7 @@ const ProductList = ({...props}) =>{
             socket.off("new_Item_Added");
         }
         //eslint-disable-next-line
-    }, [DeleteItem]);
+    }, [DeleteItem, AddItem]);
 
     const renderRow = ({columnIndex, key, rowIndex, style}) => {
     //If we have no valid Items in DisplayList Array then return empty element

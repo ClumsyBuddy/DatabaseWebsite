@@ -118,7 +118,9 @@ const AddModal = ({...props}) => {
             console.log("Missing SKU or Brand");
             return false;
         }
-        socket.emit("add_Item", selected);
+        socket.emit("add_Item", selected, (result) => {
+            console.log("Result: " + JSON.stringify(result));
+        });
     }
 
     return (

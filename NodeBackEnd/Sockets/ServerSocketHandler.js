@@ -40,26 +40,34 @@ function on_connection(socket){
         })
     })
     socket.on("add_Item", (new_item, fn)=>{
-        
+        //Check if missing SKU or Brand, send response saying fail
         if(!new_item || !new_item.sku || !new_item.brand){
-            fn({
-                status:"ok",
+            fn({ //This is the callback function that the Socket sends
+                status:"failed",
                 msg:"Missing Information"
             });
             console.log("Missing SKU or Brand");
             return;
         }
-        //Need to parse the item data into useable bits for the database, then add it a return the new item and send  it to the clients to update the productlist
-        let all_Keys = Object.keys(new_item);
-        let new_Item_Object = {};
+        
+        let all_Keys = Object.keys(new_item); //All keys in string format
+        let new_Item_Object = {}; //This will hold all Options and option values in pairs
 
         all_Keys.forEach((value, i) =>{
-            if(new_item[value] !== false){
+            if(new_item[value] !== false){ //We only add selected items that are true to the new object
                 new_Item_Object[value] = new_item[value];
             }
         })
-        Classes.Sable.AddItem(new_Item_Object);
-        io.emit("new_Item_Added", "Hello World!");
+        Classes.Sable.AddItem(new_Item_Object).then(async (result) => {
+            if(result.ItemAlreadyExist){ //If the item already exist then we can skip to the next one
+                return;
+            }
+            fn({ //Return Response that it was successful
+                status:"success",
+                msg:"Added Item Successfully"
+            })
+            io.emit("new_Item_Added", await Classes.Sable.GetItemById("Sable", result.id)); //Emit the new item to all clients
+        });
     });
 
 }

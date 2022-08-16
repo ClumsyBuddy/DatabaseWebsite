@@ -46,6 +46,9 @@ class DatabaseManager {
     delete(name, key) {
         return this.DatabaseConnection.run(`DELETE FROM ${name} WHERE key = ?`, [key]);
     }
+    getById(name, id) {
+        return this.DatabaseConnection.get(`SELECT * FROM ${name} WHERE key = ${id}`);
+    }
     getByColumn(name, ColumnName, ColumnValue) {
         return this.DatabaseConnection.get(`SELECT * FROM ${this.DbStorage[name].Table} WHERE ${ColumnName} = ?`, [ColumnValue]);
     }

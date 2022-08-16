@@ -63,6 +63,10 @@ class DatabaseManager {
       );
     }
 
+    getById(name, id){
+      return this.DatabaseConnection.get(`SELECT * FROM ${name} WHERE key = ${id}`);
+    }
+
     getByColumn(name:string, ColumnName:string, ColumnValue:any) { //Find a specfic item using the name of the column and the value you are looking for
           return this.DatabaseConnection.get(`SELECT * FROM ${this.DbStorage[name].Table} WHERE ${ColumnName} = ?`,
               [ColumnValue]);
