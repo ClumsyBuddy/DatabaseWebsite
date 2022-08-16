@@ -177,6 +177,8 @@ body::-webkit-scrollbar{
 .BaseContainer::-webkit-scrollbar{
     display: none;
 }
+
+
 .BaseContainer{
     width: 90%;
     height: 70vh;
@@ -350,3 +352,152 @@ body::-webkit-scrollbar{
       transform: rotate(0);
     }
   }
+
+
+
+.overlay{
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.9);
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+.overlay a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 36px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.overlay a:hover, .overlay a:focus{
+    color: #f1f1f1;
+}
+
+.Overlay-Content{
+    position: relative;
+    top: .5em;
+    width: 90%;
+    margin: auto;
+    text-align: center;
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+/*
+.Overlay-Content::after{
+    content: "";
+    flex: auto;
+}
+*/
+.Overlay-Title{
+    text-align: center; 
+    color: white;
+    margin-top: 2em;
+    font-size: 2em;
+}
+
+.overlay .closebtn{
+    position: absolute;
+    top: 20px;
+    right: 45px;
+    font-size: 60px;
+}
+.BackButton{
+    position: absolute;
+    top: 20px;
+    left: 45px;
+    font-size: 60px;
+}
+
+
+.InfoItem{
+    background-color:#F65E00;
+    color: white !important;
+    border: #f1f1f1;
+    border-style: solid;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.InfoItem:hover{
+    background-color: #1E2E54;
+}
+
+.overlay::-webkit-scrollbar{
+    display: none;
+}
+
+
+
+.CContainer{
+    width: 90%;
+}
+
+.Column{
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    font-size: large;
+}
+.Row{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    padding: 20px;
+    flex-basis: 0%;
+    flex-grow: 1;
+}
+
+.InnerRow{
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+}
+
+.LogoutButtonForm{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+}
+.LogoutButton{
+    background-color: #F65E00;
+    color: azure;
+    border-color: azure;
+    border-radius: 5px;
+}
+.LogoutButton:hover{
+    background-color: #1E2E54;
+    color: azure;
+}
+.LogoutButton:active{
+    background-color: #818181;
+}
+.AddSubmitButton{
+    width: 5vw;
+    height: 3vh;
+    margin: auto;
+    background-color: #F65E00;
+    border-color: white;
+    border-radius: 5px;
+    margin-top: 1.5vh;
+    font-size: medium;
+    color:azure;
+    font-weight: bold;
+}
+
+.AddSubmitButton:hover{
+    background-color: #2a4175;
+    color:#F65E00;
+}
+
+.AddSubmitButton:active{
+    background-color: #818181;
+}

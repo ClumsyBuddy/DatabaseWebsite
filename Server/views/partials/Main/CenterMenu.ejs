@@ -1,0 +1,16 @@
+<div class="CenteredMenu" style="height: 100%">
+    <h1 class="center" style="color:orangered">Items</h1>
+
+    <div class="SearchBar">
+        <div class="AddButtonContainer">
+            <button id="Add" type="submit" name="Sable" class="MenuButtons">Add</button>
+        </div>
+        <div class="SearchBarContainer">
+            <input type="text" name="Sable" placeholder="Search by SKU" class="SearchBox" id="SearchBar">
+            <div class="AddButtonContainer"><button class="MenuButtons" type="click" id="Search">Search</button></div>
+        </div>
+    </div>
+    <h2 class=""><%= PageState.SectionId %></h1>
+    <%- include('./FullScreenNavigation') %>
+    <%- include('./BaseItemDisplay') %>
+</div>
