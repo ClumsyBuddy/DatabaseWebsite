@@ -61,7 +61,6 @@ function RoutesInit(){
                 ItemData = element;
             }
         })
-        console.log(ItemData);
         res.json(ItemData);
     });
 

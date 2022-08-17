@@ -112,6 +112,13 @@ class  ResponseHandler{
     }
 
 
+    async UpdateItem(Columns:Array<string>, Values:Array<string>, key:number){
+        for(let i = 0; i < Columns.length; i++){
+            await this.DBController.update("Sable", Columns[i], Values[i],  key);
+        }
+        return await this.GetItemById("Sable", key);
+    }
+
     async AddItem(ItemObject: {[k:string]: any}={}, name?:string){
         if(Object.length === 0){
             console.log("Empty Object"); //Double checking for any errors

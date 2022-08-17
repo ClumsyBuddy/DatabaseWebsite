@@ -99,6 +99,14 @@ class ResponseHandler {
             });
         });
     }
+    UpdateItem(Columns, Values, key) {
+        return __awaiter(this, void 0, void 0, function* () {
+            for (let i = 0; i < Columns.length; i++) {
+                yield this.DBController.update("Sable", Columns[i], Values[i], key);
+            }
+            return yield this.GetItemById("Sable", key);
+        });
+    }
     AddItem(ItemObject = {}, name) {
         return __awaiter(this, void 0, void 0, function* () {
             if (Object.length === 0) {

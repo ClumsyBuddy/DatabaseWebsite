@@ -35,11 +35,9 @@ class DatabaseManager {
         return this.DatabaseConnection.run( `INSERT INTO ${name} (${columns}) VALUES(${QuestionMark})`, params);
       }
 
-    update(name:string, columns:string, newColumnValues: any, QuestionMark:string,  key:number) { //update a element using the Name of the Column item and the key of the item.
+    update(name:string, column:string, newValue: any,  key:number) { //update a element using the Name of the Column item and the key of the item.
       return this.DatabaseConnection.run(
-        `UPDATE ${name} SET ${columns} = ${QuestionMark} WHERE key = ?`,
-        [newColumnValues, key]
-      )
+        `UPDATE ${name} SET ${column} = ? WHERE key = ${key}`, newValue);
     }
 
     delete(name:string, key:number) { //Delete the item using the key

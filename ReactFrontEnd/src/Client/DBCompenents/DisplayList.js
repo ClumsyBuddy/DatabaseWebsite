@@ -49,6 +49,15 @@ const ProductList = ({...props}) =>{
           })
     }
 
+    const NewItemUpdate = useCallback((item) => {
+        for(let i =0; i < ProductList.length; i++){
+            if(ProductList[i].key === item.key){
+                ProductList[i] = item;
+                setProductList(ProductList);
+            }
+        }
+    }, [ProductList]);
+
     const DeleteItem = useCallback((key, socketResonse=false) => {
         const RemoveAtIndex = (index) =>{
             const deleteItem = ()=>{
@@ -142,16 +151,17 @@ const ProductList = ({...props}) =>{
         socket.on("disconnect", () => {setIsConnected(false)});
         socket.on("delete_item_client", (msg)=>{DeleteItem(Number(msg.key), true);});
         socket.on("new_Item_Added", (item) => {AddItem(item)})
-
+        socket.on("client_updated_item", (updatedItem) =>{ NewItemUpdate(updatedItem); })
 
         return () => {
             socket.off("connect");
             socket.off("disconnect");
             socket.off("delete_item_client");
             socket.off("new_Item_Added");
+            socket.off("client_updated_item");
         }
         //eslint-disable-next-line
-    }, [DeleteItem, AddItem]);
+    }, [DeleteItem, AddItem, NewItemUpdate]);
 
     const renderRow = ({columnIndex, key, rowIndex, style}) => {
     //If we have no valid Items in DisplayList Array then return empty element

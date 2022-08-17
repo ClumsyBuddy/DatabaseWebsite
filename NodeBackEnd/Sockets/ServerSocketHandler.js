@@ -78,5 +78,27 @@ function on_connection(socket){
         });
     });
 
+    socket.on("update_item", async (itemToUpdate) => {
+        console.log(itemToUpdate)
+        const ValuesToUpdate = Object.keys(itemToUpdate.updated);
+        let options_Values = [];
+        ValuesToUpdate.forEach((val) => {
+            if(typeof itemToUpdate.updated[val] === "string"){
+                if(itemToUpdate.updated[val][itemToUpdate.updated[val].length-1] === ","){
+                    itemToUpdate.updated[val] = itemToUpdate.updated[val].slice(0, itemToUpdate.updated[val].length-1);
+                }
+                options_Values.push(itemToUpdate.updated[val]);
+            }else{
+                options_Values.push(itemToUpdate.updated[val]);
+            }
+        })
+        const ItemKey = itemToUpdate.key;
+
+        Classes.Sable.UpdateItem(ValuesToUpdate, options_Values, ItemKey).then((result) => {
+            socket.emit("client_updated_item", result);
+        });
+
+
+    })
 
 }

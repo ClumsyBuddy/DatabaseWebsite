@@ -28,8 +28,8 @@ class DatabaseManager {
     create(name, columns, QuestionMark, params = []) {
         return this.DatabaseConnection.run(`INSERT INTO ${name} (${columns}) VALUES(${QuestionMark})`, params);
     }
-    update(name, columns, newColumnValues, QuestionMark, key) {
-        return this.DatabaseConnection.run(`UPDATE ${name} SET ${columns} = ${QuestionMark} WHERE key = ?`, [newColumnValues, key]);
+    update(name, column, newValue, key) {
+        return this.DatabaseConnection.run(`UPDATE ${name} SET ${column} = ? WHERE key = ${key}`, newValue);
     }
     delete(name, key) {
         return this.DatabaseConnection.run(`DELETE FROM ${name} WHERE key = ?`, [key]);

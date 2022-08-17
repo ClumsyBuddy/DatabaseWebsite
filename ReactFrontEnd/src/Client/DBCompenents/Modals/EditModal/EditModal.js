@@ -27,7 +27,6 @@ const EditModal = ({...props}) => {
               .then(data => {
                 const AllOptions = data.Options;
                 setItemData(AllOptions);
-                console.log(AllOptions, props.editProduct);
               });
         }
         
@@ -39,6 +38,17 @@ const EditModal = ({...props}) => {
     }, []);
 
     
+    const SetChecked = (optionName, element) => {
+        const Products = props.editProduct;
+        if(Products[optionName] === null || Products[optionName] === "0" || Products[optionName] === 0){
+            return false;
+        }
+        if(Products[optionName] === true || Products[optionName] === "true" || Products[optionName] === "1" || Products[optionName] === 1 || Products[optionName].includes(element)){
+            return true;
+        }
+        return false;
+    }
+
     const RenderOptions = () => {
         return (
             <div className='OList' style={{width:"50vw", height:"55vh", overflow:"scroll"}}>
@@ -46,7 +56,7 @@ const EditModal = ({...props}) => {
                 {props.editProduct.itemtype}
             </label>
             <br></br>
-            <label>{props.editProduct.sku}</label>
+            <label>{props.editProduct.sku.replace(/_/g, " ")}</label>
             <label>{props.editProduct.brand}</label>
             
             <div style={{width:"100%", height:"auto", display:"flex", 
@@ -64,14 +74,14 @@ const EditModal = ({...props}) => {
                                     {
                                         if(element === "" || element === true || element === false){
                                             return (<> {element === "" ? <label style={{textDecoration:"underline"}}>textbox</label> : <></>}
-                                            <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e) => {let _new = selected; _new[optionName] = e.currentTarget.checked; setSelected(_new); console.log(selected); }}></input> </>
+                                            <input type={"checkbox"} defaultChecked={SetChecked(optionName, element)} 
+                                            className='ButtonHoverEffect ItemTypeButton' onChange={(e) => {let _new = selected; _new[optionName] = e.currentTarget.checked; setSelected(_new); console.log(selected); }}></input> </>
                                             );
                                         }
                                         return <>
                                             <label>{element}</label>
-                                            <input type={"checkbox"} defaultChecked={
-                                                props.editProduct[optionName] !== null ? !!props.editProduct[optionName].includes(element) : false
-                                            } className='ButtonHoverEffect ItemTypeButton' onChange={(e)=>
+                                            <input type={"checkbox"} defaultChecked={SetChecked(optionName, element)} 
+                                            className='ButtonHoverEffect ItemTypeButton' onChange={(e)=>
                                             {
                                                 let _new = selected; 
                                                 if(e.currentTarget.checked === false){
@@ -99,13 +109,10 @@ const EditModal = ({...props}) => {
    
 
     const SendSelected = () => {
-        if(!selected.brand || !selected.sku){
-            console.log("Missing SKU or Brand");
-            return false;
-        }
-        // socket.emit("add_Item", selected, (result) => {
-        //     console.log("Result: " + JSON.stringify(result));
-        // });
+        console.log(selected);
+        socket.emit("update_item", {updated:selected, key:props.editProduct.key}, (result) => {
+            console.log("Result: " + JSON.stringify(result));
+        });
     }
 
     return (
@@ -117,7 +124,7 @@ const EditModal = ({...props}) => {
                     <div className='OptionsContainer' style={{overflow:"scroll"}}>
                         {RenderOptions()}
                     </div>
-                    <button className='ButtonHoverEffect SubmitButton' onClick={(e)=>{SendSelected()}}>Submit</button>
+                    <button className='ButtonHoverEffect SubmitButton' onClick={(e)=>{console.log(selected); SendSelected();}}>Submit</button>
                 </div>
             </div>
         </React.Fragment>
