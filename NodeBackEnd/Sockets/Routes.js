@@ -53,6 +53,18 @@ function RoutesInit(){
     app.get("/ItemData", (req, res) => {
         res.json(Classes.Sable.ItemData);
     });
+
+    app.post("/SpecificItemType", (req, res) => {
+        let ItemData;
+        Classes.Sable.ItemData.forEach((element, i) => {
+            if(element.ItemType === req.body.type){
+                ItemData = element;
+            }
+        })
+        console.log(ItemData);
+        res.json(ItemData);
+    });
+
     app.get("/Brands", (req, res) => {
         res.json(Classes.Sable.Brands);
     });

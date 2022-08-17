@@ -11,7 +11,7 @@ class Login {
     constructor(DbController) {
         this.db_Name = "Login";
         this.c_DbController = DbController; //TODO need to make this more dynamic (Probably auto propogate the ReponseHandler Object)
-        this.c_DbController.createTable(this.db_Name, "Login", "username TEXT NOT NULL, password TEXT NOT NULL, permission TEXT NOT NULL, \
+        this.c_DbController.createTable(this.db_Name, "username TEXT NOT NULL, password TEXT NOT NULL, permission TEXT NOT NULL, \
                                                         Warehouse INTEGER NOT NULL, Sable INTEGER NOT NULL, Diplomat INTEGER NOT NULL, RDI INTEGER NOT NULL");
         this.Permission = {
             Low: 1,

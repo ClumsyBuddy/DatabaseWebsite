@@ -11,20 +11,8 @@ class DatabaseManager {
         this.DatabaseConnection = db; //Connection to the Database class itself    
     }
     // name is the name of the DbStorage Object we would like to use.
-    createTable(name, _Table, Columns) {
-        var _length = Columns.split(",").length; //Get the number of columns by getting how many comma separations their are
-        var QuestionMarkArray = '';
-        for (var i = 0; i < _length; i++) { //Build a string with the Question marks
-            QuestionMarkArray += ", ?"; //Add the Question marks
-        }
-        this.DbStorage = Object.assign(Object.assign({}, this.DbStorage), {
-            [name]: {
-                Table: _Table,
-                Columns: Columns,
-                QuestionMarkArray: QuestionMarkArray
-            }
-        });
-        const sql = `CREATE TABLE IF NOT EXISTS ${this.DbStorage[name].Table} (key INTEGER PRIMARY KEY AUTOINCREMENT, ${this.DbStorage[name].Columns})`; //Create a Table with passed values
+    createTable(_Table, Columns) {
+        const sql = `CREATE TABLE IF NOT EXISTS ${_Table} (key INTEGER PRIMARY KEY AUTOINCREMENT, ${Columns})`; //Create a Table with passed values
         return this.DatabaseConnection.run(sql); //Pass sql to Database
     }
     getColumns(name) {
@@ -40,8 +28,8 @@ class DatabaseManager {
     create(name, columns, QuestionMark, params = []) {
         return this.DatabaseConnection.run(`INSERT INTO ${name} (${columns}) VALUES(${QuestionMark})`, params);
     }
-    update(name, itemName, newValue, key) {
-        return this.DatabaseConnection.run(`UPDATE ${this.DbStorage[name].Table} SET ${itemName} = ? WHERE key = ?`, [newValue, key]);
+    update(name, columns, newColumnValues, QuestionMark, key) {
+        return this.DatabaseConnection.run(`UPDATE ${name} SET ${columns} = ${QuestionMark} WHERE key = ?`, [newColumnValues, key]);
     }
     delete(name, key) {
         return this.DatabaseConnection.run(`DELETE FROM ${name} WHERE key = ?`, [key]);
@@ -50,7 +38,7 @@ class DatabaseManager {
         return this.DatabaseConnection.get(`SELECT * FROM ${name} WHERE key = ${id}`);
     }
     getByColumn(name, ColumnName, ColumnValue) {
-        return this.DatabaseConnection.get(`SELECT * FROM ${this.DbStorage[name].Table} WHERE ${ColumnName} = ?`, [ColumnValue]);
+        return this.DatabaseConnection.get(`SELECT * FROM ${name} WHERE ${ColumnName} = ?`, [ColumnValue]);
     }
     getAll(name) {
         return this.DatabaseConnection.all(`SELECT * FROM ${name}`);

@@ -140,10 +140,16 @@ class ResponseHandler {
             keys.forEach((value, i) => {
                 if (typeof ItemObject[value] === "string") {
                     Columns += value;
-                    Col_Values.push(ItemObject[value].replace(",", "").replace(" ", ""));
+                    if (ItemObject[value][ItemObject[value].length - 1] === ",") {
+                        ItemObject[value] = ItemObject[value].slice(0, ItemObject[value].length - 1);
+                    }
+                    Col_Values.push(ItemObject[value].replace(" ", ""));
                 }
                 else {
                     Columns += value.toString();
+                    if (ItemObject[value][ItemObject[value].length - 1] === ",") {
+                        ItemObject[value] = ItemObject[value].slice(0, ItemObject[value].length - 1);
+                    }
                     Col_Values.push(ItemObject[value].toString());
                 }
                 if (i !== keys.length - 1) {

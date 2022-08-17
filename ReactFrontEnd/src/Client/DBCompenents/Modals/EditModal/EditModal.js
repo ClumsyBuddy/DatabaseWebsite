@@ -10,108 +10,97 @@ const EditModal = ({...props}) => {
 
 
     const [ItemData, setItemData] = useState([]);
-    const [ChosenType, setChosenType] = useState("");
-    const [Brands, setBrands] = useState([]);
     const [selected, setSelected] = useState({});
 
     const mounted = useRef(false);
 
     useEffect(()=>{
         const FetchItemData = () => {
-            fetch("/ItemData", {
-                method:"GET",
+            fetch("/SpecificItemType", {
+                method:"POST",
                 headers: {"Content-Type": "application/JSON"},
+                body: JSON.stringify({type:props.editProduct.itemtype}),
               })
               .then(res => {
                 return res.json();
               })
               .then(data => {
-                setItemData(data);
+                console.log(data);
+                const AllOptions = data.Options;
+                let Options = {};
+                AllOptions.forEach(element => {
+                    Object.assign(Options, element);
+                });
+                setItemData(Options);
+                console.log(props.editProduct);
               });
         }
-        const FetchBrands = () => {
-            fetch("/Brands", {
-                method:"GET",
-                headers: {"Content-Type": "application/JSON"},
-              })
-              .then(res => {
-                return res.json();
-              })
-              .then(data => {
-                setBrands(data);
-              });
-        }
+        
 
         if(!mounted.current){
             FetchItemData();
-            FetchBrands();
+            console.log(props.editProduct.key);
         }
         mounted.current = true;
     }, []);
 
-    //TODO Should Probably break up this unreadable blob of code. This does way to much
-    // I should also initialize all of the Options and  values to false on startup.
-    const RenderType = ItemData.map((item) => <button className='ButtonHoverEffect ItemTypeButton' onClick={(e)=>{setChosenType(item.ItemType);}}>{item.ItemType.replace(/_/g, " ")}</button>);          
-    const RenderOptions = ItemData.map((item) => {
-        if(item.ItemType === ChosenType){
-            return (<div className='OList' style={{width:"50vw", height:"55vh", overflow:"scroll"}}>
-                <label>{ChosenType.replace(/_/g, " ")}</label>
-                <textarea placeholder='Enter SKU' style={{resize:"none"}} cols={20} rows={1} onChange={(e)=>{let _new = selected; _new.sku = e.currentTarget.value; setSelected(_new);}}></textarea>
-                <select onChange={(e)=>{let _new = selected; _new.brand = e.currentTarget.value; setSelected(_new);}}>
-                    {Brands.map((brand, i) => {return(<option>{brand}</option>)})}
-                </select>
-                <div style={{width:"100%", height:"auto", display:"flex", 
-                            flexDirection:"row", justifyContent:"center", 
-                            flexFlow:"wrap", overflow:"hidden"}}>{
-                item.Options.length !== 0 ? item.Options.map((option) => {
-                    let optionName = Object.keys(option)[0];
-                    return (<div style={{width:"20%", borderStyle:"solid", borderColor:"black", margin:"1%", borderRadius:"10px", padding:"10px", 
-                                        display:"block", fontSize:"20px"}}>
-                        <label>{Object.keys(option)[0].replace(/_/g, " ")}: </label>
-                        {
-                            option[optionName].map((element, i) => {
-                                if(element === "" || element === true || element === false){
-                                    return (<> {element === "" ? <label style={{textDecoration:"underline"}}>textbox</label> : <></>}
-                                    <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e) => {let _new = selected; _new[optionName] = e.currentTarget.checked; setSelected(_new); console.log(selected); }}></input> </>
-                                    );
-                                }
-                                return ( <>
-                                    <label>{element}</label>
-                                    <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e)=>{
-                                        let _new = selected; 
-                                        if(e.currentTarget.checked === false){
-                                            let toReplace = element + ",";
-                                            console.log(toReplace);
-                                            _new[optionName] = _new[optionName].replace(toReplace, "");
-                                        }else{
-                                            console.log(element);
-                                            if(_new[optionName] === undefined){
-                                                _new[optionName] = element + ",";
-                                            }else{
-                                                _new[optionName] += element + ',';
-                                            }
-                                        }
-                                        console.log(_new);
-                                        setSelected(_new);
-                                        }}></input> 
-                                </>);
-                            })
-                        }
-                    </div>);
-                }) : <p>Item Has No Options</p> 
-            }</div></div>);
-        }
-        return (<></>);
-    })
+    
+    // const RenderOptions = ItemData.map((item) => {
 
+    //     return (<div className='OList' style={{width:"50vw", height:"55vh", overflow:"scroll"}}>
+    //         <label>{props.editProduct.sku}</label>
+    //         <label>
+    //             {props.editProduct.itemtype}
+    //         </label>
+    //         <div style={{width:"100%", height:"auto", display:"flex", 
+    //             flexDirection:"row", justifyContent:"center", 
+    //             flexFlow:"wrap", overflow:"hidden"}}>
+    //         {
+    //             item.Options.length !== 0 ? item.Options.map((option) => 
+    //             {
+    //                 let optionName = Object.keys(option)[0];
+    //                 return (<div style={{width:"20%", borderStyle:"solid", borderColor:"black", margin:"1%", borderRadius:"10px", padding:"10px", 
+    //                         display:"block", fontSize:"20px"}}>
+    //                         <label>{Object.keys(option)[0].replace(/_/g, " ")}: </label>
+    //                         {
+    //                             option[optionName].map((element, i) => 
+    //                             {
+    //                                 if(element === "" || element === true || element === false){
+    //                                     return (<> {element === "" ? <label style={{textDecoration:"underline"}}>textbox</label> : <></>}
+    //                                     <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e) => {let _new = selected; _new[optionName] = e.currentTarget.checked; setSelected(_new); console.log(selected); }}></input> </>
+    //                                     );
+    //                                 }
+    //                                 return ( <>
+    //                                     <label>{element}</label>
+    //                                     <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e)=>
+    //                                     {
+    //                                         let _new = selected; 
+    //                                         if(e.currentTarget.checked === false){
+    //                                             let toReplace = element + ",";
+    //                                             console.log(toReplace);
+    //                                             _new[optionName] = _new[optionName].replace(toReplace, "");
+    //                                         }else{
+    //                                             console.log(element);
+    //                                             if(_new[optionName] === undefined){
+    //                                                 _new[optionName] = element + ",";
+    //                                             }else{
+    //                                                 _new[optionName] += element + ',';
+    //                                             }
+    //                                         }
+    //                                         console.log(_new);
+    //                                         setSelected(_new);
+    //                                     }}></input> 
+    //                                 </>);
+    //                             })
+    //                         }
+    //             </div>);
+    //         }) : <p>Item Has No Options</p> 
+    //     }</div></div>);
+    
+        
+    // })
 
-    const ReturnRender = () =>{
-        if(!ChosenType){
-            return(RenderType.length === 0 ? <div>Loading...</div> : RenderType);
-        }else{
-            return(RenderOptions.length === 0 ? <div>Loading...</div> : RenderOptions);
-        }
-    }
+   
 
     const SendSelected = () => {
         if(!selected.brand || !selected.sku){
@@ -128,9 +117,9 @@ const EditModal = ({...props}) => {
             <div id='Overlay' className='Overlay'>
                 <button className='CloseButton' onClick={(e)=>{props.flipOpen(false); console.log(props); setSelected({});}}>&times;</button>
                 <div id='Container' className='Container'>
-                    <h1>Add Modal</h1>
+                    <h1>Edit Modal</h1>
                     <div className='OptionsContainer' style={{overflow:"scroll"}}>
-                        {ReturnRender()}
+                        
                     </div>
                     <button className='ButtonHoverEffect SubmitButton' onClick={(e)=>{SendSelected()}}>Submit</button>
                 </div>

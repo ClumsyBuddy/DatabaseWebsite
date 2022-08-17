@@ -10,26 +10,12 @@
 class DatabaseManager {
   DatabaseConnection: any;
   KeyCounter:number;
-  DbStorage:object;
     constructor(db) {
       this.DatabaseConnection = db //Connection to the Database class itself    
     }
     // name is the name of the DbStorage Object we would like to use.
-    createTable(name: string, _Table:string, Columns:string) {
-      var _length = Columns.split(",").length; //Get the number of columns by getting how many comma separations their are
-      var QuestionMarkArray = '';
-      for(var i = 0; i < _length; i++){ //Build a string with the Question marks
-        QuestionMarkArray += ", ?"; //Add the Question marks
-      }
-      this.DbStorage = {...this.DbStorage, ...{ //This is a weird way to achieve this dynamically DbStorage = {"Sable":{Table:_Table, Columns:Columns, QuestionMark:QuestionMark}}
-          [name]:{
-          Table:_Table,
-          Columns:Columns,
-          QuestionMarkArray:QuestionMarkArray
-        }
-      }};
-
-      const sql = `CREATE TABLE IF NOT EXISTS ${this.DbStorage[name].Table} (key INTEGER PRIMARY KEY AUTOINCREMENT, ${this.DbStorage[name].Columns})` //Create a Table with passed values
+    createTable(_Table:string, Columns:string) {
+      const sql = `CREATE TABLE IF NOT EXISTS ${_Table} (key INTEGER PRIMARY KEY AUTOINCREMENT, ${Columns})` //Create a Table with passed values
       return this.DatabaseConnection.run(sql)//Pass sql to Database
     }
 
@@ -49,10 +35,10 @@ class DatabaseManager {
         return this.DatabaseConnection.run( `INSERT INTO ${name} (${columns}) VALUES(${QuestionMark})`, params);
       }
 
-    update(name:string, itemName:string, newValue: any, key:number) { //update a element using the Name of the Column item and the key of the item.
+    update(name:string, columns:string, newColumnValues: any, QuestionMark:string,  key:number) { //update a element using the Name of the Column item and the key of the item.
       return this.DatabaseConnection.run(
-        `UPDATE ${this.DbStorage[name].Table} SET ${itemName} = ? WHERE key = ?`,
-        [newValue, key]
+        `UPDATE ${name} SET ${columns} = ${QuestionMark} WHERE key = ?`,
+        [newColumnValues, key]
       )
     }
 
@@ -68,7 +54,7 @@ class DatabaseManager {
     }
 
     getByColumn(name:string, ColumnName:string, ColumnValue:any) { //Find a specfic item using the name of the column and the value you are looking for
-          return this.DatabaseConnection.get(`SELECT * FROM ${this.DbStorage[name].Table} WHERE ${ColumnName} = ?`,
+          return this.DatabaseConnection.get(`SELECT * FROM ${name} WHERE ${ColumnName} = ?`,
               [ColumnValue]);
     }
 

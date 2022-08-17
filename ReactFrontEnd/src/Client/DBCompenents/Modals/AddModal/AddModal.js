@@ -51,7 +51,9 @@ const AddModal = ({...props}) => {
 
     //TODO Should Probably break up this unreadable blob of code. This does way to much
     // I should also initialize all of the Options and  values to false on startup.
-    const RenderType = ItemData.map((item) => <button className='ButtonHoverEffect ItemTypeButton' onClick={(e)=>{setChosenType(item.ItemType);}}>{item.ItemType.replace(/_/g, " ")}</button>);          
+    const RenderType = ItemData.map((item) => <button className='ButtonHoverEffect ItemTypeButton' onClick={(e)=>{setChosenType(item.ItemType);
+        let _new = selected; _new.itemtype = item.ItemType; setSelected(_new);
+    } }>{item.ItemType.replace(/_/g, " ")}</button>);          
     const RenderOptions = ItemData.map((item) => {
         if(item.ItemType === ChosenType){
             return (<div className='OList' style={{width:"50vw", height:"55vh", overflow:"scroll"}}>
