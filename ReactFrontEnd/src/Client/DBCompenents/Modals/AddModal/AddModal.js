@@ -39,7 +39,7 @@ const AddModal = ({...props}) => {
             
         }
         mounted.current = true;
-    }, []);
+    }, [selected]);
 
     //TODO Should Probably break up this unreadable blob of code. This does way to much
     // I should also initialize all of the Options and  values to false on startup.
@@ -114,7 +114,7 @@ const AddModal = ({...props}) => {
         }
         socket.emit("add_Item", selected, (result) => {
             console.log("Result: " + JSON.stringify(result));
-            props.setIsOpen(false);
+            //Need to show something that lets user know its been updated with the item
         });
     }
 
