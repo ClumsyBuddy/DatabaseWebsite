@@ -142,6 +142,7 @@ const EditModal = ({...props}) => {
         socket.emit("update_item", {updated:selected, key:props.editProduct.key}, (result) => {
             console.log("Result: " + JSON.stringify(result));
         });
+        props.flipOpen(false);
     }
 
     return (

@@ -34,6 +34,7 @@ const ProductList = ({...props}) =>{
     const [isOpen, setIsOpen] = useState(false);
     const [editProductSelect, editProductSet] = useState(NaN);
 
+    const [reRender, setReRender] = useState(false);
 
     const fetchData = () =>{
         fetch("/ProductList", {
@@ -93,8 +94,11 @@ const ProductList = ({...props}) =>{
 
 
     const AddItem = useCallback((item) => {
+        console.log("Add Item");
         ProductList.push(item);
-    }, [ProductList]);
+        setProductList(ProductList);
+        setReRender(!reRender);
+    }, [ProductList, reRender]);
     
     if(!mounted.current){ //All pre render task go here
         fetchData();

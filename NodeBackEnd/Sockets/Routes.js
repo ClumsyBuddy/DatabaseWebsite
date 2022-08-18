@@ -51,8 +51,9 @@ function RoutesInit(){
     
     //Router for getting all get and post request on '/' which is index
     app.get("/ItemData", (req, res) => {
-        res.json(Classes.Sable.ItemData);
+        res.json({ItemData:Classes.Sable.ItemData, Brand:Classes.Sable.Brands});
     });
+
 
     app.post("/SpecificItemType", (req, res) => {
         let ItemData;
@@ -64,9 +65,7 @@ function RoutesInit(){
         res.json(ItemData);
     });
 
-    app.get("/Brands", (req, res) => {
-        res.json(Classes.Sable.Brands);
-    });
+    
 
     app.get("/ProductList", async (req, res) => {
         const ProductList = await Classes.Sable.GetAllProducts("Sable");

@@ -26,25 +26,17 @@ const AddModal = ({...props}) => {
                 return res.json();
               })
               .then(data => {
-                setItemData(data);
-              });
-        }
-        const FetchBrands = () => {
-            fetch("/Brands", {
-                method:"GET",
-                headers: {"Content-Type": "application/JSON"},
-              })
-              .then(res => {
-                return res.json();
-              })
-              .then(data => {
-                setBrands(data);
-              });
+                setItemData(data.ItemData);
+                setBrands(data.Brand);
+                let _new = selected;
+                _new.brand = data.Brand[0];
+                setSelected(_new);
+            });
         }
 
         if(!mounted.current){
             FetchItemData();
-            FetchBrands();
+            
         }
         mounted.current = true;
     }, []);
@@ -122,6 +114,7 @@ const AddModal = ({...props}) => {
         }
         socket.emit("add_Item", selected, (result) => {
             console.log("Result: " + JSON.stringify(result));
+            props.setIsOpen(false);
         });
     }
 
