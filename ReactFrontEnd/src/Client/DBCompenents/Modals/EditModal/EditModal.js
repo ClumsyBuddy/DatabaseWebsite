@@ -33,16 +33,18 @@ const EditModal = ({...props}) => {
 
         if(!mounted.current){
             FetchItemData();
-            //console.log(props.editProduct);
+            //console.log(props.editProduct["Color"]);
             const keys = Object.keys(props.editProduct);
+            var _new = {};
             //console.log(keys);
             for(let i = 0; i < keys.length; i++){
                 if(props.editProduct[keys[i]] === null || keys[i] === "sku" || keys[i] === 'brand' || 
-                    keys[i] === "key" || typeof props.editProduct[keys[i]] !== "string" || !props.editProduct[keys[i]].includes(",")){
+                    keys[i] === "key" || typeof props.editProduct[keys[i]] !== "string" || keys[i] === "itemtype"){
                     continue;
                 }
-                var _new = {};
+                // console.log(props.editProduct[keys[i]]);
                 _new[keys[i]] = props.editProduct[keys[i]] + ",";
+                // console.log(_new);
             }
             if(_new){
                 setSelected(_new);                
@@ -52,17 +54,18 @@ const EditModal = ({...props}) => {
     }, []);
 
     
-    const SetChecked = (optionName, element) => {
+    const SetChecked = (optionName, _element) => {
         const Products = props.editProduct;
+        const element = _element.toString();
         //console.log(Products[optionName].split(","), element);
-        if(Products[optionName] === null || Products[optionName].toString() === "0"){
+        if(Products[optionName] === null || Products[optionName] === "0"){
             return false;
         }
 
         if(typeof Products[optionName] === "string" && Products[optionName].includes(",") && Products[optionName].split(",").length > 1){
             for(let i = 0; i < Products[optionName].split(",").length; i++){
                 //console.log(element.toString(), Products[optionName].split(",")[i]);
-                if(Products[optionName].split(",")[i] === element.toString()){
+                if(Products[optionName].split(",")[i] === element){
                     return true;
                 }
             }
@@ -113,8 +116,9 @@ const EditModal = ({...props}) => {
                                             className='ButtonHoverEffect ItemTypeButton' onChange={(e)=>
                                             {
                                                 let _new = selected; 
+                                                console.log(element, _new);
                                                 if(e.currentTarget.checked === false){
-                                                    let toReplace = element + ",";
+                                                    let toReplace = element;
                                                     _new[optionName] = _new[optionName].replace(toReplace, "");
                                                 }else{
                                                     if(_new[optionName] === undefined){
