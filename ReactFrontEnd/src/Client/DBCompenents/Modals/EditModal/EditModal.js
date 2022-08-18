@@ -33,6 +33,20 @@ const EditModal = ({...props}) => {
 
         if(!mounted.current){
             FetchItemData();
+            //console.log(props.editProduct);
+            const keys = Object.keys(props.editProduct);
+            //console.log(keys);
+            for(let i = 0; i < keys.length; i++){
+                if(props.editProduct[keys[i]] === null || keys[i] === "sku" || keys[i] === 'brand' || 
+                    keys[i] === "key" || typeof props.editProduct[keys[i]] !== "string" || !props.editProduct[keys[i]].includes(",")){
+                    continue;
+                }
+                var _new = {};
+                _new[keys[i]] = props.editProduct[keys[i]] + ",";
+            }
+            if(_new){
+                setSelected(_new);                
+            }
         }
         mounted.current = true;
     }, []);
@@ -40,12 +54,27 @@ const EditModal = ({...props}) => {
     
     const SetChecked = (optionName, element) => {
         const Products = props.editProduct;
-        if(Products[optionName] === null || Products[optionName] === "0" || Products[optionName] === 0){
+        //console.log(Products[optionName].split(","), element);
+        if(Products[optionName] === null || Products[optionName].toString() === "0"){
             return false;
         }
-        if(Products[optionName] === true || Products[optionName] === "true" || Products[optionName] === "1" || Products[optionName] === 1 || Products[optionName].includes(element)){
+
+        if(typeof Products[optionName] === "string" && Products[optionName].includes(",") && Products[optionName].split(",").length > 1){
+            for(let i = 0; i < Products[optionName].split(",").length; i++){
+                //console.log(element.toString(), Products[optionName].split(",")[i]);
+                if(Products[optionName].split(",")[i] === element.toString()){
+                    return true;
+                }
+            }
+        }
+
+        if(
+            Products[optionName] === true || Products[optionName] === "true" || 
+            Products[optionName].toString() === "1" || Products[optionName] === element
+        ){
             return true;
         }
+
         return false;
     }
 

@@ -79,7 +79,11 @@ function on_connection(socket){
     });
 
     socket.on("update_item", async (itemToUpdate) => {
-        console.log(itemToUpdate)
+        console.log(itemToUpdate);
+        if(!itemToUpdate.updated){
+            console.log("ERROR NO ITEMS: update_item");
+            return;
+        }
         const ValuesToUpdate = Object.keys(itemToUpdate.updated);
         let options_Values = [];
         ValuesToUpdate.forEach((val) => {
