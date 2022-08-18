@@ -52,6 +52,7 @@ const ProductList = ({...props}) =>{
     const NewItemUpdate = useCallback((item) => {
         for(let i =0; i < ProductList.length; i++){
             if(ProductList[i].key === item.key){
+                console.log(ProductList, item);
                 ProductList[i] = item;
                 setProductList(ProductList);
             }
@@ -151,7 +152,7 @@ const ProductList = ({...props}) =>{
         socket.on("disconnect", () => {setIsConnected(false)});
         socket.on("delete_item_client", (msg)=>{DeleteItem(Number(msg.key), true);});
         socket.on("new_Item_Added", (item) => {AddItem(item)})
-        socket.on("client_updated_item", (updatedItem) =>{ NewItemUpdate(updatedItem); })
+        socket.on("client_updated_item", (updatedItem) =>{ NewItemUpdate(updatedItem);})
 
         return () => {
             socket.off("connect");

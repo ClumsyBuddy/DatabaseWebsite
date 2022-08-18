@@ -91,6 +91,9 @@ function on_connection(socket){
                 if(itemToUpdate.updated[val][itemToUpdate.updated[val].length-1] === ","){
                     itemToUpdate.updated[val] = itemToUpdate.updated[val].slice(0, itemToUpdate.updated[val].length-1);
                 }
+                if(itemToUpdate.updated[val][0] === ","){
+                    itemToUpdate.updated[val] = itemToUpdate.updated[val].substring(1);
+                }
                 options_Values.push(itemToUpdate.updated[val]);
             }else{
                 options_Values.push(itemToUpdate.updated[val]);
@@ -99,7 +102,7 @@ function on_connection(socket){
         const ItemKey = itemToUpdate.key;
 
         Classes.Sable.UpdateItem(ValuesToUpdate, options_Values, ItemKey).then((result) => {
-            socket.emit("client_updated_item", result);
+            io.emit("client_updated_item", result);
         });
 
 

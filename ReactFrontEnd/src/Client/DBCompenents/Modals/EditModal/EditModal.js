@@ -114,7 +114,8 @@ const EditModal = ({...props}) => {
                                                 console.log(element, _new);
                                                 if(e.currentTarget.checked === false){
                                                     let toReplace = element;
-                                                    _new[optionName] = _new[optionName].replace(toReplace, "");
+                                                    _new[optionName] = _new[optionName].replace(toReplace + ",", "");
+                                                    
                                                 }else{
                                                     if(_new[optionName] === undefined){
                                                         _new[optionName] = element + ",";
