@@ -33,67 +33,62 @@ const EditModal = ({...props}) => {
 
         if(!mounted.current){
             FetchItemData();
-            //console.log(props.editProduct["Color"]);
             const keys = Object.keys(props.editProduct);
             var _new = {};
-            //console.log(keys);
-            for(let i = 0; i < keys.length; i++){
+            for(let i = 0; i < keys.length; i++){ //This sets the selected options on startup.
                 if(props.editProduct[keys[i]] === null || keys[i] === "sku" || keys[i] === 'brand' || 
                     keys[i] === "key" || typeof props.editProduct[keys[i]] !== "string" || keys[i] === "itemtype"){
                     continue;
                 }
-                // console.log(props.editProduct[keys[i]]);
                 _new[keys[i]] = props.editProduct[keys[i]] + ",";
-                // console.log(_new);
             }
             if(_new){
                 setSelected(_new);                
             }
         }
         mounted.current = true;
-    }, []);
+    }, [props.editProduct]);
 
-    
+    /*
+    *   This function checks if the item shoud be checked on startup based off a few patterns
+    */
     const SetChecked = (optionName, _element) => {
         const Products = props.editProduct;
         const element = _element.toString();
-        //console.log(Products[optionName].split(","), element);
-        if(Products[optionName] === null || Products[optionName] === "0"){
+        if(Products[optionName] === null || Products[optionName] === "0"){ //If its null or 0 then return false (Aka not checked)
             return false;
         }
 
-        if(typeof Products[optionName] === "string" && Products[optionName].includes(",") && Products[optionName].split(",").length > 1){
+        if(typeof Products[optionName] === "string" && Products[optionName].includes(",") && Products[optionName].split(",").length > 1){ //if its a string with multiple options
             for(let i = 0; i < Products[optionName].split(",").length; i++){
-                //console.log(element.toString(), Products[optionName].split(",")[i]);
                 if(Products[optionName].split(",")[i] === element){
                     return true;
                 }
             }
         }
-
-        if(
+        if( //If its true or just plain equal return true
             Products[optionName] === true || Products[optionName] === "true" || 
             Products[optionName].toString() === "1" || Products[optionName] === element
         ){
             return true;
         }
 
-        return false;
+        return false; //All other cases return false
     }
 
     const RenderOptions = () => {
         return (
             <div className='OList' style={{width:"50vw", height:"55vh", overflow:"scroll"}}>
             <label>
-                {props.editProduct.itemtype}
+                ItemType: {props.editProduct.itemtype}
             </label>
-            <br></br>
-            <label>{props.editProduct.sku.replace(/_/g, " ")}</label>
-            <label>{props.editProduct.brand}</label>
+            <label style={{margin:"20px"}}>SKU: {props.editProduct.sku.replace(/_/g, " ")}</label>
+            <label>Brand: {props.editProduct.brand}</label>
             
             <div style={{width:"100%", height:"auto", display:"flex", 
                 flexDirection:"row", justifyContent:"center", flexFlow:"wrap", overflow:"hidden"}}>
             {
+                !ItemData.length ? <div style={{color:"white"}}>Loading...</div> :
                 ItemData.map((option) => 
                 {
                     let optionName = Object.keys(option)[0];
@@ -112,7 +107,7 @@ const EditModal = ({...props}) => {
                                         }
                                         return <>
                                             <label>{element}</label>
-                                            <input type={"checkbox"} defaultChecked={SetChecked(optionName, element)} 
+                                            <input type={"checkbox"} defaultChecked={SetChecked(optionName, element)}
                                             className='ButtonHoverEffect ItemTypeButton' onChange={(e)=>
                                             {
                                                 let _new = selected; 
@@ -128,7 +123,8 @@ const EditModal = ({...props}) => {
                                                     }
                                                 }
                                                 setSelected(_new);
-                                            }}></input> 
+                                            }
+                                            }></input> 
                                         </>;
                                     })
                                 }
@@ -142,7 +138,6 @@ const EditModal = ({...props}) => {
    
 
     const SendSelected = () => {
-        console.log(selected);
         socket.emit("update_item", {updated:selected, key:props.editProduct.key}, (result) => {
             console.log("Result: " + JSON.stringify(result));
         });
