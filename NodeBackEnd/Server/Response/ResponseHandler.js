@@ -164,8 +164,6 @@ class ResponseHandler {
                     Columns += ","; //If we are not at the end add a comma between each column
                 }
             });
-            console.log("Columns: " + Columns);
-            console.log("Column Values: ", Col_Values);
             let id = yield this.DBController.create("Sable", Columns, QuestionMarkString, Col_Values); //Create the item and return the id (aka the key)
             return { id: id.id, ItemAlreadyExist: false }; //return the id and that the item didnt exist
         });

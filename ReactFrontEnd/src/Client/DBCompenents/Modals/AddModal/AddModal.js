@@ -55,12 +55,13 @@ const AddModal = ({...props}) => {
                     {Brands.map((brand, i) => {return(<option>{brand}</option>)})}
                 </select>
                 <div style={{width:"100%", height:"auto", display:"flex", 
-                            flexDirection:"row", justifyContent:"center", 
-                            flexFlow:"wrap", overflow:"hidden"}}>{
-                item.Options.length !== 0 ? item.Options.map((option) => {
-                    let optionName = Object.keys(option)[0];
-                    return (<div style={{width:"20%", borderStyle:"solid", borderColor:"black", margin:"1%", borderRadius:"10px", padding:"10px", 
-                                        display:"block", fontSize:"20px"}}>
+                    flexDirection:"row", justifyContent:"center", 
+                    flexFlow:"wrap", overflow:"hidden"}}>
+                    {
+                        item.Options.length !== 0 ? item.Options.map((option) => {
+                        let optionName = Object.keys(option)[0];
+                        return (<div style={{width:"20%", borderStyle:"solid", borderColor:"black", margin:"1%", borderRadius:"10px", padding:"10px", 
+                            display:"block", fontSize:"20px"}}>
                         <label>{Object.keys(option)[0].replace(/_/g, " ")}: </label>
                         {
                             option[optionName].map((element, i) => {
@@ -75,17 +76,14 @@ const AddModal = ({...props}) => {
                                         let _new = selected; 
                                         if(e.currentTarget.checked === false){
                                             let toReplace = element + ",";
-                                            console.log(toReplace);
                                             _new[optionName] = _new[optionName].replace(toReplace, "");
                                         }else{
-                                            console.log(element);
                                             if(_new[optionName] === undefined){
                                                 _new[optionName] = element + ",";
                                             }else{
                                                 _new[optionName] += element + ',';
                                             }
                                         }
-                                        console.log(_new);
                                         setSelected(_new);
                                         }}></input> 
                                 </>);
