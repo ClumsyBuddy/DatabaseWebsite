@@ -88,9 +88,8 @@ import sqlite3 from "sqlite3";
 
 import {Database} from "../Server/Database/Database.js";
 import {DatabaseManager} from "../Server/Database/DatabaseManager.js";
-import { SableResponseHandler } from "../Server/DBClasses/Sable/SableResponseHandler.js";
-import {DiploResponseHandler} from "../Server/DBClasses/Diplomat/DiploResponseHandler.js";
 import {Login} from "../Server/DBClasses/Login/LoginHandler.js";
+import { ResponseHandler } from "../Server/Response/ResponseHandler.js";
 
 //Create variables for exported Classes
 const db = new Database("./Main.db");
@@ -99,15 +98,23 @@ const MainDB = new DatabaseManager(db);
 //Login Manager
 const UserLogin = new Login(MainDB);
 
-const Sable = new SableResponseHandler(MainDB, UserLogin, "Sable", io);
-const Diplo = new DiploResponseHandler(MainDB, UserLogin, io);
+const ReponseHandler = new ResponseHandler(
+  MainDB, 
+  {
+    Sable:{
+        ClassAutoColumn:"sku TEXT, brand TEXT, itemtype TEXT, image TEXT",
+        CACIndex:3,
+        DBController:MainDB
+    }
+  }
+);
+
 
 var Classes = {
     db:db,
     MainDB:MainDB,
     UserLogin:UserLogin,
-    Sable:Sable,
-    Diplo:Diplo,
+    ReponseHandler:ReponseHandler
 }
 
 export {

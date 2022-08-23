@@ -22,7 +22,7 @@ function on_connection(socket){
         })
     })
     socket.on("delete_item_server", async (msg, callback) => {
-        let status = await Classes.Sable.DeleteItem("Sable", Number(msg.key))
+        let status = await Classes.ReponseHandler.DeleteItem("Sable", Number(msg.key))
         if(!status){
             callback({
                 status: "failed",
@@ -66,7 +66,7 @@ function on_connection(socket){
                 new_Item_Object[value] = new_item[value];
             }
         })
-        Classes.Sable.AddItem(new_Item_Object).then(async (result) => {
+        Classes.ReponseHandler.AddItem(new_Item_Object).then(async (result) => {
             if(result.ItemAlreadyExist){ //If the item already exist then we can skip to the next one
                 return;
             }
@@ -74,7 +74,7 @@ function on_connection(socket){
                 status:"success",
                 msg:"Added Item Successfully"
             })
-            io.emit("new_Item_Added", await Classes.Sable.GetItemById("Sable", result.id)); //Emit the new item to all clients
+            io.emit("new_Item_Added", await Classes.ReponseHandler.GetItemById("Sable", result.id)); //Emit the new item to all clients
         });
     });
 

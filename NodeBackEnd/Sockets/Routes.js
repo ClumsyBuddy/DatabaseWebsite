@@ -51,13 +51,14 @@ function RoutesInit(){
     
     //Router for getting all get and post request on '/' which is index
     app.get("/ItemData", (req, res) => {
-        res.json({ItemData:Classes.Sable.ItemData, Brand:Classes.Sable.Brands});
+        //console.log("Calling ItemData", Classes.ReponseHandler.ItemData("Sable"), Classes.ReponseHandler.getBrands("Sable"));
+        res.json({ItemData:Classes.ReponseHandler.ItemData("Sable"), Brand:Classes.ReponseHandler.getBrands("Sable")});
     });
 
 
     app.post("/SpecificItemType", (req, res) => {
         let ItemData;
-        Classes.Sable.ItemData.forEach((element, i) => {
+        Classes.ReponseHandler.ItemData("Sable").forEach((element, i) => {
             if(element.ItemType === req.body.type){
                 ItemData = element;
             }
@@ -68,7 +69,7 @@ function RoutesInit(){
     
 
     app.get("/ProductList", async (req, res) => {
-        const ProductList = await Classes.Sable.GetAllProducts("Sable");
+        const ProductList = await Classes.ReponseHandler.GetAllProducts("Sable");
         console.log(req.session.isLogin);
         res.json(ProductList);
     }); 
