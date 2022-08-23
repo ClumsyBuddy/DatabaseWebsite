@@ -78,12 +78,12 @@ class ResponseHandler extends Engine {
             });
         });
     }
-    UpdateItem(Columns, Values, key) {
+    UpdateItem(Columns, Values, key, Name) {
         return __awaiter(this, void 0, void 0, function* () {
             for (let i = 0; i < Columns.length; i++) {
-                yield this.DBController.update("Sable", Columns[i], Values[i], key);
+                yield this.DBController.update(Name, Columns[i], Values[i], key);
             }
-            return yield this.GetItemById("Sable", key);
+            return yield this.GetItemById(Name, key);
         });
     }
     AddItem(ItemObject = {}, name) {

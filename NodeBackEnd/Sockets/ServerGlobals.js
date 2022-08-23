@@ -105,6 +105,11 @@ const ReponseHandler = new ResponseHandler(
         ClassAutoColumn:"sku TEXT, brand TEXT, itemtype TEXT, image TEXT",
         CACIndex:3,
         DBController:MainDB
+    },
+    Diplomat:{
+      ClassAutoColumn:"sku TEXT, brand TEXT, itemtype TEXT",
+      CACIndex:2,
+      DBController:MainDB
     }
   }
 );

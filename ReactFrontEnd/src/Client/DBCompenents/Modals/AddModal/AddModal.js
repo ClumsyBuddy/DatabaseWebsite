@@ -33,13 +33,22 @@ const AddModal = ({...props}) => {
                 setSelected(_new);
             });
         }
-
+        socket.on("AddConfigUpdated", response => {
+            console.log(response.NewData);
+            setItemData(response.NewData);
+        });
         if(!mounted.current){
             FetchItemData();
             
         }
         mounted.current = true;
-    }, [selected]);
+
+        return () => {
+            socket.off("AddConfigUpdated")
+        }
+
+
+    }, [selected, socket]);
 
     //TODO Should Probably break up this unreadable blob of code. This does way to much
     // I should also initialize all of the Options and  values to false on startup.
@@ -125,7 +134,7 @@ const AddModal = ({...props}) => {
                     <div className='OptionsContainer' style={{overflow:"scroll"}}>
                         {ReturnRender()}
                     </div>
-                    <button className='ButtonHoverEffect SubmitButton' onClick={(e)=>{SendSelected()}}>Submit</button>
+                    {!ChosenType ? <></> : <button className='ButtonHoverEffect SubmitButton' onClick={(e)=>{SendSelected()}}>Submit</button>}
                 </div>
             </div>
         </React.Fragment>

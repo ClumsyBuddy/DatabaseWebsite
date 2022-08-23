@@ -45,8 +45,8 @@ function on_connection(socket){
         fn({
             status:"ok",
             isLogin:Login
-        })
-    })
+        });
+    });
     socket.on("add_Item", (new_item, fn)=>{
         //Check if missing SKU or Brand, send response saying fail
         if(!new_item || !new_item.sku || !new_item.brand){
@@ -65,7 +65,7 @@ function on_connection(socket){
             if(new_item[value] !== false){ //We only add selected items that are true to the new object
                 new_Item_Object[value] = new_item[value];
             }
-        })
+        });
         Classes.ReponseHandler.AddItem(new_Item_Object).then(async (result) => {
             if(result.ItemAlreadyExist){ //If the item already exist then we can skip to the next one
                 return;
@@ -98,14 +98,14 @@ function on_connection(socket){
             }else{
                 options_Values.push(itemToUpdate.updated[val]);
             }
-        })
+        });
         const ItemKey = itemToUpdate.key;
 
-        Classes.Sable.UpdateItem(ValuesToUpdate, options_Values, ItemKey).then((result) => {
+        Classes.ReponseHandler.UpdateItem(ValuesToUpdate, options_Values, ItemKey, "Sable").then((result) => {
             io.emit("client_updated_item", result);
         });
 
 
-    })
+    });
 
 }

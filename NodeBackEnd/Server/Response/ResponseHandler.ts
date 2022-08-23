@@ -74,11 +74,11 @@ class  ResponseHandler extends Engine{
     }
 
 
-    async UpdateItem(Columns:Array<string>, Values:Array<string>, key:number){
+    async UpdateItem(Columns:Array<string>, Values:Array<string>, key:number, Name:string){
         for(let i = 0; i < Columns.length; i++){
-            await this.DBController.update("Sable", Columns[i], Values[i],  key);
+            await this.DBController.update(Name, Columns[i], Values[i],  key);
         }
-        return await this.GetItemById("Sable", key);
+        return await this.GetItemById(Name, key);
     }
 
     async AddItem(ItemObject: {[k:string]: any}={}, name:string){
