@@ -1,6 +1,6 @@
 .ListContainer{
     color: black;
-    border-color: white;
+    /* border-color: black; */
     border-style: solid;
 }
 .ListContainer::-webkit-scrollbar{
@@ -12,8 +12,8 @@
     color: white;
     text-align: center;
     border-radius: 10px;
-    border-color: white;
-    border-style: solid;
+    /* border-color: black; */
+    /* border-style: solid; */
     transition: transform 1.2s;
     transform: scale(1);
 }
@@ -30,7 +30,8 @@
 .InfoContainer{
     display: flex;
     flex-direction:column;
-    
+    height: 50%;
+    justify-content: end;
     
 }
 
@@ -45,17 +46,26 @@
     display: flex;
     justify-content: space-between;
     flex-direction: row;
+    margin-top: 15%;
+    height: 20%;
+    margin-left: 3%;
+    margin-right: 3%;
 }
 
+
+.EditButton, .DeleteButton{
+
+}
 
 button, .EditButton, .DeleteButton{
     background-color: #F65E00;
     color: black;
     font-weight: 700;
     font-size: medium;
-    border-color: white;
-    border-style: solid;
+    /* border-color: white; */
+    /* border-style: solid; */
     border-radius: 5px;
+    border: none;
 
 }
 

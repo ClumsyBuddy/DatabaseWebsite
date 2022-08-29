@@ -25,8 +25,8 @@
 }
 .TitleHeader{
     color:#F65E00;
-    text-shadow: 3px 1px black;
-    text-decoration: underline;
+    /* text-shadow: 3px 1px black; */
+    /* text-decoration: underline; */
     text-align: center;
     font-size: 70px;
     font-weight: 700;

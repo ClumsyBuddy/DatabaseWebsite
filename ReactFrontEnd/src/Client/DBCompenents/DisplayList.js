@@ -184,13 +184,13 @@ const ProductList = ({...props}) =>{
         marginBottom:RowMargin*2
     }}  className="">
         <div className="Item" style={{height:RowHeight*RowItemHeight}}>
-            <div className="EditAddContainer">
-                <button onClick={(e)=>{flipOpen(true); editProductSet(DisplayList[rowIndex*MaxColumn+columnIndex]);}} className="EditButton ButtonHoverEffect">Edit</button>
-                <button value={DisplayList[rowIndex*MaxColumn+columnIndex].key} onClick={(e)=>{DeleteItem(e.currentTarget.value);}} className="DeleteButton ButtonHoverEffect">Delete</button>
-            </div>
             <div className="InfoContainer">
                 <p className="InfoDisplay">SKU: {DisplayList[rowIndex*MaxColumn+columnIndex].sku}</p>
                 <p className="InfoDisplay">BRAND: {DisplayList[rowIndex*MaxColumn+columnIndex].brand}</p>
+            </div>
+            <div className="EditAddContainer">
+                <button onClick={(e)=>{flipOpen(true); editProductSet(DisplayList[rowIndex*MaxColumn+columnIndex]);}} className="EditButton ButtonHoverEffect">Edit</button>
+                <button value={DisplayList[rowIndex*MaxColumn+columnIndex].key} onClick={(e)=>{DeleteItem(e.currentTarget.value);}} className="DeleteButton ButtonHoverEffect">Delete</button>
             </div>
         </div>
     </div> 
