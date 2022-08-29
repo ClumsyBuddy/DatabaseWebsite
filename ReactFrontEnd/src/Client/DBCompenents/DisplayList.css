@@ -30,7 +30,7 @@
 .InfoContainer{
     display: flex;
     flex-direction:column;
-    height: 50%;
+    height: 60%;
     justify-content: end;
     
 }
@@ -46,7 +46,7 @@
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    margin-top: 15%;
+    margin-top: 10%;
     height: 20%;
     margin-left: 3%;
     margin-right: 3%;

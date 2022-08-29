@@ -98,16 +98,18 @@ const MainDB = new DatabaseManager(db);
 //Login Manager
 const UserLogin = new Login(MainDB);
 
+
+const BaseEntry = "sku TEXT, brand TEXT, itemtype TEXT, active INTEGER"
 const ReponseHandler = new ResponseHandler(
   MainDB, 
   {
     Sable:{
-        ClassAutoColumn:"sku TEXT, brand TEXT, itemtype TEXT, image TEXT",
+        ClassAutoColumn:BaseEntry,
         CACIndex:3,
         DBController:MainDB
     },
     Diplomat:{
-      ClassAutoColumn:"sku TEXT, brand TEXT, itemtype TEXT",
+      ClassAutoColumn:BaseEntry,
       CACIndex:2,
       DBController:MainDB
     }

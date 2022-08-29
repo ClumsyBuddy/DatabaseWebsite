@@ -58,8 +58,8 @@ const LinkPage = () => {
             {!auth?.login ? <Link className="LoginButton" to="/Login">Login</Link> : <button onClick={ClearAuth} className="LogoutButton">Logout</button>}
             <h1 className="DataBaseHeader">Databases</h1>
             <div className="dbContainer">
-                <Link className="dbLink" to="/Sable">Sable</Link>
-                <Link className="dbLink" to="/Diplomat">Diplomat</Link>
+                <Link className="dbLink" to="/Sable">SABLE</Link>
+                <Link className="dbLink" to="/Diplomat">DIPLOMAT</Link>
                 <Link className="dbLink" to="/RDI">RDI</Link>
             </div>
             <p style={{color:"white", zIndex:1}} className="Counter TextStroke">{!counter ? "Loading..." : counter + " seconds"}</p>

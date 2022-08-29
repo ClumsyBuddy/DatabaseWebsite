@@ -6,42 +6,20 @@
             "Royal":"ROY"
         },
         "Size":{
-            "XXSmall":"XXS",
-            "XSmall":"XS",
-            "Small":"SM",
-            "Meduim":"MD",
-            "Large":"LG",
-            "XLarge":"XL",
-            "TWOXLarge":"2XL",
-            "THREEXLarge":"3XL",
-            "FOURXLarge":"4XL",
-            "FIVEXLarge":"5XL",
-            "SIXXLarge":"6XL"
+            "1":"XXS",
+            "2":"XS",
+            "3":"SM",
+            "4":"MD",
+            "5":"LG",
+            "6":"XL",
+            "7":"2XL",
+            "8":"3XL",
+            "9":"4XL",
+            "10":"5XL",
+            "11":"6XL"
         }
     },
-    "Bussiness_Card":{
-        "Quantity":{
-            "500":500, 
-            "1000":1000
-        },
-        "Layout":{
-            "Front&Back":"Front&Back",
-            "FrontOnly":"FrontOnly"
-        },
-        "Inlude_Choice_Priviliges_Logo":false,
-        "Logo":"",
-        "Name":"",
-        "Title":"",
-        "Direct_Number":"",
-        "Mobile_Number":"",
-        "email":"",
-        "Property_Name":"",
-        "Property_Phone_Number":"",
-        "Property_Address":"",
-        "Property_Fax_Number":"",
-        "Property_Website":"",
-        "Proof":false
-    },
-    "HECKYEA":1121241124451124115,
-    "HelloTim":2222
+    "Bussiness_Card":"status",
+    "HECKYEA":"status",
+    "HelloTim":"status"
 }
