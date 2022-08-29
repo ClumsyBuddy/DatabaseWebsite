@@ -12,8 +12,9 @@
     color: white;
     text-align: center;
     border-radius: 10px;
-    /* border-color: black; */
-    /* border-style: solid; */
+    border-color: black;
+    border-style: solid;
+    border-width: 2px;
     transition: transform 1.2s;
     transform: scale(1);
 }
@@ -53,9 +54,6 @@
 }
 
 
-.EditButton, .DeleteButton{
-
-}
 
 button, .EditButton, .DeleteButton{
     background-color: #F65E00;

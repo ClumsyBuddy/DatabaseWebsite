@@ -83,8 +83,8 @@ const EditModal = ({...props}) => {
                 ItemType: {props.editProduct.itemtype}
             </label>
             <label style={{margin:"20px"}}>SKU: {props.editProduct.sku.replace(/_/g, " ")}</label>
-            <label>Brand: {props.editProduct.brand}</label>
-            
+            <label>Brand: {props.editProduct.brand} </label>
+            <label> Color: {props.editProduct.Color}</label>
             <div style={{width:"100%", height:"auto", display:"flex", 
                 flexDirection:"row", justifyContent:"center", flexFlow:"wrap", overflow:"hidden"}}>
             {
@@ -92,6 +92,10 @@ const EditModal = ({...props}) => {
                 ItemData.map((option) => 
                 {
                     let optionName = Object.keys(option)[0];
+
+                    if(optionName === "Color"){
+                        return <></>;
+                    }
                     return (
                         <div style={{width:"20%", borderStyle:"solid", borderColor:"black", margin:"1%", borderRadius:"10px", padding:"10px", 
                                 display:"block", fontSize:"20px"}}>
@@ -99,6 +103,7 @@ const EditModal = ({...props}) => {
                                 {
                                     option[optionName].map((element, i) => 
                                     {
+
                                         if(element === "" || element === true || element === false){
                                             return (<> {element === "" ? <label style={{textDecoration:"underline"}}>textbox</label> : <></>}
                                             <input type={"checkbox"} defaultChecked={SetChecked(optionName, element)} 

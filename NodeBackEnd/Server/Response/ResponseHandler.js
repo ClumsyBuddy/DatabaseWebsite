@@ -102,9 +102,17 @@ class ResponseHandler extends Engine {
             }
             let ItemAlreadyExist = yield this.DBController.getAll(name).then((result) => {
                 for (let i = 0; i < result.length; i++) {
-                    if (result[i].sku === ItemObject.sku && result[i].brand === ItemObject.brand) {
-                        console.log("This already Exist");
-                        return true;
+                    if (ItemObject.itemtype === "Uniform") {
+                        if (result[i].sku === ItemObject.sku && result[i].brand === ItemObject.brand && result[i].Color === ItemObject.Color) {
+                            console.log("This already Exist");
+                            return true;
+                        }
+                    }
+                    else {
+                        if (result[i].sku === ItemObject.sku && result[i].brand === ItemObject.brand) {
+                            console.log("This already Exist");
+                            return true;
+                        }
                     }
                 }
                 return false;

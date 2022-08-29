@@ -66,7 +66,7 @@ function on_connection(socket){
                 new_Item_Object[value] = new_item[value];
             }
         });
-        Classes.ReponseHandler.AddItem(new_Item_Object).then(async (result) => {
+        Classes.ReponseHandler.AddItem(new_Item_Object, "Sable").then(async (result) => {
             if(result.ItemAlreadyExist){ //If the item already exist then we can skip to the next one
                 return;
             }

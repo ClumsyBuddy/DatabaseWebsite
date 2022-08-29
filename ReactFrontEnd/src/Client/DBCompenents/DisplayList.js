@@ -187,7 +187,7 @@ const ProductList = ({...props}) =>{
             <div className="InfoContainer">
                 <p className="InfoDisplay">SKU: {DisplayList[rowIndex*MaxColumn+columnIndex].sku}</p>
                 <p className="InfoDisplay">BRAND: {DisplayList[rowIndex*MaxColumn+columnIndex].brand}</p>
-                <p className="InfoDisplay">Type: {DisplayList[rowIndex*MaxColumn+columnIndex].itemtype}</p>
+                <p className="InfoDisplay">Type: {DisplayList[rowIndex*MaxColumn+columnIndex].itemtype.replace(/_/g, " ")}</p>
             </div>
             <div className="EditAddContainer">
                 <button onClick={(e)=>{flipOpen(true); editProductSet(DisplayList[rowIndex*MaxColumn+columnIndex]);}} className="EditButton ButtonHoverEffect">Edit</button>

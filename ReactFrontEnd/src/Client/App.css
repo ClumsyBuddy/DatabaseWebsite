@@ -9,7 +9,7 @@ body > #root > div {
 
 .BaseContainer{
   /* background-color: #282C34; */
-  background-color: white;
+  background-color: rgba(100, 100, 100, 1);
 }
 
 .ButtonHoverEffect{
@@ -18,7 +18,7 @@ body > #root > div {
 }
 .ButtonHoverEffect:hover{
   transform: translate(0, -2px);
-  box-shadow: 1px 3px 4px rgba(255,255,255, 0.3);
+  box-shadow: 1px 3px 4px rgba(0,0,0, 0.3);
   -webkit-transition : transform ease-in-out 0.5s, box-shadow ease-in-out .4s;
   transition: transform ease-in-out 0.5s, box-shadow ease-in-out .4s;
 

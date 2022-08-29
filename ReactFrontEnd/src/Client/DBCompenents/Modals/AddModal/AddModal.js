@@ -54,7 +54,8 @@ const AddModal = ({...props}) => {
     // I should also initialize all of the Options and  values to false on startup.
     const RenderType = ItemData.map((item) => <button className='ButtonHoverEffect ItemTypeButton' onClick={(e)=>{setChosenType(item.ItemType);
         let _new = selected; _new.itemtype = item.ItemType; setSelected(_new);
-    } }>{item.ItemType.replace(/_/g, " ")}</button>);          
+    } }>{item.ItemType.replace(/_/g, " ")}</button>);
+
     const RenderOptions = ItemData.map((item) => {
         if(item.ItemType === ChosenType){
             return (<div className='OList' style={{width:"50vw", height:"55vh", overflow:"scroll"}}>
@@ -68,6 +69,24 @@ const AddModal = ({...props}) => {
                     flexFlow:"wrap", overflow:"hidden"}}>
                     {
                         item.Options.length !== 0 ? item.Options.map((option) => {
+                            console.log(ChosenType, option);
+                            const _Name = Object.keys(option);
+                            if(ChosenType === "Uniform" && _Name[0] === "Color"){
+                                return (
+                                    <div style={{marginTop:"5vh"}}>
+                                        <label style={{marginRight:".4vw"}}>Color</label>
+                                        <select onChange={(e) => {let _new = selected; _new.Color = e.currentTarget.value; setSelected(_new);}}> 
+                                        {
+                                            option[_Name[0]].map((o) => {return(<option>{o}</option>)})
+                                        }
+                                        </select>
+                                    </div>
+                                );
+                            }
+
+                            //If uniform itemtype
+                            // if current option color
+
                         let optionName = Object.keys(option)[0];
                         return (<div style={{width:"20%", borderStyle:"solid", borderColor:"black", margin:"1%", borderRadius:"10px", padding:"10px", 
                             display:"block", fontSize:"20px"}}>
@@ -99,7 +118,11 @@ const AddModal = ({...props}) => {
                             })
                         }
                     </div>);
-                }) : <p>Item Has No Options</p> 
+                }) : <div> 
+                    <label>Active: </label>
+                        <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e) => {
+                            let _new = selected; _new["active"] = e.currentTarget.checked; setSelected(_new);}}></input> 
+                    </div>
             }</div></div>);
         }
         return (<></>);
