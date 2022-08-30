@@ -84,11 +84,14 @@ const EditModal = ({...props}) => {
             </label>
             <label style={{margin:"20px"}}>SKU: {props.editProduct.sku.replace(/_/g, " ")}</label>
             <label>Brand: {props.editProduct.brand} </label>
-            <label> Color: {props.editProduct.Color}</label>
+            {props.editProduct.Color ? <label> Color: {props.editProduct.Color}</label> : <></>}
             <div style={{width:"100%", height:"auto", display:"flex", 
                 flexDirection:"row", justifyContent:"center", flexFlow:"wrap", overflow:"hidden"}}>
             {
-                !ItemData.length ? <div style={{color:"white"}}>Loading...</div> :
+                !ItemData.length ? <div>
+                    <label>Active: </label><input type={"checkbox"} defaultChecked={SetChecked("active", props.editProduct)} onChange={(e) => {
+                        let _new = selected; _new["active"] = e.currentTarget.checked; setSelected(_new);
+                    }}></input></div> :
                 ItemData.map((option) => 
                 {
                     let optionName = Object.keys(option)[0];
