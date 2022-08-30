@@ -110,7 +110,7 @@ const ReponseHandler = new ResponseHandler(
     },
     Diplomat:{
       ClassAutoColumn:BaseEntry,
-      CACIndex:2,
+      CACIndex:3,
       DBController:MainDB
     }
   }

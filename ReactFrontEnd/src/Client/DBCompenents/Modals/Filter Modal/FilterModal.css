@@ -1,0 +1,27 @@
+
+
+.FilterPopUp{
+    position: absolute;
+    top: 10vh;
+    left: 57.5vw;
+    width: 15vw;
+    height: 15vh;
+    background-color: rgba(20, 20, 20, 1);
+    z-index: 2;
+    color: white;
+    border-radius: 10px;
+}
+
+
+.FilterCloseButton{
+    float: right;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+.FilterCloseButton:hover{
+    background-color: azure;
+}
+
+.BrandFilter{
+    margin-left: 10px;
+}
