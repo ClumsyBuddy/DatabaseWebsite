@@ -37,14 +37,14 @@ function FilterModal(props){
     const RenderBrand = Brands.map((brands) => {
         return (
             <>
-                <option>{brands}</option>
+                {props.selectedFilters.Brand === brands ? props.selectedFilters.Brand !== "" ? <option selected>{brands}</option> : <option>{brands}</option> : <option>{brands}</option>}
             </>
         )
     });
     const RenderItemTypes = Types.map((type) => {
         return (
             <>
-                <option>{type.ItemType.replace(/_/g, " ")}</option>
+                {props.selectedFilters.Type === type.ItemType ? props.selectedFilters.Type !== "" ? <option selected>{type.ItemType.replace(/_/g, " ")}</option> : <option>{type.ItemType.replace(/_/g, " ")}</option> : <option>{type.ItemType.replace(/_/g, " ")}</option>}
             </>
         )
     });
@@ -52,20 +52,21 @@ function FilterModal(props){
     return (
         <React.Fragment>
             <div className='FilterPopUp'>
-                <button className='FilterCloseButton' onClick={(e)=>{props.setIsOpen(false);}}>&times;</button>
                 <div className='InnerElements'>
+                <button className='FilterCloseButton' onClick={(e)=>{props.setIsOpen(false);}}>&times;</button>
                     <select style={{textAlign:'center'}} className="BrandFilter" onChange={(e) => { let _new = props.selectedFilters; _new.Brand = e.currentTarget.value; props.updateSelected(_new); }}>
-                        <option selected disabled hidden>Brand Filter</option>
-                        <option>None</option>
+                        {props.selectedFilters.Brand === "" ? <option selected disabled hidden>{RenderBrand.length === 0 ? "Loading..." : "Brand Filter"}</option> : <></>}
+                        <option value={""}>None</option>
                         {RenderBrand}
                     </select>
                     <select style={{textAlign:'center'}} className="BrandFilter" onChange={(e) => { let _new = props.selectedFilters; _new.Type = e.currentTarget.value.replace(/ /g, "_"); props.updateSelected(_new); }}>
-                        <option selected disabled hidden>Type Filter</option>
-                        <option>None</option>
+                        {props.selectedFilters.Type === "" ? <option selected disabled hidden>{RenderItemTypes.length === 0 ? "Loading..." : "Type Filter"}</option> : <></>}
+                        <option value={""}>None</option>
                         {RenderItemTypes}
                     </select>
                 </div>
-                <button className='FakeSubmitButton' onClick={(e)=>{props.setIsOpen(false);}}>Submit</button>
+                
+                <button className='FakeSubmitButton ButtonHoverEffect' onClick={(e)=>{props.setIsOpen(false);}}>Submit</button>
             </div>
         </React.Fragment>
     )

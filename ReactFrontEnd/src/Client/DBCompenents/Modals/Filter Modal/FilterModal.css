@@ -10,6 +10,7 @@
     z-index: 2;
     color: white;
     border-radius: 10px;
+    text-align: center;
 }
 
 
@@ -27,7 +28,5 @@
 }
 
 .FakeSubmitButton{
-    position: fixed;
-    margin-top: 8.5vh;
-    margin-left: 5.5vw;
+    margin-top: 8.5vh;    
 }

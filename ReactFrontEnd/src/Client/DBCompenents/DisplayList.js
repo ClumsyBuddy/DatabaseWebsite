@@ -132,11 +132,41 @@ const ProductList = ({...props}) =>{
     }
 
 
-    if(props.Filter.Brand !== "" || props.Filter.Type !== ""){
-        let newDisplayList = [];
+    const AnyFilters = () => {
+        let HaveFilter = false;
+        for(const key in props.Filter){
+            if(props.Filter[key] !== ""){
+                HaveFilter = true;
+            }
+        }
+        return HaveFilter;
+    }
 
-        DisplayList.forEach((ele) => {
-            if(ele.brand === props.Filter.Brand || ele.itemtype === props.Filter.Type){
+    if(AnyFilters()){
+        let newDisplayList = [];
+        let filteredObj = Object.fromEntries(
+            Object.entries(props.Filter).filter(([key, value]) => value !== "")
+        );
+        let Length = Object.keys(filteredObj).length; //Get the amount of Filter things we are going to need to check for
+        let filterNames = Object.keys(filteredObj); // The actual items we need to check for
+
+        DisplayList.forEach((ele) => { //Loop the objects and check for matches
+            let Matches = 0;
+            let pItem = Object.keys(ele); // ===> Could use for in instead of getting keys most likely
+            filterNames.forEach((fEle)=>{
+                pItem.forEach((i) => {
+                    if(ele[i] === props.Filter[fEle]){
+                        Matches++;
+                    }
+                })
+            })
+            // if(ele.brand === props.Filter.Brand){
+            //     Matches++;
+            // }
+            // if(ele.itemtype === props.Filter.Type){
+            //     Matches++;
+            // }
+            if(Matches >= Length){ //If we have the correct number of matches on this item then append it to the new list
                 newDisplayList.push(ele);
             }
         })
