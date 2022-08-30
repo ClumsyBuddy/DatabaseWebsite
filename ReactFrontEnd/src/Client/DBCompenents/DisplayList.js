@@ -117,18 +117,32 @@ const ProductList = ({...props}) =>{
                         continue;
                     }
                     let Prop = p[property].toString().toLowerCase();
-                    if(Prop.includes(q.toLowerCase())){
+                    let _q = q.toLowerCase();
+                    if(Prop.includes(_q)){
                         Match++;
                     }
                 }
             });
-            if(Match === QueryLength){
+            if(Match >= QueryLength){
                 DisplayList.push(ProductList[i]);
             }
        });
     }else{
         DisplayList = ProductList;
     }
+
+
+    if(props.Filter.Brand !== "" || props.Filter.Type !== ""){
+        let newDisplayList = [];
+
+        DisplayList.forEach((ele) => {
+            if(ele.brand === props.Filter.Brand || ele.itemtype === props.Filter.Type){
+                newDisplayList.push(ele);
+            }
+        })
+        DisplayList = newDisplayList;
+    }
+
 
     const flipOpen = (bool) =>{ //Function To slip SetIsOpen. Used to send to children components
         setIsOpen(bool);

@@ -19,12 +19,21 @@ function Sable(){
 
     const [AddModelisOpen, AddModelsetIsOpen] = useState(false);
     const [FilterModalisOpen, FilterModalsetIsOpen] = useState(false);
-
+    const [SelectedFitlers, setSelectedFilters] = useState({Brand:"", Type:""});
 
     const UpdateQuery = (value) =>{
         setQuery(value);
     }
-    
+    const UpdateSelected = (Selected) => {
+        console.log(Selected);
+        if(Selected.Brand === "None"){
+            Selected.Brand = "";
+        }
+        if(Selected.Type === "None"){
+            Selected.Type = "";
+        }
+        setSelectedFilters(Selected);
+    }
     
     return (
         <div className='SableBaseContainer'>
@@ -36,16 +45,16 @@ function Sable(){
             <div className='MenuNav'>
                 <button className='AddButton Marg MenuButton ButtonHoverEffect' onClick={(e) => {AddModelsetIsOpen(true);}}>Add</button>
                 <textarea id="SearchBar" className='SearchBar Marg ' placeholder='Enter Sku' cols={25} rows={1} onChange={(e)=>{UpdateQuery(e.currentTarget.value);}}></textarea>
-                <button type='submit' className='SearchButton Marg MenuButton ClearButton ButtonHoverEffect' onClick={(e)=>{document.getElementById("SearchBar").value = ""; UpdateQuery("");}}>Clear</button>
-                <button type='submit' className='MenuButton ButtonHoverEffect' onClick={(e)=>{FilterModalsetIsOpen(true);}}>Filter</button>
+                <button type='submit' className='SearchButton Marg MenuButton ClearButton ButtonHoverEffect' onClick={(e)=>{document.getElementById("SearchBar").value = ""; UpdateQuery(""); setSelectedFilters({Brand:"", Type:""});}}>Clear</button>
+                <button type='submit' className='MenuButton ButtonHoverEffect' onClick={(e)=>{FilterModalsetIsOpen(!FilterModalisOpen);}}>Filter</button>
 
             </div>
 
             <div className='SableProductListContainer'>
                 <Suspense fallback={<div style={{color:"white"}}>Loading...</div>}>
-                    <DisplayList Query={Query} />
+                    <DisplayList Query={Query} Filter={SelectedFitlers}/>
                 </Suspense>
-                {FilterModalisOpen ? <FilterModal setIsOpen={FilterModalsetIsOpen}/> : <></>}
+                {FilterModalisOpen ? <FilterModal setIsOpen={FilterModalsetIsOpen} selectedFilters={SelectedFitlers} updateSelected={UpdateSelected} /> : <></>}
                 {AddModelisOpen ? <AddModal setIsOpen={AddModelsetIsOpen} /> : <></>}
             </div>
 

@@ -25,3 +25,9 @@
 .BrandFilter{
     margin-left: 10px;
 }
+
+.FakeSubmitButton{
+    position: fixed;
+    margin-top: 8.5vh;
+    margin-left: 5.5vw;
+}

@@ -54,7 +54,9 @@ function RoutesInit(){
         //console.log("Calling ItemData", Classes.ReponseHandler.ItemData("Sable"), Classes.ReponseHandler.getBrands("Sable"));
         res.json({ItemData:Classes.ReponseHandler.ItemData("Sable"), Brand:Classes.ReponseHandler.getBrands("Sable")});
     });
-
+    app.get("/FilterData", (req, res) => {
+        res.json({ItemData:Classes.ReponseHandler.ItemData("Sable"), Brand:Classes.ReponseHandler.getBrands("Sable")});
+    });
 
     app.post("/SpecificItemType", (req, res) => {
         let ItemData;
