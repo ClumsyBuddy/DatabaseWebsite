@@ -6,6 +6,7 @@ import useSocket from "../../hooks/useSocket";
 
 import EditModal from "./Modals/EditModal/EditModal";
 import "./DisplayList.css";
+import ConfirmationModal from "./Modals/ConfirmationModal/ConfirmationModal";
 
 
 
@@ -33,6 +34,9 @@ const ProductList = ({...props}) =>{
 
     const [isOpen, setIsOpen] = useState(false);
     const [editProductSelect, editProductSet] = useState(NaN);
+
+    const [deleteConfirmation, setDeleteConfirmation] = useState({isOpen:false, Item:null, func:undefined});
+
 
     const [reRender, setReRender] = useState(false);
 
@@ -235,7 +239,7 @@ const ProductList = ({...props}) =>{
             </div>
             <div className="EditAddContainer">
                 <button onClick={(e)=>{flipOpen(true); editProductSet(DisplayList[rowIndex*MaxColumn+columnIndex]);}} className="EditButton ButtonHoverEffect">Edit</button>
-                <button value={DisplayList[rowIndex*MaxColumn+columnIndex].key} onClick={(e)=>{DeleteItem(e.currentTarget.value);}} className="DeleteButton ButtonHoverEffect">Delete</button>
+                <button value={DisplayList[rowIndex*MaxColumn+columnIndex].key} onClick={(e)=>{setDeleteConfirmation({isOpen:true, Item:e.currentTarget.value, func:DeleteItem});}} className="DeleteButton ButtonHoverEffect">Delete</button>
             </div>
         </div>
     </div> 
@@ -258,6 +262,7 @@ const ProductList = ({...props}) =>{
                 <div style={{color:"white", textAlign:"center"}}>Loading...</div>
             }
              {isOpen ? <EditModal flipOpen={flipOpen} editProduct={editProductSelect} /> : <></>}
+             {deleteConfirmation.isOpen ? <ConfirmationModal Modalwindow={setDeleteConfirmation} Data={{Item:deleteConfirmation.Item, Func:deleteConfirmation.func}}  /> : <></>}
       </div>
       );
    
