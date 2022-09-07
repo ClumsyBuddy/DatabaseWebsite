@@ -4,13 +4,13 @@ import AddModal from '../DBCompenents/Modals/AddModal/AddModal';
 import FilterModal from '../DBCompenents/Modals/Filter Modal/FilterModal';
 
 
-import "./Sable.css";
+import "./DataBaseMenu.css";
 
 
 const DisplayList = React.lazy(() => import('../DBCompenents/DisplayList'));
 
 
-function Sable(){
+function DataBaseMenu({...props}){
     const navigate = useNavigate();
     const returnToSender = () => {
         navigate("/", {replace:true});
@@ -40,11 +40,11 @@ function Sable(){
            
             <button onClick={returnToSender} className='BackButton ButtonHoverEffect'>Back</button>
                
-            <h1 className='TitleHeader'>Sable</h1>
+            <h1 className='TitleHeader'>{props.DB}</h1>
           
             <div className='MenuNav'>
                 <button className='AddButton Marg MenuButton ButtonHoverEffect' onClick={(e) => {AddModelsetIsOpen(true);}}>Add</button>
-                <textarea id="SearchBar" className='SearchBar Marg ' placeholder='Enter Sku' cols={25} rows={1} onChange={(e)=>{UpdateQuery(e.currentTarget.value);}}></textarea>
+                <textarea id="SearchBar" className='SearchBar Marg ' placeholder='Search...' cols={25} rows={1} onChange={(e)=>{UpdateQuery(e.currentTarget.value);}}></textarea>
                 <button type='submit' className='SearchButton Marg MenuButton ClearButton ButtonHoverEffect' onClick={(e)=>{document.getElementById("SearchBar").value = ""; UpdateQuery(""); setSelectedFilters({Brand:"", Type:""});}}>Clear</button>
                 <button type='submit' className='MenuButton ButtonHoverEffect' onClick={(e)=>{FilterModalsetIsOpen(!FilterModalisOpen);}}>Filter</button>
 
@@ -64,4 +64,4 @@ function Sable(){
 }
 
 
-export default Sable;
+export default DataBaseMenu;
