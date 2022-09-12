@@ -9,3 +9,7 @@ This is the FrontPage where you can access mulitple datasebase instances
 
 This is product display page. This is where all of the magic happens:
 ![image](https://user-images.githubusercontent.com/35859863/189674414-1000e292-8e02-46b1-a65f-0ab353fa7f58.png)
+
+
+
+This system is still a work in progress and changes almost everyday.
