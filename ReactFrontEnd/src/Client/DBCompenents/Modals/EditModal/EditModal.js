@@ -99,46 +99,49 @@ const EditModal = ({...props}) => {
                     if(optionName === "Color"){
                         return <></>;
                     }
-                    return (
-                        <div style={{width:"20%", borderStyle:"solid", borderColor:"black", margin:"1%", borderRadius:"10px", padding:"10px", 
-                                display:"block", fontSize:"20px"}}>
-                                <label>{Object.keys(option)[0].replace(/_/g, " ")}: </label>
+                    return (<>
+                        <label>{Object.keys(option)[0].replace(/_/g, " ")}: </label>
+                        <div style={{width:"25%", borderStyle:"solid", borderColor:"black", margin:"2%", borderRadius:"10px", padding:"10px",
+                             fontSize:"25px"}} className="CheckBoxList">
+                                
                                 {
                                     option[optionName].map((element, i) => 
                                     {
-
-                                        if(element === "" || element === true || element === false){
-                                            return (<> {element === "" ? <label style={{textDecoration:"underline"}}>textbox</label> : <></>}
-                                            <input type={"checkbox"} defaultChecked={SetChecked(optionName, element)} 
-                                            className='ButtonHoverEffect ItemTypeButton' onChange={(e) => {let _new = selected; _new[optionName] = e.currentTarget.checked; setSelected(_new); console.log(selected); }}></input> </>
-                                            );
-                                        }
-                                        return <>
-                                            <label>{element}</label>
-                                            <input type={"checkbox"} defaultChecked={SetChecked(optionName, element)}
-                                            className='ButtonHoverEffect ItemTypeButton' onChange={(e)=>
-                                            {
-                                                let _new = selected; 
-                                                console.log(element, _new);
-                                                if(e.currentTarget.checked === false){
-                                                    let toReplace = element;
-                                                    _new[optionName] = _new[optionName].replace(toReplace + ",", "");
-                                                    
-                                                }else{
-                                                    if(_new[optionName] === undefined){
-                                                        _new[optionName] = element + ",";
+                                        // if(element === "" || element === true || element === false){
+                                        //     return (<> 
+                                        //         {element === "" ? <label style={{textDecoration:"underline"}}>textbox</label> : <></>}
+                                        //         <input type={"checkbox"} defaultChecked={SetChecked(optionName, element)} 
+                                        //         className='ButtonHoverEffect ItemTypeButton' onChange={(e) => {let _new = selected; _new[optionName] = e.currentTarget.checked; setSelected(_new); console.log(selected); }}></input> 
+                                        //     </>);
+                                        // }
+                                        return (<>
+                                            <div style={{}}>
+                                            <label style={{fontSize:"20px"}}>{element}-</label>
+                                            <input type={"checkbox"} style={{}}defaultChecked={SetChecked(optionName, element)}
+                                                className='ButtonHoverEffect ItemTypeButton' onChange={(e)=>
+                                                {
+                                                    let _new = selected; 
+                                                    console.log(element, _new);
+                                                    if(e.currentTarget.checked === false){
+                                                        let toReplace = element;
+                                                        _new[optionName] = _new[optionName].replace(toReplace + ",", "");
+                                                        
                                                     }else{
-                                                        _new[optionName] += element + ',';
+                                                        if(_new[optionName] === undefined){
+                                                            _new[optionName] = element + ",";
+                                                        }else{
+                                                            _new[optionName] += element + ',';
+                                                        }
                                                     }
+                                                    setSelected(_new);
                                                 }
-                                                setSelected(_new);
-                                            }
-                                            }></input> 
-                                        </>;
+                                            }></input>
+                                            </div>
+                                        </>);
                                     })
                                 }
                     </div>
-                    );
+                </>);
             })
         }</div></div>
         );

@@ -6,7 +6,7 @@ import useSocket from "../../hooks/useSocket";
 
 import EditModal from "./Modals/EditModal/EditModal";
 import "./DisplayList.css";
-import ConfirmationModal from "./Modals/ConfirmationModal/ConfirmationModal";
+import DeleteConfirmationModal from "./Modals/ConfirmationModal/DeleteConfirmationModal";
 
 
 
@@ -262,7 +262,7 @@ const ProductList = ({...props}) =>{
                 <div style={{color:"white", textAlign:"center"}}>Loading...</div>
             }
              {isOpen ? <EditModal flipOpen={flipOpen} editProduct={editProductSelect} /> : <></>}
-             {deleteConfirmation.isOpen ? <ConfirmationModal Modalwindow={setDeleteConfirmation} Data={{Item:deleteConfirmation.Item, Func:deleteConfirmation.func}}  /> : <></>}
+             {deleteConfirmation.isOpen ? <DeleteConfirmationModal Modalwindow={setDeleteConfirmation} Data={{Item:deleteConfirmation.Item, Func:deleteConfirmation.func}}  /> : <></>}
       </div>
       );
    

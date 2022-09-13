@@ -61,7 +61,7 @@ const AddModal = ({...props}) => {
             return (<div className='OList' style={{width:"50vw", height:"55vh", overflow:"scroll"}}>
                 <label>{ChosenType.replace(/_/g, " ")}</label>
                 <textarea placeholder='Enter SKU' style={{resize:"none"}} cols={20} rows={1} onChange={(e)=>{let _new = selected; _new.sku = e.currentTarget.value; setSelected(_new);}}></textarea>
-                <select onChange={(e)=>{let _new = selected; _new.brand = e.currentTarget.value; setSelected(_new);}}>
+                <select onChange={(e)=>{let _new = selected; _new.brand = e.currentTarget.value; setSelected(_new);}} style={{transform:"translatey(-5px)"}}>
                     {Brands.map((brand, i) => {return(<option>{brand}</option>)})}
                 </select>
                 <div style={{width:"100%", height:"auto", display:"flex", 
@@ -88,19 +88,22 @@ const AddModal = ({...props}) => {
                             // if current option color
 
                         let optionName = Object.keys(option)[0];
-                        return (<div style={{width:"20%", borderStyle:"solid", borderColor:"black", margin:"1%", borderRadius:"10px", padding:"10px", 
-                            display:"block", fontSize:"20px"}}>
-                        <label>{Object.keys(option)[0].replace(/_/g, " ")}: </label>
+                        return (<>
+                            <label>{Object.keys(option)[0].replace(/_/g, " ")}: </label>
+                        <div style={{width:"25%", borderStyle:"solid", borderColor:"black", margin:"1%", borderRadius:"10px", padding:"10px",
+                             fontSize:"20px"}} className="CheckBoxList">
+                        
                         {
                             option[optionName].map((element, i) => {
-                                if(element === "" || element === true || element === false){
-                                    return (<> {element === "" ? <label style={{textDecoration:"underline"}}>textbox</label> : <></>}
-                                    <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e) => {let _new = selected; _new[optionName] = e.currentTarget.checked; setSelected(_new); console.log(selected); }}></input> </>
-                                    );
-                                }
+                                // if(element === "" || element === true || element === false){
+                                //     return (<> {element === "" ? <label style={{textDecoration:"underline"}}>textbox</label> : <></>}
+                                //     <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e) => {let _new = selected; _new[optionName] = e.currentTarget.checked; setSelected(_new); console.log(selected); }}></input> </>
+                                //     );
+                                // }
                                 return ( <>
-                                    <label>{element}</label>
-                                    <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e)=>{
+                                    <div>
+                                    <label>{element}-</label>
+                                    <input type={"checkbox"} className='ItemTypeButton' onChange={(e)=>{
                                         let _new = selected; 
                                         if(e.currentTarget.checked === false){
                                             let toReplace = element + ",";
@@ -114,10 +117,11 @@ const AddModal = ({...props}) => {
                                         }
                                         setSelected(_new);
                                         }}></input> 
+                                    </div>
                                 </>);
                             })
                         }
-                    </div>);
+                    </div></>);
                 }) : <div> 
                     <label>Active: </label>
                         <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e) => {

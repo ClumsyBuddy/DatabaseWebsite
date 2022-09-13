@@ -15,3 +15,9 @@
     border-radius: 40px;
     color: black;
 }
+
+.CheckBoxList{
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    /* column-gap: 5px; */
+}

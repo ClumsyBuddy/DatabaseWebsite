@@ -27,3 +27,11 @@
 .SubmitButton:active{
     background-color: white;
 }
+
+
+
+.CheckBoxList{
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    /* column-gap: 5px; */
+}

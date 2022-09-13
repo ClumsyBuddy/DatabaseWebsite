@@ -1,6 +1,6 @@
 import React from 'react'
 
-import "./ConfirmationModal.css";
+import "./DeleteConfirmationModal.css";
 
 export default function ConfirmationModal({...props}){
     return(
