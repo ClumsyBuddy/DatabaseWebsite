@@ -161,7 +161,7 @@ const AddModal = ({...props}) => {
             }
 
 
-            setInterval(() => {
+            setTimeout(() => {
                 setAddReponse({success:false, failed:false, duplicate:false});
             }, 2000);
             //Need to show something that lets user know its been updated with the item
@@ -179,9 +179,14 @@ const AddModal = ({...props}) => {
                     </div>
                     {!ChosenType ? <></> : <button className='ButtonHoverEffect SubmitButton' onClick={(e)=>{SendSelected()}}>Submit</button>}
                     <div>
-                        { !addReponse.success ? <></> : <p style={{margin:"0px", padding:"0px", color:"darkgreen"}}>Item Was Added Successfully!</p> }
-                        { !addReponse.failed ? <></> : <p style={{margin:"0px", padding:"0px", color:"red"}}>Failed To Add Item</p> }
-                        { !addReponse.duplicate ? <></> : <p style={{margin:"0px", padding:"0px", color:"yellow"}}>Item Already Exists</p> }
+                        { !addReponse.success ? <></> : 
+                        <p style={{margin:"0px", padding:"0px", color:"darkgreen"}}>Item Was Added Successfully!</p> }
+
+                        { !addReponse.failed ? <></> : 
+                        <p style={{margin:"0px", padding:"0px", color:"red"}}>Failed To Add Item</p> }
+                        
+                        { !addReponse.duplicate ? <></> : 
+                        <p style={{margin:"0px", padding:"0px", color:"yellow"}}>Item Already Exists</p> }
                     </div>
                 </div>
             </div>

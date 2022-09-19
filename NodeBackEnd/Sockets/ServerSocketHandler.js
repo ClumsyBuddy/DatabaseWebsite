@@ -81,9 +81,12 @@ function on_connection(socket){
         });
     });
 
-    socket.on("update_item", async (itemToUpdate) => {
+    socket.on("update_item", async (itemToUpdate, fn) => {
         console.log(itemToUpdate);
         if(!itemToUpdate.updated){
+            fn({
+                status:"failed"
+            });
             console.log("ERROR NO ITEMS: update_item");
             return;
         }
@@ -105,6 +108,9 @@ function on_connection(socket){
         const ItemKey = itemToUpdate.key;
 
         Classes.ReponseHandler.UpdateItem(ValuesToUpdate, options_Values, ItemKey, "Sable").then((result) => {
+            fn({
+                status:"success"
+            });
             io.emit("client_updated_item", result);
         });
 

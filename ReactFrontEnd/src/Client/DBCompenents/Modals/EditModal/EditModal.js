@@ -12,6 +12,8 @@ const EditModal = ({...props}) => {
     const [ItemData, setItemData] = useState([]);
     const [selected, setSelected] = useState({});
 
+    const [addReponse, setAddReponse] = useState({success:false, failed:false});
+
     const mounted = useRef(false);
 
     useEffect(()=>{
@@ -152,8 +154,17 @@ const EditModal = ({...props}) => {
     const SendSelected = () => {
         socket.emit("update_item", {updated:selected, key:props.editProduct.key}, (result) => {
             console.log("Result: " + JSON.stringify(result));
+            if(result.status === "success"){
+                setAddReponse({success:true});
+            }
+           if(result.status === "failed"){
+            setAddReponse({failed:true});
+           }
+           setTimeout(() => {
+                setAddReponse({success:false, failed:false});
+                props.flipOpen(false);
+            }, 2000);
         });
-        props.flipOpen(false);
     }
 
     return (
@@ -166,6 +177,12 @@ const EditModal = ({...props}) => {
                         {RenderOptions()}
                     </div>
                     <button className='ButtonHoverEffect SubmitButton' onClick={(e)=>{console.log(selected); SendSelected();}}>Submit</button>
+
+                    { !addReponse.success ? <></> : 
+                        <p style={{margin:"0px", padding:"0px", color:"darkgreen"}}>Item Was Added Successfully!</p> }
+
+                    { !addReponse.failed ? <></> : 
+                    <p style={{margin:"0px", padding:"0px", color:"red"}}>Failed To Add Item</p> }
                 </div>
             </div>
         </React.Fragment>
