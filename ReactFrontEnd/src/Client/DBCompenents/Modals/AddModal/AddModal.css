@@ -9,9 +9,9 @@
 .OptionsContainer{
     display: flex;
     justify-content: center;
-    flex-flow: wrap;
+    /* flex-flow: wrap;
     flex-basis: 0;
-    flex-grow: 1;
+    flex-grow: 1; */
 }
 
 

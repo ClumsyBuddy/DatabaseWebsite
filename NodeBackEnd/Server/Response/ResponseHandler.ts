@@ -96,7 +96,7 @@ class  ResponseHandler extends Engine{
          let ItemAlreadyExist = await this.DBController.getAll(name).then((result) => { //Get all current items to check if it exists already
            for(let i = 0; i < result.length; i++){
                 if(ItemObject.itemtype === "Uniform"){
-                    if(result[i].sku === ItemObject.sku && result[i].brand === ItemObject.brand && result[i].Color === ItemObject.Color){
+                    if(result[i].sku === ItemObject.sku && result[i].brand === ItemObject.brand && result[i].color === ItemObject.Color){
                         console.log("This already Exist");
                         return true;
                     }    

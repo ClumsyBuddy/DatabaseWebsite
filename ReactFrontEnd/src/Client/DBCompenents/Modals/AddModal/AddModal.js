@@ -14,6 +14,8 @@ const AddModal = ({...props}) => {
     const [Brands, setBrands] = useState([]);
     const [selected, setSelected] = useState({});
 
+    const [addReponse, setAddReponse] = useState({success:false, failed:false, duplicate:false});
+
     const mounted = useRef(false);
 
     useEffect(()=>{
@@ -58,7 +60,7 @@ const AddModal = ({...props}) => {
 
     const RenderOptions = ItemData.map((item) => {
         if(item.ItemType === ChosenType){
-            return (<div className='OList' style={{width:"50vw", height:"55vh", overflow:"scroll"}}>
+            return (<div className='OList' style={{width:"50vw", height:"50vh", overflow:"scroll"}}>
                 <label>{ChosenType.replace(/_/g, " ")}</label>
                 <textarea placeholder='Enter SKU' style={{resize:"none"}} cols={20} rows={1} onChange={(e)=>{let _new = selected; _new.sku = e.currentTarget.value; setSelected(_new);}}></textarea>
                 <select onChange={(e)=>{let _new = selected; _new.brand = e.currentTarget.value; setSelected(_new);}} style={{transform:"translatey(-5px)"}}>
@@ -147,7 +149,21 @@ const AddModal = ({...props}) => {
             return false;
         }
         socket.emit("add_Item", selected, (result) => {
-            console.log("Result: " + JSON.stringify(result));
+            if(result.status === "success"){
+                console.log("Result: " + JSON.stringify(result));                
+                setAddReponse({success:true});
+            }
+            if(result.status === "duplicate"){
+                setAddReponse({duplicate:true});
+            }
+            if(result.status === "failed"){
+                setAddReponse({failed:true});
+            }
+
+
+            setInterval(() => {
+                setAddReponse({success:false, failed:false, duplicate:false});
+            }, 2000);
             //Need to show something that lets user know its been updated with the item
         });
     }
@@ -162,6 +178,11 @@ const AddModal = ({...props}) => {
                         {ReturnRender()}
                     </div>
                     {!ChosenType ? <></> : <button className='ButtonHoverEffect SubmitButton' onClick={(e)=>{SendSelected()}}>Submit</button>}
+                    <div>
+                        { !addReponse.success ? <></> : <p style={{margin:"0px", padding:"0px", color:"darkgreen"}}>Item Was Added Successfully!</p> }
+                        { !addReponse.failed ? <></> : <p style={{margin:"0px", padding:"0px", color:"red"}}>Failed To Add Item</p> }
+                        { !addReponse.duplicate ? <></> : <p style={{margin:"0px", padding:"0px", color:"yellow"}}>Item Already Exists</p> }
+                    </div>
                 </div>
             </div>
         </React.Fragment>

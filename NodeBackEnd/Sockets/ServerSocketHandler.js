@@ -67,12 +67,15 @@ function on_connection(socket){
             }
         });
         Classes.ReponseHandler.AddItem(new_Item_Object, "Sable").then(async (result) => {
+            console.log(result);
             if(result.ItemAlreadyExist){ //If the item already exist then we can skip to the next one
+                fn({
+                    status:"duplicate"
+                });
                 return;
             }
             fn({ //Return Response that it was successful
                 status:"success",
-                msg:"Added Item Successfully"
             })
             io.emit("new_Item_Added", await Classes.ReponseHandler.GetItemById("Sable", result.id)); //Emit the new item to all clients
         });
