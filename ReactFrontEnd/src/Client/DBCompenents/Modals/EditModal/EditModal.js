@@ -157,13 +157,12 @@ const EditModal = ({...props}) => {
             if(result.status === "success"){
                 setAddReponse({success:true});
             }
-           if(result.status === "failed"){
-            setAddReponse({failed:true});
-           }
-           setTimeout(() => {
-                setAddReponse({success:false, failed:false});
-                props.flipOpen(false);
-            }, 2000);
+            if(result.status === "failed"){
+                setAddReponse({failed:true});
+            }
+            setTimeout(() => {
+                    setAddReponse({success:false, failed:false});
+                }, 1500);
         });
     }
 
@@ -179,10 +178,10 @@ const EditModal = ({...props}) => {
                     <button className='ButtonHoverEffect SubmitButton' onClick={(e)=>{console.log(selected); SendSelected();}}>Submit</button>
 
                     { !addReponse.success ? <></> : 
-                        <p style={{margin:"0px", padding:"0px", color:"darkgreen"}}>Item Was Added Successfully!</p> }
+                        <p style={{margin:"0px", padding:"0px", color:"darkgreen"}}>Item Was Updated Successfully!</p> }
 
                     { !addReponse.failed ? <></> : 
-                    <p style={{margin:"0px", padding:"0px", color:"red"}}>Failed To Add Item</p> }
+                    <p style={{margin:"0px", padding:"0px", color:"red"}}>Failed To Update Item</p> }
                 </div>
             </div>
         </React.Fragment>

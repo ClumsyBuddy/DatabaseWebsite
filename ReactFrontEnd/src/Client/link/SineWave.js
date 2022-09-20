@@ -18,18 +18,18 @@ export function start() {
     Animation = window.requestAnimationFrame(start);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    DrawInner(450, 'sin', 5);
+   // DrawInner(450, 'sin', 5);
     drawWave(450,"sin");
-    DrawInner(450, 'sin', -5);
+    //DrawInner(450, 'sin', -5);
     
-    DrawInner(220, 'cos', -5);
+    //DrawInner(220, 'cos', -5);
     drawWave(220,"cos");
-    DrawInner(220, 'cos', -5);
+    //DrawInner(220, 'cos', -5);
 
 
-    DrawInner(75, 'sin', -5);
+    //DrawInner(75, 'sin', -5);
     drawWave(75,"sin");
-    DrawInner(75, 'sin', -5);
+    //DrawInner(75, 'sin', -5);
 
     
   step += .40; 
@@ -64,8 +64,8 @@ function drawWave(amplitude,trig){
   // trig is the trigonometric function to be used: sin or cos
   ctx.beginPath();
   ctx.lineWidth = 6;
-  ctx.strokeStyle = "#000000";
-  
+  // ctx.strokeStyle = "#000000";
+  ctx.strokeStyle = "#61DBFB"
   var x = 0;
   var y = 0;
   //var amplitude = 10;
