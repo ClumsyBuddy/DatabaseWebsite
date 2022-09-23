@@ -1,5 +1,5 @@
 import {app, Classes, io} from "./ServerGlobals.js";
-
+import upload from "./upload.js";
 
 var Counter = 0;
 setInterval(() => {
@@ -57,6 +57,19 @@ function RoutesInit(){
     app.get("/FilterData", (req, res) => {
         res.json({ItemData:Classes.ReponseHandler.ItemData("Sable"), Brand:Classes.ReponseHandler.getBrands("Sable")});
     });
+
+    app.post("/ImportFile", upload,  (req, res, next) => {
+        const file = req.file;
+        console.log(file);
+        if(!file){
+            const error = new Error("No File");
+            error.httpStatusCode = 400;
+            return next(error);
+        }
+
+        res.json("Hello World");
+    });
+
 
     app.post("/SpecificItemType", (req, res) => {
         let ItemData;

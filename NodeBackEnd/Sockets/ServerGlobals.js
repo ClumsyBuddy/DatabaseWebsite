@@ -3,6 +3,7 @@ import ip from "ip";
 import session from "express-session";
 import cors from "cors";
 import {default as SQLiteStoreSession} from "connect-sqlite3";
+
 let SQLiteStore = SQLiteStoreSession(session);
 
 SQLiteStore.prototype.all = function(fn){
@@ -133,5 +134,5 @@ export {
     ip,
     express,
     Classes,
-    sqlite3,
+    sqlite3
 };
