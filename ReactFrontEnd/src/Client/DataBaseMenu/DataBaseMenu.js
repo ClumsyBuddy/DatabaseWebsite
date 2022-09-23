@@ -1,8 +1,9 @@
 import React, { Suspense, useState } from 'react';
 import {useNavigate} from "react-router-dom"
+
 import AddModal from '../DBCompenents/Modals/AddModal/AddModal';
 import FilterModal from '../DBCompenents/Modals/Filter Modal/FilterModal';
-
+import ImportModal from '../DBCompenents/Modals/ImportModal/ImportModal';
 
 import "./DataBaseMenu.css";
 
@@ -19,6 +20,7 @@ function DataBaseMenu({...props}){
 
     const [AddModelisOpen, AddModelsetIsOpen] = useState(false);
     const [FilterModalisOpen, FilterModalsetIsOpen] = useState(false);
+    const [ImportModalisOpen, ImportModalsetIsOpen] = useState(false);
     const [SelectedFitlers, setSelectedFilters] = useState({Brand:"", Type:""});
     const [showToolTip, setShowToolTip] = useState(false);
 
@@ -45,16 +47,18 @@ function DataBaseMenu({...props}){
             <h1 className='TitleHeader' style={{pointerEvents:"none"}}>{props.DB}</h1>
           
             <div className='MenuNav'>
+                <button type='submit' className='MenuButton ButtonHoverEffect' onClick={(e)=>{ImportModalsetIsOpen(true)}}>Import</button>
                 <button className='AddButton Marg MenuButton ButtonHoverEffect' onClick={(e) => {AddModelsetIsOpen(true);}}>Add</button>
                 <textarea id="SearchBar" style={{marginRight:".25%"}} className='SearchBar Marg ' placeholder='Search...' cols={25} rows={1} onChange={(e)=>{UpdateQuery(e.currentTarget.value);}}></textarea>
                 <div style={{position:"relative"}}>
                 <svg onMouseEnter={(ev)=>{setShowToolTip(true)}} onMouseLeave={(ev)=>{setShowToolTip(false)}} style={{height:"20px", width:"20px"}}><path fill='black' d={tooltipSVG} ></path></svg>
-                {!showToolTip ? <></> :  <div style={{width:"600px", backgroundColor:"white", height:"30px", position:"absolute", borderRadius:"5px", left:"25px", top:"0"}}>
-                                            <p style={{fontSize:"15px", color:"black", lineHeight:"0px", paddingLeft:"5px", paddingRight:"5px", fontWeight:"500"}}>You can input anything related to the product. Such as color, SKU and even the brand!</p>
-                                        </div>}
+                    {!showToolTip ? <></> :  <div style={{width:"600px", backgroundColor:"white", height:"30px", position:"absolute", borderRadius:"5px", left:"25px", top:"0"}}>
+                                                <p style={{fontSize:"15px", color:"black", lineHeight:"0px", paddingLeft:"5px", paddingRight:"5px", fontWeight:"500"}}>You can input anything related to the product. Such as color, SKU and even the brand!</p>
+                                            </div>}
                 </div>
                 <button type='submit' className='SearchButton Marg MenuButton ClearButton ButtonHoverEffect' onClick={(e)=>{document.getElementById("SearchBar").value = ""; UpdateQuery(""); setSelectedFilters({Brand:"", Type:""});}}>Clear</button>
                 <button type='submit' className='MenuButton ButtonHoverEffect' onClick={(e)=>{FilterModalsetIsOpen(!FilterModalisOpen);}}>Filter</button>
+                
 
             </div>
 
@@ -64,6 +68,7 @@ function DataBaseMenu({...props}){
                 </Suspense>
                 {FilterModalisOpen ? <FilterModal setIsOpen={FilterModalsetIsOpen} selectedFilters={SelectedFitlers} updateSelected={UpdateSelected} /> : <></>}
                 {AddModelisOpen ? <AddModal setIsOpen={AddModelsetIsOpen} /> : <></>}
+                {ImportModalisOpen ? <ImportModal setIsOpen={ImportModalsetIsOpen} /> : <></>}
             </div>
 
 

@@ -110,7 +110,7 @@ const ProductList = ({...props}) =>{
     //Search function, gets search query and returns displaylist with results based on query
     if(props.Query){
         DisplayList = [];
-        let _Query = props.Query.replace("+", " ").replace(",", " ").split((' '));
+        let _Query = props.Query.replace(new RegExp("/", "g"), " ").replace(new RegExp(",", "g"), " ").split((' '));
         _Query = _Query.filter(item => item);
         let QueryLength = _Query.length;
         ProductList.forEach((p, i) => {
