@@ -113,8 +113,11 @@ const ProductList = ({...props}) =>{
         let _Query = props.Query.replace(new RegExp("/", "g"), " ").replace(new RegExp(",", "g"), " ").split((' '));
         _Query = _Query.filter(item => item);
         let QueryLength = _Query.length;
+        
         ProductList.forEach((p, i) => {
             let Match = 0;
+            let Not_Check = false;
+            let Was_Not = false;
             _Query.forEach((q, __i) =>{
                 for(var property in p){
                     if(p[property] === null || p[property] === undefined){
@@ -122,11 +125,38 @@ const ProductList = ({...props}) =>{
                     }
                     let Prop = p[property].toString().toLowerCase();
                     let _q = q.toLowerCase();
-                    if(Prop.includes(_q)){
-                        Match++;
+
+                    if(_q[0] === "!"){
+                        let newQ = _q.replace(/!/g, "");
+                        Not_Check = true;
+                        if(Prop.includes(newQ)){
+                            console.log("Exclude", newQ, Prop);
+                            Was_Not = true;
+                            // break;
+                        }
                     }
+                    if(_q[0] === "|" && _q[_q.length-1] === "|"){
+                        const newQ = _q.replace(/\|/g, "");
+                        if(Prop === newQ){
+                            console.log("Absolute Include", Prop, newQ);
+                            Match++;
+                            // break;
+                        }
+                    }
+                    if(_q[0] !== "!" || _q[0] !== "|"){
+                        if(Prop.includes(_q)){
+                            console.log("Generic Include");
+                            Match++;
+                            // break;
+                        }
+                    }
+                    
                 }
             });
+            if(!Was_Not && Not_Check){
+                Match++;
+            }
+            console.log(Match)
             if(Match >= QueryLength){
                 DisplayList.push(ProductList[i]);
             }
@@ -233,9 +263,11 @@ const ProductList = ({...props}) =>{
     }}  className="">
         <div className="Item" style={{height:RowHeight*RowItemHeight}}>
             <div className="InfoContainer">
-                <p className="InfoDisplay">SKU: {DisplayList[rowIndex*MaxColumn+columnIndex].sku}</p>
-                <p className="InfoDisplay">BRAND: {DisplayList[rowIndex*MaxColumn+columnIndex].brand}</p>
-                <p className="InfoDisplay">Type: {DisplayList[rowIndex*MaxColumn+columnIndex].itemtype.replace(/_/g, " ")}</p>
+                <p className="InfoDisplay SKU">SKU: {DisplayList[rowIndex*MaxColumn+columnIndex].sku}</p>
+                <hr style={{fontSize:"1px", width:"50px"}}></hr>
+                <p className="InfoDisplay BRAND">BRAND: {DisplayList[rowIndex*MaxColumn+columnIndex].brand}</p>
+                <hr style={{fontSize:"1px", width:"50px"}}></hr>
+                <p className="InfoDisplay TYPE">Type: {DisplayList[rowIndex*MaxColumn+columnIndex].itemtype.replace(/_/g, " ")}</p>
             </div>
             <div className="EditAddContainer">
                 <button onClick={(e)=>{flipOpen(true); editProductSet(DisplayList[rowIndex*MaxColumn+columnIndex]);}} className="EditButton ButtonHoverEffect">Edit</button>

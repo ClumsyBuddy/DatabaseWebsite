@@ -77,3 +77,14 @@ button, .EditButton, .DeleteButton{
     margin-top: 5px;
     margin-right: 5px;
 }
+
+
+.SKU{
+    color: yellow;
+}
+.BRAND{
+    color: red;
+}
+.TYPE{
+    color: lightgreen;
+}
