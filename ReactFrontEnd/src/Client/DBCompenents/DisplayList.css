@@ -79,12 +79,12 @@ button, .EditButton, .DeleteButton{
 }
 
 
-.SKU{
+.DSKU{
     color: yellow;
 }
-.BRAND{
+.DBRAND{
     color: red;
 }
-.TYPE{
+.DTYPE{
     color: lightgreen;
 }

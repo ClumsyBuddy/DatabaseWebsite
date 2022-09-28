@@ -116,9 +116,10 @@ const ProductList = ({...props}) =>{
         
         ProductList.forEach((p, i) => {
             let Match = 0;
-            let Not_Check = false;
-            let Was_Not = false;
+            
             _Query.forEach((q, __i) =>{
+                let Not_Check = false;
+                let Was_Not = false;
                 for(var property in p){
                     if(p[property] === null || p[property] === undefined){
                         continue;
@@ -140,22 +141,22 @@ const ProductList = ({...props}) =>{
                         if(Prop === newQ){
                             console.log("Absolute Include", Prop, newQ);
                             Match++;
-                            // break;
+                            break;
                         }
                     }
                     if(_q[0] !== "!" || _q[0] !== "|"){
                         if(Prop.includes(_q)){
                             console.log("Generic Include");
                             Match++;
-                            // break;
+                            break;
                         }
                     }
                     
                 }
+                if(!Was_Not && Not_Check){
+                    Match++;
+                }
             });
-            if(!Was_Not && Not_Check){
-                Match++;
-            }
             console.log(Match)
             if(Match >= QueryLength){
                 DisplayList.push(ProductList[i]);
@@ -263,11 +264,11 @@ const ProductList = ({...props}) =>{
     }}  className="">
         <div className="Item" style={{height:RowHeight*RowItemHeight}}>
             <div className="InfoContainer">
-                <p className="InfoDisplay SKU">SKU: {DisplayList[rowIndex*MaxColumn+columnIndex].sku}</p>
+                <p className="InfoDisplay DSKU">SKU: {DisplayList[rowIndex*MaxColumn+columnIndex].sku}</p>
                 <hr style={{fontSize:"1px", width:"50px"}}></hr>
-                <p className="InfoDisplay BRAND">BRAND: {DisplayList[rowIndex*MaxColumn+columnIndex].brand}</p>
+                <p className="InfoDisplay DBRAND">BRAND: {DisplayList[rowIndex*MaxColumn+columnIndex].brand}</p>
                 <hr style={{fontSize:"1px", width:"50px"}}></hr>
-                <p className="InfoDisplay TYPE">Type: {DisplayList[rowIndex*MaxColumn+columnIndex].itemtype.replace(/_/g, " ")}</p>
+                <p className="InfoDisplay DTYPE">Type: {DisplayList[rowIndex*MaxColumn+columnIndex].itemtype.replace(/_/g, " ")}</p>
             </div>
             <div className="EditAddContainer">
                 <button onClick={(e)=>{flipOpen(true); editProductSet(DisplayList[rowIndex*MaxColumn+columnIndex]);}} className="EditButton ButtonHoverEffect">Edit</button>
