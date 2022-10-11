@@ -3,7 +3,7 @@ import Engine from "../engine.js";
 import {DatabaseManager, Login} from "../../Sockets/ServerGlobals.js";
 //const fs = require('fs');
 
-//TODO Need to implement responsice error handling so a single bug doesnt bring down the server
+//TODO Need to implement responsive error handling so a single bug doesn't bring down the server
 //     Try catch and using base state should be able to keep the server from crashing
 //  https://stackoverflow.com/questions/34834151/how-to-catch-errors-when-rendering-ejs-view-node-js
 // Possibly a good method of error handling
@@ -142,7 +142,7 @@ class  ResponseHandler extends Engine{
             }
         });
         let id = await this.DBController.create("Sable", Columns, QuestionMarkString, Col_Values); //Create the item and return the id (aka the key)
-        return {id:id.id, ItemAlreadyExist:false}; //return the id and that the item didnt exist
+        return {id:id.id, ItemAlreadyExist:false}; //return the id and that the item didn't exist
     }
 
     async GetItemById(DB:string, id:number){
@@ -176,7 +176,7 @@ class  ResponseHandler extends Engine{
     // *   1. This function gets the different item types and Options
     // *   2. It gets all current columns if there is any, it then checks to see if the there are any new items that need to be added
     // *   3. It then builds the strings that need to be added together and the ItemData objects
-    // *   4. Finally it either creates a new table or it doubles checkes these are new items and then updates the table
+    // *   4. Finally it either creates a new table or it doubles checks these are new items and then updates the table
     // */
     // async UpdateItemInformation(newValue:any){
     //     this.ItemDataArray = [];
@@ -206,7 +206,7 @@ class  ResponseHandler extends Engine{
     //     *   Now I need to get all current columns
     //     *   Then check each column to see if it already has the option in it
     //     */
-    //     this.DBController.getColumns(this.TableName).then((result) => { //Got all new options that table didnt have previously
+    //     this.DBController.getColumns(this.TableName).then((result) => { //Got all new options that table didn't have previously
     //         var newItems : any[] = []; //Stores all new Item
     //         for(var i = 0; i < this.ItemOptions.length; i++){
     //             var NewItem = true; //Boolean check for new items
@@ -215,7 +215,7 @@ class  ResponseHandler extends Engine{
     //                     NewItem = false;
     //                     continue;
     //                 } 
-    //                 if(j == result.length - 1){ //If its the end of the loop and they arent equal
+    //                 if(j == result.length - 1){ //If its the end of the loop and they aren't equal
     //                     if(NewItem){ //And it is a new item
     //                         newItems.push(this.ItemOptions[i]); //Add it to the list
     //                     }

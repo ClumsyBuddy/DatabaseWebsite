@@ -1,6 +1,9 @@
 import {app, Classes, io} from "./ServerGlobals.js";
 import upload from "./upload.js";
 
+import * as fs from "fs";
+import { parse } from "csv-parse";
+
 var Counter = 0;
 setInterval(() => {
     Counter++;
@@ -66,6 +69,33 @@ function RoutesInit(){
             error.httpStatusCode = 400;
             return next(error);
         }
+        
+
+        var RowArray = [];
+        var  OpenFile = fs.createReadStream(file.path)
+        .pipe(parse(
+            { delimiter: ",",
+            columns: true, 
+            to_line:400, 
+            skip_empty_lines:true,
+            }
+        )).on("data", function (row) {
+            var RowObject = {
+                SKU:row["Handle"],
+                Tags:row["Tags"],
+                VSKU:row["Variant SKU"],
+                Status:row["Status"]
+            }
+            RowArray.push(RowObject);
+            console.log(RowArray);
+        }).on("end", function() {
+            console.log("Finished");
+        }).on("close", function() {
+            OpenFile.destroy();            
+            fs.unlink(file.path, () => {
+                console.log("Deleted upload");
+            })
+        });
 
         res.json("Hello World");
     });

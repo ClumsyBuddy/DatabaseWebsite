@@ -118,6 +118,7 @@ const ProductList = ({...props}) =>{
             let Match = 0;
             
             _Query.forEach((q, __i) =>{
+                
                 let Not_Check = false;
                 let Was_Not = false;
                 for(var property in p){
@@ -131,15 +132,12 @@ const ProductList = ({...props}) =>{
                         let newQ = _q.replace(/!/g, "");
                         Not_Check = true;
                         if(Prop.includes(newQ)){
-                            console.log("Exclude", newQ, Prop);
                             Was_Not = true;
-                            // break;
                         }
                     }
                     if(_q[0] === "|" && _q[_q.length-1] === "|"){
                         const newQ = _q.replace(/\|/g, "");
                         if(Prop === newQ){
-                            console.log("Absolute Include", Prop, newQ);
                             Match++;
                             break;
                         }
@@ -157,7 +155,6 @@ const ProductList = ({...props}) =>{
                     Match++;
                 }
             });
-            console.log(Match)
             if(Match >= QueryLength){
                 DisplayList.push(ProductList[i]);
             }

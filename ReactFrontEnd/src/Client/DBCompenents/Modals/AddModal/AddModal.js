@@ -14,7 +14,7 @@ const AddModal = ({...props}) => {
     const [Brands, setBrands] = useState([]);
     const [selected, setSelected] = useState({});
 
-    const [addReponse, setAddReponse] = useState({success:false, failed:false, duplicate:false});
+    const [addResponse, setAddResponse] = useState({success:false, failed:false, duplicate:false});
 
     const mounted = useRef(false);
 
@@ -32,6 +32,7 @@ const AddModal = ({...props}) => {
                 setBrands(data.Brand);
                 let _new = selected;
                 _new.brand = data.Brand[0];
+                _new.active = false;
                 setSelected(_new);
             });
         }
@@ -55,7 +56,18 @@ const AddModal = ({...props}) => {
     //TODO Should Probably break up this unreadable blob of code. This does way to much
     // I should also initialize all of the Options and  values to false on startup.
     const RenderType = ItemData.map((item) => <button className='ButtonHoverEffect ItemTypeButton' onClick={(e)=>{setChosenType(item.ItemType);
-        let _new = selected; _new.itemtype = item.ItemType; setSelected(_new);
+        let _new = selected; 
+        _new.itemtype = item.ItemType;
+        if(_new.itemtype === "Uniform"){
+            for(let option of item.Options){
+                if(Object.keys(option)[0] !== "Color"){
+                    continue;
+                }
+                _new.Color = option["Color"][0];
+            }
+        }
+        setSelected(_new);
+        
     } }>{item.ItemType.replace(/_/g, " ")}</button>);
 
     const RenderOptions = ItemData.map((item) => {
@@ -125,11 +137,16 @@ const AddModal = ({...props}) => {
                         }
                     </div></>);
                 }) : <div> 
-                    <label>Active: </label>
+                    {/* <label>Active: </label>
                         <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e) => {
-                            let _new = selected; _new["active"] = e.currentTarget.checked; setSelected(_new);}}></input> 
+                            let _new = selected; _new["active"] = e.currentTarget.checked; setSelected(_new);}}></input>  */}
                     </div>
-            }</div></div>);
+            }</div>
+                <label>Active: </label>
+                <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e) => {
+                    let _new = selected; _new["active"] = e.currentTarget.checked; setSelected(_new);}}>
+                </input> 
+            </div>);
         }
         return (<></>);
     })
@@ -151,18 +168,18 @@ const AddModal = ({...props}) => {
         socket.emit("add_Item", selected, (result) => {
             if(result.status === "success"){
                 console.log("Result: " + JSON.stringify(result));                
-                setAddReponse({success:true});
+                setAddResponse({success:true});
             }
             if(result.status === "duplicate"){
-                setAddReponse({duplicate:true});
+                setAddResponse({duplicate:true});
             }
             if(result.status === "failed"){
-                setAddReponse({failed:true});
+                setAddResponse({failed:true});
             }
 
 
             setTimeout(() => {
-                setAddReponse({success:false, failed:false, duplicate:false});
+                setAddResponse({success:false, failed:false, duplicate:false});
             }, 2000);
             //Need to show something that lets user know its been updated with the item
         });
@@ -179,13 +196,13 @@ const AddModal = ({...props}) => {
                     </div>
                     {!ChosenType ? <></> : <button className='ButtonHoverEffect SubmitButton' onClick={(e)=>{SendSelected()}}>Submit</button>}
                     <div>
-                        { !addReponse.success ? <></> : 
+                        { !addResponse.success ? <></> : 
                         <p style={{margin:"0px", padding:"0px", color:"darkgreen"}}>Item Was Added Successfully!</p> }
 
-                        { !addReponse.failed ? <></> : 
+                        { !addResponse.failed ? <></> : 
                         <p style={{margin:"0px", padding:"0px", color:"red"}}>Failed To Add Item</p> }
                         
-                        { !addReponse.duplicate ? <></> : 
+                        { !addResponse.duplicate ? <></> : 
                         <p style={{margin:"0px", padding:"0px", color:"yellow"}}>Item Already Exists</p> }
                     </div>
                 </div>

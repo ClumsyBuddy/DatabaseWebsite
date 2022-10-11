@@ -59,6 +59,7 @@ function FilterModal(props){
                         <option value={""}>None</option>
                         {RenderBrand}
                     </select>
+                    <br></br>
                     <select style={{textAlign:'center'}} className="BrandFilter" onChange={(e) => { let _new = props.selectedFilters; _new.Type = e.currentTarget.value.replace(/ /g, "_"); props.updateSelected(_new); }}>
                         {props.selectedFilters.Type === "" ? <option selected disabled hidden>{RenderItemTypes.length === 0 ? "Loading..." : "Type Filter"}</option> : <></>}
                         <option value={""}>None</option>

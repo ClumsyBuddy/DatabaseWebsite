@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import Engine from "../engine.js";
 //const fs = require('fs');
-//TODO Need to implement responsice error handling so a single bug doesnt bring down the server
+//TODO Need to implement responsive error handling so a single bug doesn't bring down the server
 //     Try catch and using base state should be able to keep the server from crashing
 //  https://stackoverflow.com/questions/34834151/how-to-catch-errors-when-rendering-ejs-view-node-js
 // Possibly a good method of error handling
@@ -152,7 +152,7 @@ class ResponseHandler extends Engine {
                 }
             });
             let id = yield this.DBController.create("Sable", Columns, QuestionMarkString, Col_Values); //Create the item and return the id (aka the key)
-            return { id: id.id, ItemAlreadyExist: false }; //return the id and that the item didnt exist
+            return { id: id.id, ItemAlreadyExist: false }; //return the id and that the item didn't exist
         });
     }
     GetItemById(DB, id) {

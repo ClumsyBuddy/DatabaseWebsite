@@ -12,7 +12,7 @@ const EditModal = ({...props}) => {
     const [ItemData, setItemData] = useState([]);
     const [selected, setSelected] = useState({});
 
-    const [addReponse, setAddReponse] = useState({success:false, failed:false});
+    const [addResponse, setAddResponse] = useState({success:false, failed:false});
 
     const mounted = useRef(false);
 
@@ -52,7 +52,7 @@ const EditModal = ({...props}) => {
     }, [props.editProduct]);
 
     /*
-    *   This function checks if the item shoud be checked on startup based off a few patterns
+    *   This function checks if the item should be checked on startup based off a few patterns
     */
     const SetChecked = (optionName, _element) => {
         const Products = props.editProduct;
@@ -90,16 +90,27 @@ const EditModal = ({...props}) => {
             <div style={{width:"100%", height:"auto", display:"flex", 
                 flexDirection:"row", justifyContent:"center", flexFlow:"wrap", overflow:"hidden"}}>
             {
-                !ItemData.length ? <div>
-                    <label>Active: </label><input type={"checkbox"} defaultChecked={SetChecked("active", props.editProduct)} onChange={(e) => {
-                        let _new = selected; _new["active"] = e.currentTarget.checked; setSelected(_new);
-                    }}></input></div> :
+                // !ItemData.length ? <div>
+                //     <label>Active: </label><input type={"checkbox"} defaultChecked={SetChecked("active", props.editProduct)} onChange={(e) => {
+                //         let _new = selected; _new["active"] = e.currentTarget.checked; setSelected(_new);
+                //     }}></input></div> :
                 ItemData.map((option) => 
                 {
                     let optionName = Object.keys(option)[0];
 
                     if(optionName === "Color"){
                         return <></>;
+                    }
+                    console.log(option)
+                    if(optionName === "active"){
+                        
+                        return(
+                            <>
+                            <label>Active: </label><input type={"checkbox"} defaultChecked={SetChecked("active", props.editProduct)} onChange={(e) => {
+                                let _new = selected; _new["active"] = e.currentTarget.checked; setSelected(_new);
+                            }}></input>
+                            </>
+                        );
                     }
                     return (<>
                         <label>{Object.keys(option)[0].replace(/_/g, " ")}: </label>
@@ -144,8 +155,18 @@ const EditModal = ({...props}) => {
                                 }
                     </div>
                 </>);
+                
             })
-        }</div></div>
+            
+        }
+        <div>
+            <label>Active: </label>
+            <input type={"checkbox"} defaultChecked={SetChecked("active", props.editProduct)} onChange={(e) => {
+                    let _new = selected; _new["active"] = e.currentTarget.checked; setSelected(_new); }}>
+            </input>
+        </div>
+        
+        </div></div>
         );
     }
 
@@ -155,13 +176,13 @@ const EditModal = ({...props}) => {
         socket.emit("update_item", {updated:selected, key:props.editProduct.key}, (result) => {
             console.log("Result: " + JSON.stringify(result));
             if(result.status === "success"){
-                setAddReponse({success:true});
+                setAddResponse({success:true});
             }
             if(result.status === "failed"){
-                setAddReponse({failed:true});
+                setAddResponse({failed:true});
             }
             setTimeout(() => {
-                    setAddReponse({success:false, failed:false});
+                    setAddResponse({success:false, failed:false});
                 }, 1500);
         });
     }
@@ -177,10 +198,10 @@ const EditModal = ({...props}) => {
                     </div>
                     <button className='ButtonHoverEffect SubmitButton' onClick={(e)=>{console.log(selected); SendSelected();}}>Submit</button>
 
-                    { !addReponse.success ? <></> : 
+                    { !addResponse.success ? <></> : 
                         <p style={{margin:"0px", padding:"0px", color:"darkgreen"}}>Item Was Updated Successfully!</p> }
 
-                    { !addReponse.failed ? <></> : 
+                    { !addResponse.failed ? <></> : 
                     <p style={{margin:"0px", padding:"0px", color:"red"}}>Failed To Update Item</p> }
                 </div>
             </div>
