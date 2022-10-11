@@ -70,22 +70,24 @@ const AddModal = ({...props}) => {
         
     } }>{item.ItemType.replace(/_/g, " ")}</button>);
 
-    const RenderOptions = ItemData.map((item) => {
-        if(item.ItemType === ChosenType){
+    const RenderOptions = ItemData.map((item) => 
+    {
+        if(item.ItemType === ChosenType)
+        {
             return (<div className='OList' style={{width:"50vw", height:"50vh", overflow:"scroll"}}>
                 <label>{ChosenType.replace(/_/g, " ")}</label>
                 <textarea placeholder='Enter SKU' style={{resize:"none"}} cols={20} rows={1} onChange={(e)=>{let _new = selected; _new.sku = e.currentTarget.value; setSelected(_new);}}></textarea>
                 <select onChange={(e)=>{let _new = selected; _new.brand = e.currentTarget.value; setSelected(_new);}} style={{transform:"translatey(-5px)"}}>
                     {Brands.map((brand, i) => {return(<option>{brand}</option>)})}
                 </select>
-                <div style={{width:"100%", height:"auto", display:"flex", 
-                    flexDirection:"row", justifyContent:"center", 
-                    flexFlow:"wrap", overflow:"hidden"}}>
+                <div style={{width:"100%", height:"auto", display:"flex", flexDirection:"row", justifyContent:"center", flexFlow:"wrap", overflow:"hidden"}}>
                     {
-                        item.Options.length !== 0 ? item.Options.map((option) => {
+                        item.Options.length !== 0 ? item.Options.map((option) => 
+                        {
                             console.log(ChosenType, option);
                             const _Name = Object.keys(option);
-                            if(ChosenType === "Uniform" && _Name[0] === "Color"){
+                            if(ChosenType === "Uniform" && _Name[0] === "Color")
+                            {
                                 return (
                                     <div style={{marginTop:"5vh"}}>
                                         <label style={{marginRight:".4vw"}}>Color</label>
@@ -97,59 +99,55 @@ const AddModal = ({...props}) => {
                                     </div>
                                 );
                             }
-
-                            //If uniform itemtype
-                            // if current option color
-
-                        let optionName = Object.keys(option)[0];
-                        return (<>
-                            <label>{Object.keys(option)[0].replace(/_/g, " ")}: </label>
-                        <div style={{width:"25%", borderStyle:"solid", borderColor:"black", margin:"1%", borderRadius:"10px", padding:"10px",
-                             fontSize:"20px"}} className="CheckBoxList">
-                        
-                        {
-                            option[optionName].map((element, i) => {
-                                // if(element === "" || element === true || element === false){
-                                //     return (<> {element === "" ? <label style={{textDecoration:"underline"}}>textbox</label> : <></>}
-                                //     <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e) => {let _new = selected; _new[optionName] = e.currentTarget.checked; setSelected(_new); console.log(selected); }}></input> </>
-                                //     );
-                                // }
-                                return ( <>
-                                    <div>
-                                    <label>{element}-</label>
-                                    <input type={"checkbox"} className='ItemTypeButton' onChange={(e)=>{
-                                        let _new = selected; 
-                                        if(e.currentTarget.checked === false){
-                                            let toReplace = element + ",";
-                                            _new[optionName] = _new[optionName].replace(toReplace, "");
-                                        }else{
-                                            if(_new[optionName] === undefined){
-                                                _new[optionName] = element + ",";
-                                            }else{
-                                                _new[optionName] += element + ',';
-                                            }
-                                        }
-                                        setSelected(_new);
-                                        }}></input> 
-                                    </div>
-                                </>);
-                            })
-                        }
-                    </div></>);
-                }) : <div> 
-                    {/* <label>Active: </label>
-                        <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e) => {
-                            let _new = selected; _new["active"] = e.currentTarget.checked; setSelected(_new);}}></input>  */}
-                    </div>
-            }</div>
-                <label>Active: </label>
-                <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e) => {
-                    let _new = selected; _new["active"] = e.currentTarget.checked; setSelected(_new);}}>
-                </input> 
+                            let optionName = Object.keys(option)[0];
+                            return (<>
+                                <label>{Object.keys(option)[0].replace(/_/g, " ")}: </label>
+                                <div style={{width:"25%", borderStyle:"solid", borderColor:"black", margin:"1%", borderRadius:"10px", padding:"10px", fontSize:"20px"}} className="CheckBoxList">
+                                {
+                                    option[optionName].map((element, i) => 
+                                    {
+                                        return ( 
+                                            <>
+                                            <div>
+                                                <label>{element}-</label>
+                                                <input type={"checkbox"} className='ItemTypeButton' 
+                                                onChange={(e)=> 
+                                                    {
+                                                        let _new = selected; 
+                                                        if(e.currentTarget.checked === false)
+                                                        {
+                                                            let toReplace = element + ",";
+                                                            _new[optionName] = _new[optionName].replace(toReplace, "");
+                                                        }else
+                                                        {
+                                                            if(_new[optionName] === undefined)
+                                                            {
+                                                                _new[optionName] = element + ",";
+                                                            }else
+                                                            {
+                                                                _new[optionName] += element + ',';
+                                                            }
+                                                        }
+                                                        setSelected(_new);
+                                                    }
+                                                }>
+                                                </input> 
+                                            </div>
+                                            </>
+                                        );
+                                    })
+                                }
+                            </div></>);
+                        }) : <div></div>
+                    }</div>
+                    <label>Active: </label>
+                    <input type={"checkbox"} className='ButtonHoverEffect ItemTypeButton' onChange={(e) => {
+                        let _new = selected; _new["active"] = e.currentTarget.checked; setSelected(_new);}}>
+                    </input> 
             </div>);
         }
         return (<></>);
-    })
+    });
 
 
     const ReturnRender = () =>{

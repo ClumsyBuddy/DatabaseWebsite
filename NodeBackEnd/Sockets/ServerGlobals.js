@@ -101,7 +101,7 @@ const UserLogin = new Login(MainDB);
 
 
 const BaseEntry = "sku TEXT, brand TEXT, itemtype TEXT, active INTEGER"
-const ReponseHandler = new ResponseHandler(
+const _ResponseHandler = new ResponseHandler(
   MainDB, 
   {
     Sable:{
@@ -122,7 +122,7 @@ var Classes = {
     db:db,
     MainDB:MainDB,
     UserLogin:UserLogin,
-    ReponseHandler:ReponseHandler
+    ResponseHandler:_ResponseHandler
 }
 
 export {

@@ -22,7 +22,7 @@ function on_connection(socket){
         })
     })
     socket.on("delete_item_server", async (msg, callback) => {
-        let status = await Classes.ReponseHandler.DeleteItem("Sable", Number(msg.key))
+        let status = await Classes.ResponseHandler.DeleteItem("Sable", Number(msg.key))
         if(!status){
             callback({
                 status: "failed",
@@ -60,13 +60,13 @@ function on_connection(socket){
         console.log(new_item);
         let all_Keys = Object.keys(new_item); //All keys in string format
         let new_Item_Object = {}; //This will hold all Options and option values in pairs
-
+        
         all_Keys.forEach((value, i) =>{
             if(new_item[value] !== false || value === "active"){ //We only add selected items that are true to the new object
                 new_Item_Object[value] = new_item[value];
             }
         });
-        Classes.ReponseHandler.AddItem(new_Item_Object, "Sable").then(async (result) => {
+        Classes.ResponseHandler.AddItem(new_Item_Object, "Sable").then(async (result) => {
             if(result.ItemAlreadyExist){ //If the item already exist then we can skip to the next one
                 fn({
                     status:"duplicate"
@@ -76,7 +76,7 @@ function on_connection(socket){
             fn({ //Return Response that it was successful
                 status:"success",
             })
-            io.emit("new_Item_Added", await Classes.ReponseHandler.GetItemById("Sable", result.id)); //Emit the new item to all clients
+            io.emit("new_Item_Added", await Classes.ResponseHandler.GetItemById("Sable", result.id)); //Emit the new item to all clients
         });
     });
 
@@ -106,7 +106,7 @@ function on_connection(socket){
         });
         const ItemKey = itemToUpdate.key;
 
-        Classes.ReponseHandler.UpdateItem(ValuesToUpdate, options_Values, ItemKey, "Sable").then((result) => {
+        Classes.ResponseHandler.UpdateItem(ValuesToUpdate, options_Values, ItemKey, "Sable").then((result) => {
             fn({
                 status:"success"
             });

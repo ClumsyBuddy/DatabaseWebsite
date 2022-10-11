@@ -4,6 +4,11 @@
         "darkgreen",
         "itemtype",
         "newitem",
-        "textbox"
+        "textbox",
+        "translatey"
+    ],
+    "cSpell.words": [
+        "columnbuilder",
+        "Itemdataarray"
     ]
 }

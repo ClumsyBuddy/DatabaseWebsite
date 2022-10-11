@@ -78,95 +78,97 @@ const EditModal = ({...props}) => {
         return false; //All other cases return false
     }
 
-    const RenderOptions = () => {
+    const RenderOptions = () => 
+    {
         return (
             <div className='OList' style={{width:"50vw", height:"55vh", overflow:"scroll"}}>
-            <label>
-                ItemType: {props.editProduct.itemtype}
-            </label>
-            <label style={{margin:"20px"}}>SKU: {props.editProduct.sku.replace(/_/g, " ")}</label>
-            <label>Brand: {props.editProduct.brand} </label>
-            {props.editProduct.Color ? <label> Color: {props.editProduct.Color}</label> : <></>}
-            <div style={{width:"100%", height:"auto", display:"flex", 
-                flexDirection:"row", justifyContent:"center", flexFlow:"wrap", overflow:"hidden"}}>
-            {
-                // !ItemData.length ? <div>
-                //     <label>Active: </label><input type={"checkbox"} defaultChecked={SetChecked("active", props.editProduct)} onChange={(e) => {
-                //         let _new = selected; _new["active"] = e.currentTarget.checked; setSelected(_new);
-                //     }}></input></div> :
-                ItemData.map((option) => 
-                {
-                    let optionName = Object.keys(option)[0];
+                <label>
+                    ItemType: {props.editProduct.itemtype}
+                </label>
+                <label style={{margin:"20px"}}>SKU: {props.editProduct.sku.replace(/_/g, " ")}</label>
+                <label>Brand: {props.editProduct.brand} </label>
+                {props.editProduct.Color ? <label> Color: {props.editProduct.Color}</label> : <></>}
+                <div style={{width:"100%", height:"auto", display:"flex", 
+                    flexDirection:"row", justifyContent:"center", flexFlow:"wrap", overflow:"hidden"}}>
+                    {
+                        ItemData.map((option) => 
+                        {
+                            let optionName = Object.keys(option)[0];
 
-                    if(optionName === "Color"){
-                        return <></>;
-                    }
-                    console.log(option)
-                    if(optionName === "active"){
-                        
-                        return(
-                            <>
-                            <label>Active: </label><input type={"checkbox"} defaultChecked={SetChecked("active", props.editProduct)} onChange={(e) => {
-                                let _new = selected; _new["active"] = e.currentTarget.checked; setSelected(_new);
-                            }}></input>
-                            </>
-                        );
-                    }
-                    return (<>
-                        <label>{Object.keys(option)[0].replace(/_/g, " ")}: </label>
-                        <div style={{width:"25%", borderStyle:"solid", borderColor:"black", margin:"2%", borderRadius:"10px", padding:"10px",
-                             fontSize:"25px"}} className="CheckBoxList">
-                                
-                                {
-                                    option[optionName].map((element, i) => 
-                                    {
-                                        // if(element === "" || element === true || element === false){
-                                        //     return (<> 
-                                        //         {element === "" ? <label style={{textDecoration:"underline"}}>textbox</label> : <></>}
-                                        //         <input type={"checkbox"} defaultChecked={SetChecked(optionName, element)} 
-                                        //         className='ButtonHoverEffect ItemTypeButton' onChange={(e) => {let _new = selected; _new[optionName] = e.currentTarget.checked; setSelected(_new); console.log(selected); }}></input> 
-                                        //     </>);
-                                        // }
-                                        return (<>
-                                            <div style={{}}>
-                                            <label style={{fontSize:"20px"}}>{element}-</label>
-                                            <input type={"checkbox"} style={{}}defaultChecked={SetChecked(optionName, element)}
-                                                className='ButtonHoverEffect ItemTypeButton' onChange={(e)=>
+                            if(optionName === "Color")
+                            {
+                                return <></>;
+                            }
+                            console.log(option)
+                            if(optionName === "active")
+                            {
+                                return(
+                                    <>
+                                        <label>Active: </label>
+                                        <input type={"checkbox"} defaultChecked={SetChecked("active", props.editProduct)} onChange=
+                                            {(e) => 
                                                 {
-                                                    let _new = selected; 
-                                                    console.log(element, _new);
-                                                    if(e.currentTarget.checked === false){
-                                                        let toReplace = element;
-                                                        _new[optionName] = _new[optionName].replace(toReplace + ",", "");
-                                                        
-                                                    }else{
-                                                        if(_new[optionName] === undefined){
-                                                            _new[optionName] = element + ",";
-                                                        }else{
-                                                            _new[optionName] += element + ',';
-                                                        }
-                                                    }
-                                                    setSelected(_new);
+                                                    let _new = selected; _new["active"] = e.currentTarget.checked; setSelected(_new);
                                                 }
-                                            }></input>
-                                            </div>
-                                        </>);
-                                    })
-                                }
+                                            }>
+                                        </input>
+                                    </>
+                                );
+                            }
+                            return (<>
+                                <label>{Object.keys(option)[0].replace(/_/g, " ")}: </label>
+                                <div style={{width:"25%", borderStyle:"solid", borderColor:"black", margin:"2%", borderRadius:"10px", padding:"10px",fontSize:"25px"}} className="CheckBoxList">
+                                    {
+                                        option[optionName].map((element, i) => 
+                                        {
+                                            return (<>
+                                                <div style={{}}>
+                                                    <label style={{fontSize:"20px"}}>{element}-</label>
+                                                    <input type={"checkbox"} style={{}}defaultChecked={SetChecked(optionName, element)}
+                                                        className='ButtonHoverEffect ItemTypeButton' 
+                                                        onChange={(e)=>
+                                                            {
+                                                                let _new = selected; 
+                                                                console.log(element, _new);
+                                                                if(e.currentTarget.checked === false)
+                                                                {
+                                                                    let toReplace = element;
+                                                                    _new[optionName] = _new[optionName].replace(toReplace + ",", "");
+                                                                    
+                                                                }else
+                                                                {
+                                                                    if(_new[optionName] === undefined)
+                                                                    {
+                                                                        _new[optionName] = element + ",";
+                                                                    }else
+                                                                    {
+                                                                        _new[optionName] += element + ',';
+                                                                    }
+                                                                }
+                                                                setSelected(_new);
+                                                            }
+                                                        }>
+                                                    </input>
+                                                </div>
+                                            </>);
+                                        })
+                                    }
+                                </div>
+                            </>);
+                        })
+                    }
+                    <div>
+                        <label>Active: </label>
+                        <input type={"checkbox"} defaultChecked={SetChecked("active", props.editProduct)} 
+                        onChange={(e) => 
+                            {
+                                let _new = selected; _new["active"] = e.currentTarget.checked; setSelected(_new); 
+                            }
+                        }>
+                        </input>
                     </div>
-                </>);
-                
-            })
-            
-        }
-        <div>
-            <label>Active: </label>
-            <input type={"checkbox"} defaultChecked={SetChecked("active", props.editProduct)} onChange={(e) => {
-                    let _new = selected; _new["active"] = e.currentTarget.checked; setSelected(_new); }}>
-            </input>
-        </div>
-        
-        </div></div>
+                </div>
+            </div>
         );
     }
 

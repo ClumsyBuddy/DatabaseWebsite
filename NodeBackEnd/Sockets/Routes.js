@@ -54,11 +54,11 @@ function RoutesInit(){
     
     //Router for getting all get and post request on '/' which is index
     app.get("/ItemData", (req, res) => {
-        //console.log("Calling ItemData", Classes.ReponseHandler.ItemData("Sable"), Classes.ReponseHandler.getBrands("Sable"));
-        res.json({ItemData:Classes.ReponseHandler.ItemData("Sable"), Brand:Classes.ReponseHandler.getBrands("Sable")});
+        //console.log("Calling ItemData", Classes.ResponseHandler.ItemData("Sable"), Classes.ResponseHandler.getBrands("Sable"));
+        res.json({ItemData:Classes.ResponseHandler.ItemData("Sable"), Brand:Classes.ResponseHandler.getBrands("Sable")});
     });
     app.get("/FilterData", (req, res) => {
-        res.json({ItemData:Classes.ReponseHandler.ItemData("Sable"), Brand:Classes.ReponseHandler.getBrands("Sable")});
+        res.json({ItemData:Classes.ResponseHandler.ItemData("Sable"), Brand:Classes.ResponseHandler.getBrands("Sable")});
     });
 
     app.post("/ImportFile", upload,  (req, res, next) => {
@@ -103,7 +103,7 @@ function RoutesInit(){
 
     app.post("/SpecificItemType", (req, res) => {
         let ItemData;
-        Classes.ReponseHandler.ItemData("Sable").forEach((element, i) => {
+        Classes.ResponseHandler.ItemData("Sable").forEach((element, i) => {
             if(element.ItemType === req.body.type){
                 ItemData = element;
             }
@@ -114,7 +114,7 @@ function RoutesInit(){
     
 
     app.get("/ProductList", async (req, res) => {
-        const ProductList = await Classes.ReponseHandler.GetAllProducts("Sable");
+        const ProductList = await Classes.ResponseHandler.GetAllProducts("Sable");
         console.log(req.session.isLogin);
         res.json(ProductList);
     }); 

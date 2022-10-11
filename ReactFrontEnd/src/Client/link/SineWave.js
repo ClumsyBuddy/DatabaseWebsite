@@ -35,28 +35,28 @@ export function start() {
   step += .40; 
 }
 
-function DrawInner(amplitude,trig, outlineOffset){
-  // trig is the trigonometric function to be used: sin or cos
-  ctx.beginPath();
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = "#61DBFB";
+// function DrawInner(amplitude,trig, outlineOffset){
+//   // trig is the trigonometric function to be used: sin or cos
+//   ctx.beginPath();
+//   ctx.lineWidth = 2;
+//   ctx.strokeStyle = "#61DBFB";
   
-  var x = outlineOffset;
-  var y = 0;
-  //var amplitude = 10;
-  var frequency = height / (2 * Math.PI);
-  ctx.save();
-  ctx.translate(-amplitude * Math[trig](step / frequency), 0);
-  while (y < height) {
-    x = width / 2 + amplitude * Math[trig]((y + step) / frequency);
-    ctx.lineTo(x, y);
+//   var x = outlineOffset;
+//   var y = 0;
+//   //var amplitude = 10;
+//   var frequency = height / (2 * Math.PI);
+//   ctx.save();
+//   ctx.translate(-amplitude * Math[trig](step / frequency), 0);
+//   while (y < height) {
+//     x = width / 2 + amplitude * Math[trig]((y + step) / frequency);
+//     ctx.lineTo(x, y);
   
-    y++;
-  }
+//     y++;
+//   }
 
-  ctx.stroke();
-  ctx.restore();
-}
+//   ctx.stroke();
+//   ctx.restore();
+// }
 
 
 
