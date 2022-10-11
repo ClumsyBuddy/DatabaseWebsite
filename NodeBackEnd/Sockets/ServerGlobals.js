@@ -24,6 +24,7 @@ let server = createServer(app);
 
 import {Server} from "socket.io";
 
+
 var Week = 7 * 24 * 60 * 60 * 1000; //How long session token will remain
 const SessionMiddleWare = session({ //Create session middleware
     store: new SQLiteStore,
@@ -32,6 +33,8 @@ const SessionMiddleWare = session({ //Create session middleware
     saveUninitialized:true,
     cookie: { maxAge: Week, secure:false } // 1 week
 });
+
+
 
 const io = new Server(server, {
     allowRequest: (req, callback) => {
@@ -74,8 +77,10 @@ app.use(SessionMiddleWare);
 
 
 const corsOptions = {
-origin: "*",
+origin: "localhost:3000",
 optionsSuccessStatus: 200,
+methods:['GET', 'POST', 'PUT', 'DELETE'],
+credentials:true
 };
 
 app.use(cors(corsOptions));

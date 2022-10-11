@@ -38,17 +38,7 @@ function RoutesInit(){
         .get(async (req, res) =>{
         }).post(async (req, res) => {
             let isLogin = await Classes.UserLogin.LoginAttempt(req, res, req.body.name, req.body.password);
-            req.session.save(function(){});
-            req.sessionStore.all((err, _session) => {
-                _session.forEach((item) => {
-                    if(item.sid !== req.sessionID){
-                        if(item.sess.username === req.session.username){ //TODO need to rethink how I approach the sessions and remembering login
-                            //req.sessionStore.destroy(item.sid, ()=>{console.log("Destroying: " + item.sid);})
-                            //isLogin = false;
-                        }
-                    }
-                })
-            });
+            // req.session.save();
             res.status(200).json(isLogin);
         });
     

@@ -1,9 +1,12 @@
 {
     "compile-hero.disable-compile-files-on-did-save-code": true,
     "cSpell.ignoreWords": [
+        "VSKU",
         "darkgreen",
         "itemtype",
         "newitem",
+        "resave",
+        "sess",
         "textbox",
         "translatey"
     ],

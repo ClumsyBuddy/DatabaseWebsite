@@ -60,7 +60,7 @@ function on_connection(socket){
         console.log(new_item);
         let all_Keys = Object.keys(new_item); //All keys in string format
         let new_Item_Object = {}; //This will hold all Options and option values in pairs
-        
+
         all_Keys.forEach((value, i) =>{
             if(new_item[value] !== false || value === "active"){ //We only add selected items that are true to the new object
                 new_Item_Object[value] = new_item[value];
@@ -115,6 +115,8 @@ function on_connection(socket){
 
 
     });
-
+    socket.on("disconnect", function(req) {
+        console.log(socket.request);
+    });
 
 }
