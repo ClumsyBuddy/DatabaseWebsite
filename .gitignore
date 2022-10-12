@@ -2,5 +2,5 @@
 NodeBackEnd/sessions
 ReactFrontEnd/node_modules
 NodeBackEnd/node_modules
-NodeBackEnd/Socket/uploads/*
+NodeBackEnd/Socket/uploads
 NodeBackEnd/uploads/*

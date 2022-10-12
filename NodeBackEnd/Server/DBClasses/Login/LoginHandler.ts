@@ -29,7 +29,6 @@ class Login{
             if(result !== undefined && result.password == password && result.username == username.toLowerCase()){
                 req.session.username = result.username;  //Get the USername
                 var UserData = {
-                    ProductList: [],
                     AllowedActions:{
                         Delete:this.PermissionLevel(req, this.Permission.High, result.permission),
                         Update:this.PermissionLevel(req, this.Permission.Mid, result.permission),
@@ -37,9 +36,6 @@ class Login{
                         ViewLogs:this.PermissionLevel(req, this.Permission.Low, result.permission)
                     },
                     UserPermission: result.permission,
-                    Sable: result.Sable, //get Whether its Sable
-                    Diplomat: result.Diplomat, //Get Whether its diplomat
-                    RDI: result.RDI //Get whether its RDI
                 };
                 req.session.UserData = UserData;
                 req.session.isLogin = true;

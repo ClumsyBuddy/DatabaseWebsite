@@ -2,21 +2,25 @@ import express from "express";
 import ip from "ip";
 import session from "express-session";
 import cors from "cors";
-import {default as SQLiteStoreSession} from "connect-sqlite3";
+// import {default as SQLiteStoreSession} from "connect-sqlite3";
 
-let SQLiteStore = SQLiteStoreSession(session);
+import createMemoryStore from "memorystore";
 
-SQLiteStore.prototype.all = function(fn){
-    this.db.all("SELECT * FROM " + this.table, (err, result) => {
-        if(err) fn(err);
-        if(!result) return fn();
-        let ParsedResult = [];
-        result.map((item, i) => {
-            ParsedResult.push({sid:item.sid, expired:item.expired, sess:JSON.parse(item.sess)})
-        });
-        fn(null, ParsedResult);
-    });
-}
+const MemoryStore = createMemoryStore(session)
+// let _MemoryStore = new MemoryStore(session);
+// let SQLiteStore = SQLiteStoreSession(session);
+
+// SQLiteStore.prototype.all = function(fn){
+//     this.db.all("SELECT * FROM " + this.table, (err, result) => {
+//         if(err) fn(err);
+//         if(!result) return fn();
+//         let ParsedResult = [];
+//         result.map((item, i) => {
+//             ParsedResult.push({sid:item.sid, expired:item.expired, sess:JSON.parse(item.sess)})
+//         });
+//         fn(null, ParsedResult);
+//     });
+// }
 
 import {createServer} from "http";
 let app = express();
@@ -24,14 +28,13 @@ let server = createServer(app);
 
 import {Server} from "socket.io";
 
-
-var Week = 7 * 24 * 60 * 60 * 1000; //How long session token will remain
+var Week = 24 * 60 * 60 * 1000; //How long session token will remain
 const SessionMiddleWare = session({ //Create session middleware
-    store: new SQLiteStore,
+    store: new MemoryStore({ checkPeriod:Week }),
     secret: 'DBSession',
     resave: false,
-    saveUninitialized:true,
-    cookie: { maxAge: Week, secure:false } // 1 week
+    saveUninitialized:false,
+    cookie: { maxAge: Week } // 1 week
 });
 
 
@@ -134,7 +137,8 @@ export {
     app,
     server,
     io,
-    SQLiteStore,
+    // SQLiteStore,
+    MemoryStore,
     session,
     ip,
     express,

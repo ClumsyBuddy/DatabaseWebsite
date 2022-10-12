@@ -1,5 +1,6 @@
-import {app, Classes, io} from "./ServerGlobals.js";
+import {app, Classes, io, MemoryStore} from "./ServerGlobals.js";
 import upload from "./upload.js";
+import { Blah } from "./HandleUpload.js";
 
 import * as fs from "fs";
 import { parse } from "csv-parse";
@@ -38,6 +39,7 @@ function RoutesInit(){
         .get(async (req, res) =>{
         }).post(async (req, res) => {
             let isLogin = await Classes.UserLogin.LoginAttempt(req, res, req.body.name, req.body.password);
+            req.sessionStore.all((e, o) => {console.log(o)});
             // req.session.save();
             res.status(200).json(isLogin);
         });
@@ -53,7 +55,7 @@ function RoutesInit(){
 
     app.post("/ImportFile", upload,  (req, res, next) => {
         const file = req.file;
-        console.log(file);
+        console.log(file, "Hello World");
         if(!file){
             const error = new Error("No File");
             error.httpStatusCode = 400;
@@ -66,7 +68,7 @@ function RoutesInit(){
         .pipe(parse(
             { delimiter: ",",
             columns: true, 
-            to_line:400, 
+            // to_line:400, 
             skip_empty_lines:true,
             }
         )).on("data", function (row) {
@@ -74,18 +76,21 @@ function RoutesInit(){
                 SKU:row["Handle"],
                 Tags:row["Tags"],
                 VSKU:row["Variant SKU"],
-                Status:row["Status"]
+                Status:row["Status"],
+                ImageAlt:row["Image Alt Text"]
             }
             RowArray.push(RowObject);
-            console.log(RowArray);
+            // console.log(RowArray);
         }).on("end", function() {
+            Blah(RowArray);
             console.log("Finished");
         }).on("close", function() {
-            OpenFile.destroy();            
+            OpenFile.destroy();   
             fs.unlink(file.path, () => {
                 console.log("Deleted upload");
             })
         });
+
 
         res.json("Hello World");
     });
