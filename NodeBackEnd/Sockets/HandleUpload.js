@@ -20,7 +20,15 @@ export async function CleanData(dirtyData){
             SavedSKU.push(obj.SKU);
             let FilteredTags = obj.Tags.split(",").filter((e) => { return !e.includes("_")});
             let stat = obj.Status === "active" ? true : false;
-            cleaned.push({SKU: obj.SKU, Tags: FilteredTags, Variant: [{VSKU:obj.VSKU, Active:stat}], Status: obj.Status});
+
+            let isUniform = false;
+            for(let t of FilteredTags){
+                if(t.includes("Uniform")){
+                    isUniform = true;
+                }
+            }
+
+            cleaned.push({SKU: obj.SKU, Tags: FilteredTags, Variant: [{VSKU:obj.VSKU, Active:stat}], Status: obj.Status, Uniform:isUniform});
         }
     }
     return cleaned;

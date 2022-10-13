@@ -37,6 +37,22 @@
 
 }
 
+
+.TagButton[data-value="0"]{
+    color:darkred;
+}
+.TagButton[data-value="1"]{
+    color:green;
+}
+
+
+button.VariantButton[data-value="1"]{
+    color:green;
+}
+button.VariantButton[data-value="0"]{
+    color:darkred;
+}
+
 .ItemContainerWrapper{
     display: flex;
     flex-direction:column;
