@@ -1,6 +1,6 @@
 import {app, Classes, io, MemoryStore} from "./ServerGlobals.js";
 import upload from "./upload.js";
-import { Blah } from "./HandleUpload.js";
+import { CleanData } from "./HandleUpload.js";
 
 import * as fs from "fs";
 import { parse } from "csv-parse";
@@ -80,15 +80,18 @@ function RoutesInit(){
                 ImageAlt:row["Image Alt Text"]
             }
             RowArray.push(RowObject);
-            // console.log(RowArray);
         }).on("end", function() {
-            Blah(RowArray);
+            CleanData(RowArray).then((cleanedArray) => {
+                io.emit("CleanedData", cleanedArray);
+            });
             console.log("Finished");
         }).on("close", function() {
-            OpenFile.destroy();   
-            fs.unlink(file.path, () => {
-                console.log("Deleted upload");
-            })
+            setTimeout(() => {
+                fs.unlink(file.path, () => {
+                    console.log("Deleted upload");
+                })
+                OpenFile.destroy();       
+            }, 100);
         });
 
 

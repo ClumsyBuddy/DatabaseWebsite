@@ -2,19 +2,12 @@
 
 
 
-export async function Blah(dirtyData){
-    // console.log(dirtyData);
-
+export async function CleanData(dirtyData){
     var SavedSKU = [];
     var cleaned = [];
-
-
     console.log(dirtyData.length);
     for (let i = 0; i < dirtyData.length; i++) {
         const obj = dirtyData[i];
-        // if(obj.ImageAlt !== undefined && obj.ImageAlt.includes("_Hide_") && obj.VSKU !== ""){
-        //     console.log(obj);
-        // }
         if(SavedSKU.includes(obj.SKU)){
             cleaned.forEach((e) => {
                 if(e.SKU === obj.SKU){
@@ -29,10 +22,6 @@ export async function Blah(dirtyData){
             let stat = obj.Status === "active" ? true : false;
             cleaned.push({SKU: obj.SKU, Tags: FilteredTags, Variant: [{VSKU:obj.VSKU, Active:stat}], Status: obj.Status});
         }
-        // console.log(obj);
-        
     }
-    console.log(JSON.stringify(cleaned, null, 2));
-
-
+    return cleaned;
 }
